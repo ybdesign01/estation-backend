@@ -1,17 +1,24 @@
 package com.app.estation.controller;
 
 
+import com.app.estation.advice.validation.InsertValidation;
 import com.app.estation.dto.UserDto;
+import com.app.estation.dto.UserPassDto;
+import com.app.estation.entity.Profile;
 import com.app.estation.entity.User;
+import com.app.estation.repository.ProfileRepository;
+import com.app.estation.repository.UserRepository;
 import com.app.estation.service.UserServiceImpl;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -20,8 +27,15 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
+
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private ProfileRepository profileRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -31,16 +45,41 @@ public class UserController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<UserDto> getById(@PathVariable Long id){
+    public ResponseEntity<Object> getById(@PathVariable Long id){
         User u = userService.getUser(id);
         if(u != null){
             UserDto user = modelMapper.map(u, UserDto.class);
+            return ResponseEntity.ok().body(user);
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+    }
+
+    @GetMapping("/getUser")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserPassDto> getByToken(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
+        User u = userService.getUserByToken(token);
+        if(u != null){
+            UserPassDto user = modelMapper.map(u, UserPassDto.class);
             return ResponseEntity.ok().body(user);
         }else{
             return ResponseEntity.notFound().build();
         }
     }
 
+    @PostMapping("/addUser")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> addUser(@Validated(InsertValidation.class) @RequestBody UserDto userDto){
+        User user = userService.addUser(userDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
+    }
+
+    @PostMapping("/updateUser/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> updateUser(@Validated(InsertValidation.class) @RequestBody UserDto userDto, @PathVariable Long id){
+        User user = userService.updateUser(id, userDto);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
+    }
 
 
 

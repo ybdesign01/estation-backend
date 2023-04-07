@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,6 +23,7 @@ public class User implements UserDetails {
     private Long id_user;
     private String nom;
     private String prenom;
+    @Column(unique = true)
     private String email;
     private String password;
     private String matricule;
@@ -64,4 +66,6 @@ public class User implements UserDetails {
     public String getPassword() {
         return password;
     }
+
+
 }

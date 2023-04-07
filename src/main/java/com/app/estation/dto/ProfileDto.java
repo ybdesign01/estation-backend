@@ -13,10 +13,9 @@ import lombok.*;
 @EqualsAndHashCode
 public class ProfileDto {
 
-    private Long id_profile;
     @NotBlank(message = "nom obligatore!", groups = {InsertValidation.class})
     private String nom;
-    @NotBlank(message = "description obligatore!", groups = {InsertValidation.class})
-    private String description;
+    /*@NotBlank(message = "description obligatore!", groups = {InsertValidation.class})
+    private String description;*/
 
 }

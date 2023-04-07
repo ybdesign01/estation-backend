@@ -43,6 +43,7 @@ public class SecurityConfiguration {
                 /*.and()
                 .exceptionHandling()
                 .authenticationEntryPoint(authEntryPoint)*/
+                .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

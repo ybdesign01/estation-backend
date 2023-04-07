@@ -21,15 +21,5 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(userDto));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthDto> register(@Validated(InsertValidation.class) @RequestBody UserDto userDto){
-        return ResponseEntity.ok(authService.register(userDto));
-    }
-
-
-    @GetMapping("/test")
-    public String test(){
-        return "Salam!";
-    }
 
 }

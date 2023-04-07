@@ -1,6 +1,9 @@
 package com.app.estation.config;
 
 import com.app.estation.repository.UserRepository;
+import com.app.estation.service.ProfileService;
+import com.app.estation.service.ProfileServiceImpl;
+import com.app.estation.util.PassEncode;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +54,11 @@ public class ApplicationConfig {
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
+
+    @Bean
+    public ProfileServiceImpl profileService() {
+        return new ProfileServiceImpl();
+    }
+
 
 }

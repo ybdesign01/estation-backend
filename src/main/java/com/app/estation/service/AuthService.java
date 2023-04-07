@@ -6,9 +6,11 @@ import com.app.estation.entity.Profile;
 import com.app.estation.entity.User;
 import com.app.estation.repository.ProfileRepository;
 import com.app.estation.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class AuthService {
@@ -19,6 +21,8 @@ public class AuthService {
     private ProfileRepository profileRepository;
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public AuthDto login(UserDto userDto){
         User user = userRepository.findByEmail(userDto.getEmail()).orElse(null);
@@ -35,13 +39,8 @@ public class AuthService {
 
     }
 
-
-    public AuthDto register(UserDto userDto){
-        Profile profile = profileRepository.save(Profile.builder(
-                null,
-                userDto.getProfile().getNom(),
-                userDto.getProfile().getDescription()
-        ));
+/*    public AuthDto register(UserDto userDto){
+        Profile p = profileRepository.findProfileByNom(userDto.getProfile().getNom());
         User user = User.builder(
                 null,
                 userDto.getNom(),
@@ -49,11 +48,11 @@ public class AuthService {
                 userDto.getEmail(),
                 userDto.getPassword(),
                 userDto.getMatricule(),
-                profile
+                p
         );
+        System.out.println(user);
         userRepository.save(user);
-        String jwtToken = jwtService.generateToken(user);
-        return AuthDto.builder(jwtToken, "Saved");
-    }
+        return AuthDto.builder("jwtToken", "Saved");
+    }*/
 
 }
