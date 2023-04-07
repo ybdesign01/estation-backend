@@ -1,4 +1,5 @@
-# estation-backend
+# E-station Backend API
+This is a Spring Boot based REST API
 
 ```
 POST: /api/auth (Get your token)
