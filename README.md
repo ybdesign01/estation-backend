@@ -2,6 +2,7 @@
 This is a Spring Boot based REST API
 
 ```
+https://estation-api.herokuapp.com/api/
 Routes without auth:
 POST: /api/auth (Get your token)
 These following routes require the Bearer token:
