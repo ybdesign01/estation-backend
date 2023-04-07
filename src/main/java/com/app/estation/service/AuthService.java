@@ -6,6 +6,7 @@ import com.app.estation.entity.Profile;
 import com.app.estation.entity.User;
 import com.app.estation.repository.ProfileRepository;
 import com.app.estation.repository.UserRepository;
+import com.app.estation.util.PassEncode;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,15 @@ public class AuthService {
     private JwtService jwtService;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private PassEncode passEncode;
 
     public AuthDto login(UserDto userDto){
         User user = userRepository.findByEmail(userDto.getEmail()).orElse(null);
         if(user == null){
             return AuthDto.builder(null, "Utilisateur introuvable!");
         }
-        if(!user.getPassword().equals(userDto.getPassword())){
+        if(!passEncode.matches(user.getPassword(),userDto.getPassword())){
             return  AuthDto.builder(null, "Mot de passe incorrect!");
         }else{
             String jwtToken = jwtService.generateToken(user);
