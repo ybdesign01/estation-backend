@@ -19,11 +19,7 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private ProfileRepository profileRepository;
-    @Autowired
     private JwtService jwtService;
-    @Autowired
-    private ModelMapper modelMapper;
     @Autowired
     private PassEncode passEncode;
 
@@ -32,30 +28,12 @@ public class AuthService {
         if(user == null){
             return AuthDto.builder(null, "Utilisateur introuvable!");
         }
-        if(!passEncode.matches(user.getPassword(),userDto.getPassword())){
+        if(!passEncode.matches(userDto.getPassword(),user.getPassword())){
             return  AuthDto.builder(null, "Mot de passe incorrect!");
         }else{
             String jwtToken = jwtService.generateToken(user);
             return AuthDto.builder(jwtToken, "Authenticated");
         }
-
-
     }
-
-/*    public AuthDto register(UserDto userDto){
-        Profile p = profileRepository.findProfileByNom(userDto.getProfile().getNom());
-        User user = User.builder(
-                null,
-                userDto.getNom(),
-                userDto.getPrenom(),
-                userDto.getEmail(),
-                userDto.getPassword(),
-                userDto.getMatricule(),
-                p
-        );
-        System.out.println(user);
-        userRepository.save(user);
-        return AuthDto.builder("jwtToken", "Saved");
-    }*/
 
 }
