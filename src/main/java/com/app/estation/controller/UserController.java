@@ -20,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -51,7 +52,7 @@ public class UserController {
             UserDto user = modelMapper.map(u, UserDto.class);
             return ResponseEntity.ok().body(user);
         }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","User not found"));
         }
     }
 
@@ -79,6 +80,16 @@ public class UserController {
     public ResponseEntity<Object> updateUser(@Validated(InsertValidation.class) @RequestBody UserDto userDto, @PathVariable Long id){
         User user = userService.updateUser(id, userDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
+    }
+
+    @GetMapping("/deleteUser/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> deleteUser(@PathVariable Long id){
+        if(userService.deleteUser(id)){
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("msg","User deleted"));
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","User not found"));
+        }
     }
 
 

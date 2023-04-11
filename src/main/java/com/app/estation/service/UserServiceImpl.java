@@ -80,6 +80,9 @@ public class UserServiceImpl {
         System.out.println("userdto:" + userDto);
         Profile profile = profileService.findProfileByNom(userDto.getProfile());
         System.out.println("accessesd");
+        if(profile == null){
+
+        }
         User user = User.builder(
                 id,
                 userDto.getNom(),
@@ -95,6 +98,15 @@ public class UserServiceImpl {
             return user;
         }else{
             return null;
+        }
+    }
+
+    public boolean deleteUser(Long id) {
+        if (userRepository.existsById(id)){
+            userRepository.deleteById(id);
+            return true;
+        }else{
+            return false;
         }
     }
 }
