@@ -4,16 +4,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 import java.util.Set;
 
 
 @Entity
-@AllArgsConstructor
+@AllArgsConstructor(staticName = "builder")
 @Data
 @NoArgsConstructor
-public class Service {
+public class Services {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -27,7 +26,7 @@ public class Station {
             name = "station_service",
             joinColumns = @JoinColumn(name = "id_station"),
             inverseJoinColumns = @JoinColumn(name = "id_service"))
-    private Set<Service> services;
+    private Set<Services> services;
 
 
 }

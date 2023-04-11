@@ -21,7 +21,7 @@ public class Produit {
     private String prix_vente;
 
     @ManyToOne
-    private Service id_service;
+    private Services id_service;
 
     @ManyToOne
     private TypeProduit type;

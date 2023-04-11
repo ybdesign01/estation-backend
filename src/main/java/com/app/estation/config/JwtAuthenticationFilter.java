@@ -1,6 +1,6 @@
 package com.app.estation.config;
 
-import com.app.estation.service.JwtService;
+import com.app.estation.service.implementation.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

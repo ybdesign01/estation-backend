@@ -1,18 +1,16 @@
-package com.app.estation.service;
+package com.app.estation.service.implementation;
 
 
 import com.app.estation.dto.UserDto;
 import com.app.estation.entity.Profile;
 import com.app.estation.entity.User;
 import com.app.estation.repository.UserRepository;
+import com.app.estation.service.implementation.JwtService;
+import com.app.estation.service.implementation.ProfileServiceImpl;
 import com.app.estation.util.PassEncode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

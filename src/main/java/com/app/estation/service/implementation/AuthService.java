@@ -1,17 +1,12 @@
-package com.app.estation.service;
+package com.app.estation.service.implementation;
 
 import com.app.estation.dto.AuthDto;
 import com.app.estation.dto.UserDto;
-import com.app.estation.entity.Profile;
 import com.app.estation.entity.User;
-import com.app.estation.repository.ProfileRepository;
 import com.app.estation.repository.UserRepository;
 import com.app.estation.util.PassEncode;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class AuthService {

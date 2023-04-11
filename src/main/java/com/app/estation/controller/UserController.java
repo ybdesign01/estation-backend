@@ -4,12 +4,10 @@ package com.app.estation.controller;
 import com.app.estation.advice.validation.InsertValidation;
 import com.app.estation.dto.UserDto;
 import com.app.estation.dto.UserPassDto;
-import com.app.estation.entity.Profile;
 import com.app.estation.entity.User;
 import com.app.estation.repository.ProfileRepository;
 import com.app.estation.repository.UserRepository;
-import com.app.estation.service.UserServiceImpl;
-import jakarta.validation.Valid;
+import com.app.estation.service.implementation.UserServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -68,21 +66,21 @@ public class UserController {
         }
     }
 
-    @PostMapping("/addUser")
+    @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> addUser(@Validated(InsertValidation.class) @RequestBody UserDto userDto){
         User user = userService.addUser(userDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
     }
 
-    @PostMapping("/updateUser/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Object> updateUser(@Validated(InsertValidation.class) @RequestBody UserDto userDto, @PathVariable Long id){
         User user = userService.updateUser(id, userDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
     }
 
-    @GetMapping("/deleteUser/{id}")
+    @DeleteMapping ("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> deleteUser(@PathVariable Long id){
         if(userService.deleteUser(id)){
