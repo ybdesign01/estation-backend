@@ -1,11 +1,8 @@
 package com.app.estation.repository;
 
 import com.app.estation.entity.Station;
-import com.app.estation.entity.User;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
-
-public interface StationRepository extends CrudRepository<Station, Long> {
+public interface StationRepository extends JpaRepository<Station, Long> {
 
 }

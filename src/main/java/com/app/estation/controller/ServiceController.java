@@ -2,6 +2,7 @@ package com.app.estation.controller;
 import com.app.estation.dto.ServicesDto;
 import com.app.estation.service.implementation.ServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class ServiceController {
         if (servicesService.addService(service)){
             return ResponseEntity.ok().body(Map.of("msg","Service added successfully"));
         }else {
-            return ResponseEntity.status(500).body(Map.of("msg","Service not added"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","Service not added"));
         }
     }
 
@@ -36,7 +37,7 @@ public class ServiceController {
         if (servicesService.updateService(service)){
             return ResponseEntity.ok().body(Map.of("msg","Service updated successfully"));
         }else {
-            return ResponseEntity.status(500).body(Map.of("msg","Service not updated, id provided is wrong"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","Service not updated, id provided is wrong"));
         }
     }
 
@@ -45,7 +46,7 @@ public class ServiceController {
         if (servicesService.deleteService(id)){
             return ResponseEntity.ok().body(Map.of("msg","Service deleted successfully"));
         }else {
-            return ResponseEntity.status(500).body(Map.of("msg","Service not deleted, please check if the id is correct"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","Service not deleted, please check if the id is correct"));
         }
     }
 

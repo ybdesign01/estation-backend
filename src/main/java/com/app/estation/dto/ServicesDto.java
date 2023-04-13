@@ -10,7 +10,6 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public class ServicesDto {
-
     private Long id_service;
     @NotBlank(message = "Nom obligatoire!")
     private String nom_service;

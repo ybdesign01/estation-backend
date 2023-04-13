@@ -5,12 +5,10 @@ import com.app.estation.dto.UserDto;
 import com.app.estation.entity.Profile;
 import com.app.estation.entity.User;
 import com.app.estation.repository.UserRepository;
-import com.app.estation.service.implementation.JwtService;
-import com.app.estation.service.implementation.ProfileServiceImpl;
+import com.app.estation.service.UserService;
 import com.app.estation.util.PassEncode;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +16,7 @@ import java.util.Optional;
 
 @Transactional
 @Service
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     PassEncode passEncode;
@@ -32,18 +30,17 @@ public class UserServiceImpl {
     @Autowired
     private JwtService jwtService;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-
+    @Override
     public List<User> getAll(){
-        return (List<User>) userRepository.findAll();
+        return userRepository.findAll();
     }
 
+    @Override
     public User getUser(Long id) {
         Optional<User> result = userRepository.findById(id);
         return result.orElse(null);
     }
-
+    @Override
     public User getUserByToken(String token) {
         String jwt = token.substring(7);
         String userEmail = jwtService.extractEmail(jwt);
@@ -51,10 +48,9 @@ public class UserServiceImpl {
         return result.orElse(null);
     }
 
+    @Override
     public User addUser(UserDto userDto){
-        System.out.println("userdto:" + userDto);
         Profile profile = profileService.findProfileByNom(userDto.getProfile());
-        System.out.println("accessesd");
         User user = User.builder(
                 null,
                 userDto.getNom(),
@@ -73,11 +69,9 @@ public class UserServiceImpl {
         }
     }
 
-
+    @Override
     public User updateUser(Long id, UserDto userDto) {
-        System.out.println("userdto:" + userDto);
         Profile profile = profileService.findProfileByNom(userDto.getProfile());
-        System.out.println("accessesd");
         if(profile == null){
             return null;
         }
@@ -99,6 +93,7 @@ public class UserServiceImpl {
         }
     }
 
+    @Override
     public boolean deleteUser(Long id) {
         if (userRepository.existsById(id)){
             userRepository.deleteById(id);
