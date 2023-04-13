@@ -34,6 +34,9 @@ public class ServicesImpl implements ServicesService {
     }
 
     public boolean updateService(ServicesDto service) {
+        if (serviceRepository.findById(service.getId_service()).isEmpty()) {
+            return false;
+        }
         Services s = Services.builder(
                 service.getId_service(),
                 service.getNom_service(),
@@ -49,12 +52,13 @@ public class ServicesImpl implements ServicesService {
     }
 
     public boolean deleteService(Long id) {
-        try {
+        if (serviceRepository.findById(id).isPresent()) {
             serviceRepository.deleteById(id);
             return true;
-        } catch (Exception e) {
+        }else{
             return false;
         }
+
     }
 
 }

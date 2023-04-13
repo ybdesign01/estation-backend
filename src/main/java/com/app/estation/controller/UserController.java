@@ -44,7 +44,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Object> getById(@PathVariable Long id){
+    public ResponseEntity<?> getById(@PathVariable Long id){
         User u = userService.getUser(id);
         if(u != null){
             UserDto user = modelMapper.map(u, UserDto.class);
@@ -56,7 +56,7 @@ public class UserController {
 
     @GetMapping("/getUser")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<UserPassDto> getByToken(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
+    public ResponseEntity<?> getByToken(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
         User u = userService.getUserByToken(token);
         if(u != null){
             UserPassDto user = modelMapper.map(u, UserPassDto.class);
@@ -68,21 +68,21 @@ public class UserController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Object> addUser(@Validated(InsertValidation.class) @RequestBody UserDto userDto){
+    public ResponseEntity<?> addUser(@Validated(InsertValidation.class) @RequestBody UserDto userDto){
         User user = userService.addUser(userDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> updateUser(@Validated(InsertValidation.class) @RequestBody UserDto userDto, @PathVariable Long id){
+    public ResponseEntity<?> updateUser(@Validated(InsertValidation.class) @RequestBody UserDto userDto, @PathVariable Long id){
         User user = userService.updateUser(id, userDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
     }
 
     @DeleteMapping ("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Object> deleteUser(@PathVariable Long id){
+    public ResponseEntity<?> deleteUser(@PathVariable Long id){
         if(userService.deleteUser(id)){
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("msg","User deleted"));
         }else{

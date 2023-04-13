@@ -8,12 +8,16 @@ The link of the api is : https://estation-api.herokuapp.com/api/
 ```
 Routes without auth:
 POST: /api/auth (Get your token)
+
+{
+    "email": "mail@mail.com",
+    "password": "Password123+"
+}
 ```
 
 ### All the following routes require the Bearer token:
 ## User
 ```
---- USER:---
 GET:     /api/user (Get all users)
          /api/user/{id} (Get user by id)
          /api/user/getUser (Get user by token)
@@ -33,7 +37,6 @@ An example of user body:
 ```
 ## Service
 ```
---- SERVICE: ---
 GET:     /api/services (Get all services)
          /api/services/{id} (Get service by id)
 POST:    /api/services/

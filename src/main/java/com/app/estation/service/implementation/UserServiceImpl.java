@@ -79,7 +79,7 @@ public class UserServiceImpl {
         Profile profile = profileService.findProfileByNom(userDto.getProfile());
         System.out.println("accessesd");
         if(profile == null){
-
+            return null;
         }
         User user = User.builder(
                 id,
