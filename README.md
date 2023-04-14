@@ -50,7 +50,7 @@ An example of Service body:
 }
 
 ```
-## Service
+## Station
 ```
 GET:     /api/station (Get all stations)
          /api/station/{id} (Get station by id)
