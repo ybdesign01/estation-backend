@@ -47,7 +47,7 @@ public class UserController {
     public ResponseEntity<?> getById(@PathVariable Long id){
         User u = userService.getUser(id);
         if(u != null){
-            UserDto user = modelMapper.map(u, UserDto.class);
+            UserPassDto user = modelMapper.map(u, UserPassDto.class);
             return ResponseEntity.ok().body(user);
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","User not found"));

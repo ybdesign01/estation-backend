@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/station")
 public class StationController {
@@ -24,7 +22,7 @@ public class StationController {
     @PostMapping
     public ResponseEntity<?> addStation(@Validated @RequestBody StationDto stationDto){
         if (stationService.addStation(stationDto)){
-            return ResponseEntity.ok().body("Station added successfully");
+            return ResponseEntity.status(201).body("Station added successfully");
         }else{
             return ResponseEntity.badRequest().body("Error adding station");
         }
