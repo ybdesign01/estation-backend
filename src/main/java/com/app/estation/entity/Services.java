@@ -11,6 +11,7 @@ import java.util.Set;
 @AllArgsConstructor(staticName = "builder")
 @Data
 @NoArgsConstructor
+@Table(name = "services")
 public class Services {
 
     @Id

@@ -3,6 +3,7 @@ package com.app.estation.dto;
 
 import com.app.estation.entity.Services;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import java.util.Set;
@@ -20,7 +21,7 @@ public class StationDto {
     private String nom_station;
     @NotBlank(message = "Ndresse obligatoires!")
     private String adresse;
-    @NotBlank(message = "Services obligatoires!")
+    @NotEmpty(message = "Services obligatoires!")
     private Set<Services> services;
 
 
