@@ -50,6 +50,29 @@ An example of Service body:
 }
 
 ```
+## Service
+```
+GET:     /api/station (Get all stations)
+         /api/station/{id} (Get station by id)
+POST:    /api/station/
+PUT:     /api/station/{id}
+DELETE:  /api/station/{id} (Requires admin role)
+
+An example of station body:
+{
+    "nom_station": "Service 1",
+    "adresse": "Description 1",
+    "services":[
+    {
+    "id_service": "1",
+    "nom_service": "NOM",
+    "description":"DESCRIPTION"
+    }
+    ]
+}
+
+```
+
 
 ## Responses & status codes
 ```
