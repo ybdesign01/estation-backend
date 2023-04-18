@@ -18,10 +18,9 @@ public class AuthController {
     @Autowired
     private PassEncode passEncode;
 
-    @PostMapping
+    @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<AuthDto> login(@RequestBody UserDto userDto){
         AuthDto dto = authService.login(userDto);
-        System.out.println(dto);
         if (dto.getToken() == null){
             return ResponseEntity.status(400).body(dto);
         }else{

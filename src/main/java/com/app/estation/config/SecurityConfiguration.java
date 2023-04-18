@@ -45,7 +45,6 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/auth/**").permitAll()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                 /*.and()
                 .exceptionHandling()
                 .authenticationEntryPoint(authEntryPoint)*/

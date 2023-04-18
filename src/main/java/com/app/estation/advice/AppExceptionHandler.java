@@ -32,5 +32,10 @@ public class AppExceptionHandler {
         return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = Exception.class)
+    public final ResponseEntity<?> handleException(Exception ex) {
+        return new ResponseEntity<>(Map.of("msg",ex.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
+    }
+
 
 }

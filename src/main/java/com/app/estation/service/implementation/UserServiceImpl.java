@@ -51,7 +51,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User addUser(UserDto userDto){
         Profile profile = profileService.findProfileByNom(userDto.getProfile());
-        User user = User.builder(
+        User user = userRepository.findByEmail(userDto.getEmail()).orElse(null);
+        if (user != null){
+            return null;
+        }
+         user = User.builder(
                 null,
                 userDto.getNom(),
                 userDto.getPrenom(),

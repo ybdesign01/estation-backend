@@ -17,36 +17,36 @@ public class ServiceController {
     ServicesImpl servicesService;
 
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public ResponseEntity<?> getServices(){
         return ResponseEntity.ok(servicesService.getServices());
     }
 
-    @PostMapping
+    @PostMapping(produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> addService(@Validated @RequestBody ServicesDto service){
         if (servicesService.addService(service)){
-            return ResponseEntity.ok().body(Map.of("msg","Service added successfully"));
+            return ResponseEntity.ok().body(Map.of("msg","service_added"));
         }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","Service not added"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","service_not_added"));
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> updateService(@Validated @RequestBody ServicesDto service, @PathVariable Long id){
         service.setId_service(id);
         if (servicesService.updateService(service)){
-            return ResponseEntity.ok().body(Map.of("msg","Service updated successfully"));
+            return ResponseEntity.ok().body(Map.of("msg","service_updated"));
         }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","Service not updated, id provided is wrong"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","service_not_updated"));
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> deleteService(@PathVariable Long id){
         if (servicesService.deleteService(id)){
-            return ResponseEntity.ok().body(Map.of("msg","Service deleted successfully"));
+            return ResponseEntity.ok().body(Map.of("msg","service_deleted"));
         }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","Service not deleted, please check if the id is correct"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","service_not_deleted"));
         }
     }
 

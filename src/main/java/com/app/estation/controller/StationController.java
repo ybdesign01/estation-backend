@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/station")
 public class StationController {
@@ -14,35 +16,35 @@ public class StationController {
     @Autowired
     StationServiceImpl stationService;
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public ResponseEntity<?> getAll(){
         return ResponseEntity.ok().body(stationService.findAll());
     }
 
-    @PostMapping
+    @PostMapping(produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> addStation(@Validated @RequestBody StationDto stationDto){
         if (stationService.addStation(stationDto)){
-            return ResponseEntity.status(201).body("Station added successfully");
+            return ResponseEntity.status(201).body(Map.of("msg","station_added"));
         }else{
-            return ResponseEntity.badRequest().body("Error adding station");
+            return ResponseEntity.badRequest().body(Map.of("msg","station_not_added"));
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> updateStation(@Validated @RequestBody StationDto stationDto, @PathVariable Long id){
         if (stationService.updateStation(stationDto, id)){
-            return ResponseEntity.ok().body("Station updated successfully");
+            return ResponseEntity.ok().body(Map.of("msg","station_updated"));
         }else{
-            return ResponseEntity.badRequest().body("Error updating station");
+                return ResponseEntity.badRequest().body(Map.of("msg","station_not_updated"));
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> deleteStation(@PathVariable Long id){
         if (stationService.deleteStation(id)){
-            return ResponseEntity.ok().body("Station deleted successfully");
+            return ResponseEntity.ok().body(Map.of("msg","station_deleted"));
         }else{
-            return ResponseEntity.badRequest().body("Error deleting station");
+            return ResponseEntity.badRequest().body(Map.of("msg","station_not_deleted"));
         }
     }
 

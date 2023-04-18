@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class AuthDto {
     private String token;
     private String msg;
+    private UserPassDto user;
 }

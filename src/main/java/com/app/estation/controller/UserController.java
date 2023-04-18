@@ -30,19 +30,13 @@ public class UserController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
-    private ProfileRepository profileRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<User> getAll(){
         return userService.getAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = "application/json")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getById(@PathVariable Long id){
         User u = userService.getUser(id);
@@ -50,11 +44,11 @@ public class UserController {
             UserPassDto user = modelMapper.map(u, UserPassDto.class);
             return ResponseEntity.ok().body(user);
         }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","User not found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","user_not_found"));
         }
     }
 
-    @GetMapping("/getUser")
+    @GetMapping(value = "/getUser", produces = "application/json")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getByToken(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
         User u = userService.getUserByToken(token);
@@ -66,27 +60,31 @@ public class UserController {
         }
     }
 
-    @PostMapping
+    @PostMapping(produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> addUser(@Validated(InsertValidation.class) @RequestBody UserDto userDto){
         User user = userService.addUser(userDto);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
+        if(user == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","user_exists"));
+        }else {
+            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateUser(@Validated(InsertValidation.class) @RequestBody UserDto userDto, @PathVariable Long id){
         User user = userService.updateUser(id, userDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
     }
 
-    @DeleteMapping ("/{id}")
+    @DeleteMapping (value = "/{id}", produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> deleteUser(@PathVariable Long id){
         if(userService.deleteUser(id)){
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("msg","User deleted"));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("msg","user_deleted"));
         }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","User not found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","user_not_found"));
         }
     }
 
