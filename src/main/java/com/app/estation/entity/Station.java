@@ -2,13 +2,9 @@ package com.app.estation.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Getter
@@ -33,10 +29,6 @@ public class Station {
             joinColumns = @JoinColumn(name = "id_station"),
             inverseJoinColumns = @JoinColumn(name = "id_service"))
     private Set<Services> services;
-/*
-    @OneToMany
-    @JoinColumn(name = "id_station")
-    private Set<Services> services = new HashSet<Services>();*/
 
     public Set<Services> getServices() {
         return services;

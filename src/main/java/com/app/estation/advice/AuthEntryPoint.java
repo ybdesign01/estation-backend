@@ -37,13 +37,4 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
         response.getWriter().write(objectMapper.writeValueAsString(responseBody));
     }
 
-/*    @ExceptionHandler(value = AccessDeniedException.class)
-    public void commence(HttpServletRequest request, HttpServletResponse response, AccessDeniedException authException)
-            throws IOException, ServletException {
-        Map<String, String> responseBody = new HashMap<>();
-        responseBody.put("msg", "Access denied");
-        response.setStatus(HttpStatus.FORBIDDEN.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write(objectMapper.writeValueAsString(responseBody));
-    }*/
 }

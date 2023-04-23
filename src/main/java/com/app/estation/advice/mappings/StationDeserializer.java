@@ -1,4 +1,4 @@
-package com.app.estation.advice;
+package com.app.estation.advice.mappings;
 
 import com.app.estation.entity.Services;
 import com.app.estation.entity.Station;

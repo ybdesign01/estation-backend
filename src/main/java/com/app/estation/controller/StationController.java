@@ -1,12 +1,10 @@
 package com.app.estation.controller;
 
-import com.app.estation.advice.StationSerializer;
 import com.app.estation.dto.StationDto;
 import com.app.estation.entity.Station;
 import com.app.estation.service.implementation.StationServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -28,14 +26,10 @@ public class StationController {
     @GetMapping(produces = "application/json")
     public ResponseEntity<?> getAll(){
         try {
-
             List<Station> stations = stationService.findAll();
             if (stations == null){
                 return ResponseEntity.badRequest().body(Map.of("msg","no_station_found"));
             }
-            SimpleModule module = new SimpleModule();
-            module.addSerializer(Station.class, new StationSerializer());
-            objectMapper.registerModule(module);
             String json = objectMapper.writeValueAsString(stations);
             return ResponseEntity.ok().body(json);
         } catch (JsonProcessingException e) {
