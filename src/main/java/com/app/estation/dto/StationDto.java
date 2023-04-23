@@ -16,13 +16,17 @@ import java.util.Set;
 @EqualsAndHashCode
 public class StationDto {
 
-    private Long id_station;
+    private Long id;
     @NotBlank(message = "Nom obligatoires!")
     private String nom_station;
-    @NotBlank(message = "Ndresse obligatoires!")
+    @NotBlank(message = "Adresse obligatoires!")
     private String adresse;
     @NotEmpty(message = "Services obligatoires!")
-    private Set<Services> services;
+    private Set<ServicesDto> services;
+/*
+    private Set<Long> servicesId;
+*/
+
 
 
 }

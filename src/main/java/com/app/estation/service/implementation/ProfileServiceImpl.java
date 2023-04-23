@@ -18,8 +18,6 @@ import java.util.Optional;
 @Service
 public class ProfileServiceImpl implements ProfileService {
 
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Autowired
     private ProfileRepository profileRepository;

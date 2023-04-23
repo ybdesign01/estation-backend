@@ -33,7 +33,7 @@ public class ServiceController {
 
     @PutMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> updateService(@Validated @RequestBody ServicesDto service, @PathVariable Long id){
-        service.setId_service(id);
+        service.setId(id);
         if (servicesService.updateService(service)){
             return ResponseEntity.ok().body(Map.of("msg","service_updated"));
         }else {

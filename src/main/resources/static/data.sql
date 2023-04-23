@@ -6,3 +6,8 @@ values (0,'admin@gmail.com',
         'D47559', 'Admin',
         'Admin',
         '$2a$10$wgPP8gZluOrlVSh11K8eKO8bSBER1GLjkw3.8CzFawqdb6ZtzKbQ6', 0) on CONFLICT (email) DO NOTHING;
+insert INTO USERS (id_user,email,matricule,nom,prenom,password,id_profile)
+values (1,'oussama@gmail.com',
+        'D47559', 'Oussama',
+        'Berhili',
+        '$2a$10$wgPP8gZluOrlVSh11K8eKO8bSBER1GLjkw3.8CzFawqdb6ZtzKbQ6', 1) on CONFLICT (email) DO NOTHING;

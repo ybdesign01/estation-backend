@@ -15,15 +15,20 @@ public class ServicesImpl implements ServicesService {
     @Autowired
     private ServiceRepository serviceRepository;
     public List<Services> getServices() {
-        return (List<Services>) serviceRepository.findAll();
+        List<Services> s = serviceRepository.findAll();
+        if (s.isEmpty()) {
+            return null;
+        }else{
+            s.forEach(Services::getStations);
+            return s;
+        }
     }
 
     public boolean addService(ServicesDto service) {
-        Services s = Services.builder(
+        Services s = new Services(
                 null,
                 service.getNom_service(),
-                service.getDescription(),
-                null
+                service.getDescription()
         );
         try {
             serviceRepository.save(s);
@@ -34,14 +39,13 @@ public class ServicesImpl implements ServicesService {
     }
 
     public boolean updateService(ServicesDto service) {
-        if (serviceRepository.findById(service.getId_service()).isEmpty()) {
+        if (serviceRepository.findById(service.getId()).isEmpty()) {
             return false;
         }
-        Services s = Services.builder(
-                service.getId_service(),
+        Services s = new Services(
+                service.getId(),
                 service.getNom_service(),
-                service.getDescription(),
-                null
+                service.getDescription()
         );
         try {
             serviceRepository.save(s);
@@ -59,6 +63,14 @@ public class ServicesImpl implements ServicesService {
             return false;
         }
 
+    }
+
+    public List<Services> findServicesByStationId(Long stationId){
+        return serviceRepository.findServicesByStationsId(stationId);
+    }
+
+    public Services getService(Long id) {
+        return serviceRepository.findById(id).orElse(null);
     }
 
 }

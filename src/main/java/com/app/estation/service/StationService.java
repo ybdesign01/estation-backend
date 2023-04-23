@@ -1,8 +1,10 @@
 package com.app.estation.service;
 import com.app.estation.dto.StationDto;
+import com.app.estation.entity.Services;
 import com.app.estation.entity.Station;
 
 import java.util.List;
+import java.util.Set;
 
 public interface StationService {
     List<Station> findAll();
@@ -10,6 +12,7 @@ public interface StationService {
     Boolean addStation(StationDto station);
     Boolean updateStation(StationDto station, Long id);
     Boolean deleteStation(Long id);
+    /*Set<Services> getServices(Long id);*/
 
 
 }
