@@ -30,6 +30,9 @@ public class StationController {
         try {
 
             List<Station> stations = stationService.findAll();
+            if (stations == null){
+                return ResponseEntity.badRequest().body(Map.of("msg","no_station_found"));
+            }
             SimpleModule module = new SimpleModule();
             module.addSerializer(Station.class, new StationSerializer());
             objectMapper.registerModule(module);
