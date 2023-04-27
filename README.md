@@ -126,7 +126,7 @@ Each error response will have a body with a message and a status code.
 
 Example of error response:
 {
-    "message": "The user with id 1 does not exist"
+    "msg": "The user with id 1 does not exist"
 }
 
 The possible status codes are:
