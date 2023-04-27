@@ -76,7 +76,11 @@ An example of user body:
     "email": "mail@mail.com",
     "matricule": "dd88",
     "password": "Password123+",
-    "profile": "USER"
+    "profile": {
+            "id_profile": 1,
+            "nom": "USER",
+            "description": "User profile"
+        }
 }
 ```
 ## Service
@@ -108,9 +112,7 @@ An example of station body:
     "adresse": "Description 1",
     "services":[
     {
-    "id_service": "1",
-    "nom_service": "NOM",
-    "description":"DESCRIPTION"
+    "id": "1",
     }
     ]
 }
