@@ -56,6 +56,7 @@ You'll get the following response:
 ```
 The token is the new access token that you need to save and use for the next requests.
 The refresh token is the same as the one you sent in the request.
+When the refreshToken expires you'll have to authenticate again.
 
 
 ## All the following routes require the Bearer token:
