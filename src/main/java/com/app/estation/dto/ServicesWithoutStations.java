@@ -1,28 +1,24 @@
 package com.app.estation.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
-
 
 import java.util.Set;
 
-public class ServicesDto {
+public class ServicesWithoutStations {
     private Long id;
     @NotBlank(message = "Nom obligatoire!")
     private String nom_service;
     @NotBlank(message = "Description obligatoire!")
     private String description;
 
-    private Set<StationWithoutServices> stations;
 
-     public ServicesDto() {
+     public ServicesWithoutStations() {
     }
 
-    public ServicesDto(Long id, String nom_service, String description, Set<StationWithoutServices> stations) {
+    public ServicesWithoutStations(Long id, String nom_service, String description) {
         this.id = id;
         this.nom_service = nom_service;
         this.description = description;
-        this.stations = stations;
     }
 
     public Long getId() {
@@ -49,11 +45,4 @@ public class ServicesDto {
         this.description = description;
     }
 
-    public Set<StationWithoutServices> getStations() {
-        return stations;
-    }
-
-    public void setStations(Set<StationWithoutServices> stations) {
-        this.stations = stations;
-    }
 }

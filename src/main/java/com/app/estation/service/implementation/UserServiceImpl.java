@@ -50,21 +50,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(UserDto userDto){
-        Profile profile = profileService.findProfileByNom(userDto.getProfile());
+        Profile profile = profileService.findProfileByNom(userDto.getProfile().getNom());
         User user = userRepository.findByEmail(userDto.getEmail()).orElse(null);
-        if (user != null){
+        if (null != user){
             return null;
         }
-         user = User.builder(
-                null,
-                userDto.getNom(),
+         user = new User( userDto.getNom(),
                 userDto.getPrenom(),
                 userDto.getEmail(),
-                passEncode.encode(userDto.getPassword()),
+                 passEncode.encode(userDto.getPassword()),
                 userDto.getMatricule(),
-                profile
-        );
-        System.out.println(user);
+                profile);
         userRepository.save(user);
         if (userRepository.existsByEmail(user.getEmail())){
             return user;
@@ -75,11 +71,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(Long id, UserDto userDto) {
-        Profile profile = profileService.findProfileByNom(userDto.getProfile());
-        if(profile == null){
+        Profile profile = profileService.findProfileByNom(userDto.getProfile().getNom());
+        if(null == profile){
             return null;
         }
-        User user = User.builder(
+        User user = new User(
                 id,
                 userDto.getNom(),
                 userDto.getPrenom(),
@@ -88,7 +84,6 @@ public class UserServiceImpl implements UserService {
                 userDto.getMatricule(),
                 profile
         );
-        System.out.println(user);
         userRepository.save(user);
         if (userRepository.existsByEmail(user.getEmail())){
             return user;

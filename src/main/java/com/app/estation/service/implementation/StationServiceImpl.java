@@ -3,12 +3,12 @@ package com.app.estation.service.implementation;
 import com.app.estation.dto.StationDto;
 import com.app.estation.entity.Services;
 import com.app.estation.entity.Station;
+import com.app.estation.mappers.StationMapper;
 import com.app.estation.repository.StationRepository;
 import com.app.estation.service.StationService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +26,6 @@ public class StationServiceImpl implements StationService {
     @Autowired
     ServicesImpl servicesService;
 
-    @Autowired
-    ModelMapper modelMapper;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -35,10 +33,6 @@ public class StationServiceImpl implements StationService {
     @Override
     public List<Station> findAll() {
         List<Station> stations = stationRepository.findAll();
-        System.out.println("stations found" + stations);
-        for (Station station : stations) {
-            System.out.println("services of station: "+station.getId() +"are: " + station.getServices());
-        }
         if (stations.isEmpty()) {
             return null;
         }else{
@@ -62,37 +56,27 @@ public class StationServiceImpl implements StationService {
 
     @Override
     public Boolean addStation(StationDto station) {
-        String json = null;
-        try {
-             json = objectMapper.writeValueAsString(station);
-            System.out.println(json);
-            Station station1 = objectMapper.readValue(json, Station.class);
-            System.out.println("station1" + station1);
+            Station station1 = StationMapper.INSTANCE.stationDtoToStation(station);
             Set<Services> servicesSet = new HashSet<>();
             Set<Services> servs = station1.getServices();
-            System.out.println("services" + servs);
             for (Services serv : servs) {
                 Services s = servicesService.getService(serv.getId());
-                System.out.println("service found" + s);
-                if (s != null)
+                if (null != s)
                 servicesSet.add(s);
                 else
                     return false;
             }
-
             station1.setServices(servicesSet);
             stationRepository.save(station1);
             return stationRepository.findById(station1.getId()).isPresent();
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+
     }
 
     @Override
     public Boolean updateStation(StationDto station, Long id) {
         Station station1 = stationRepository.findById(id).orElse(null);
-        Station station2 = modelMapper.map(station, Station.class);
-        if(station1 != null){
+        Station station2 = StationMapper.INSTANCE.stationDtoToStation(station);
+        if(null != station1){
             station1.setNom_station(station.getNom_station());
             station1.setAdresse(station.getAdresse());
             station1.setAdresse(station.getAdresse());
@@ -111,6 +95,11 @@ public class StationServiceImpl implements StationService {
         }
             return false;
 
+    }
+
+    @Override
+    public List<Station> findStationByServicesId(Long id) {
+        return stationRepository.findStationByServicesId(id);
     }
 
 }

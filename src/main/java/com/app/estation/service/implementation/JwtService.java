@@ -5,6 +5,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +17,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+@Transactional
 @Service
 public class JwtService {
-    private static final String SECRET_KEY = "66546A576E5A7234743777217A25432A462D4A614E645267556B58703273357638782F413F4428472B4B6250655368566D597133743677397A24422645294840";
+    @Value("${jwt.secret-key}")
+    private  String SECRET_KEY;
+
+    @Value("${jwt.expiration}")
+    private  Long jwtExpiration;
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -35,12 +43,13 @@ public class JwtService {
             Map<String, Object> extraClaims,
             UserDetails userDetails
     ) {
+
         return Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

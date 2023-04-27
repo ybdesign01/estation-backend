@@ -4,13 +4,9 @@ package com.app.estation.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.*;
+
 import java.util.Set;
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor(staticName = "builder")
 @Entity
 @Table(name = "station")
 public class Station {
@@ -30,12 +26,49 @@ public class Station {
             inverseJoinColumns = @JoinColumn(name = "id_service"))
     private Set<Services> services;
 
+
+    public Station(Long id, String nom_station, String adresse, Set<Services> services) {
+        this.id = id;
+        this.nom_station = nom_station;
+        this.adresse = adresse;
+        this.services = services;
+    }
+
+    public Station() {
+    }
+
     public Set<Services> getServices() {
         return services;
     }
 
     public void setServices(Set<Services> services) {
         this.services = services;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNom_station() {
+        return nom_station;
+    }
+
+    public void setNom_station(String nom_station) {
+        this.nom_station = nom_station;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
     }
 
     @Override

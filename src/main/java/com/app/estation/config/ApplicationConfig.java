@@ -1,13 +1,13 @@
 package com.app.estation.config;
 
-import com.app.estation.advice.mappings.StationSerializer;
+import com.app.estation.entity.Services;
 import com.app.estation.entity.Station;
+import com.app.estation.mappers.ServicesMapper;
+import com.app.estation.mappers.StationMapper;
 import com.app.estation.repository.UserRepository;
 import com.app.estation.service.implementation.ProfileServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@RequiredArgsConstructor
+
 public class ApplicationConfig {
 
     @Autowired
@@ -51,22 +51,14 @@ public class ApplicationConfig {
     }
 
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
-    }
 
     @Bean
     public ProfileServiceImpl profileService() {
         return new ProfileServiceImpl();
     }
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        SimpleModule module = new SimpleModule();
-        module.addSerializer(Station.class, new StationSerializer());
-        return new ObjectMapper().registerModule(module);
-    }
+
+
 
 
 }

@@ -1,6 +1,7 @@
 package com.app.estation.controller.auth;
 
 import com.app.estation.dto.AuthDto;
+import com.app.estation.dto.RefreshTokenRequest;
 import com.app.estation.dto.UserDto;
 import com.app.estation.service.implementation.AuthService;
 import com.app.estation.util.PassEncode;
@@ -21,11 +22,16 @@ public class AuthController {
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<AuthDto> login(@RequestBody UserDto userDto){
         AuthDto dto = authService.login(userDto);
-        if (dto.getToken() == null){
+        if (null == dto.getToken()){
             return ResponseEntity.status(400).body(dto);
         }else{
-            return ResponseEntity.ok(authService.login(userDto));
+            return ResponseEntity.ok(dto);
         }
+    }
+
+    @PostMapping(value = "/refresh", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest dto){
+        return ResponseEntity.ok(authService.refreshToken(dto));
     }
 
 

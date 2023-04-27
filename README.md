@@ -5,17 +5,60 @@ This is the backend for the E-station project.
 The link of the api is : https://estation-api.herokuapp.com/api/
 
 ## Auth
+### The following routes do not require authentication:
 ```
-Routes without auth:
-POST: /api/auth (Get your token)
+
+POST: /api/auth
 
 {
     "email": "mail@mail.com",
     "password": "Password123+"
 }
 ```
+You'll get a response like the following:
+```
+{
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE2ODI2MTc5NzYsImV4cCI6MTY4MjYxODg3Nn0.zSiqzNKo1EfpVZtNoVWElj34iQ0eZ_E6Wy1wnPGnPPg",
+    "msg": "authentication_success",
+    "user": {
+        "id_user": 0,
+        "nom": "Admin",
+        "prenom": "Admin",
+        "email": "mail@mail.com",
+        "matricule": "D7777",
+        "profile": {
+            "id_profile": 0,
+            "nom": "ADMIN",
+            "description": "Administrator profile"
+        }
+    },
+    "refreshToken": "f8e716f9-a262-4878-96ff-080f06e028bb"
+}
+```
+You need to save the refreshToken because it will be needed to refresh the access token when it expires.
+The default expiration time for the access token is 15 minutes. 
+The expiration time for the refresh token is 3 days.
 
-### All the following routes require the Bearer token:
+#### Refresh token
+```
+POST: /api/auth/refresh
+
+{
+    "refreshToken": "f8e716f9-a262-4878-96ff-080f06e028bb"
+}
+```
+You'll get the following response:
+```
+{
+    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE2ODI2MTkwODEsImV4cCI6MTY4MjYxOTk4MX0.OGy_-3s1eVzjVxnbYrvoF-xZ5zMtlckwtiGwS1rV7ss",
+    "refreshToken": "f8e716f9-a262-4878-96ff-080f06e028bb"
+}
+```
+The token is the new access token that you need to save and use for the next requests.
+The refresh token is the same as the one you sent in the request.
+
+
+## All the following routes require the Bearer token:
 ## User
 ```
 GET:     /api/user (Get all users)

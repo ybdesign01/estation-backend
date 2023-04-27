@@ -4,28 +4,24 @@ package com.app.estation.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
-
 import java.util.Set;
 
-public class StationDto {
+public class StationWithoutServices {
 
     private Long id;
     @NotBlank(message = "Nom obligatoires!")
     private String nom_station;
     @NotBlank(message = "Adresse obligatoires!")
     private String adresse;
-    @NotEmpty(message = "Services obligatoires!")
-    private Set<ServicesWithoutStations> services;
 
 
-    public StationDto() {
+    public StationWithoutServices() {
     }
 
-    public StationDto(Long id, String nom_station, String adresse, Set<ServicesWithoutStations> services) {
+    public StationWithoutServices(Long id, String nom_station, String adresse) {
         this.id = id;
         this.nom_station = nom_station;
         this.adresse = adresse;
-        this.services = services;
     }
 
 
@@ -53,11 +49,4 @@ public class StationDto {
         this.adresse = adresse;
     }
 
-    public Set<ServicesWithoutStations> getServices() {
-        return services;
-    }
-
-    public void setServices(Set<ServicesWithoutStations> services) {
-        this.services = services;
-    }
 }

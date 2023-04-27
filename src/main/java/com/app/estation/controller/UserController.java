@@ -5,10 +5,8 @@ import com.app.estation.advice.validation.InsertValidation;
 import com.app.estation.dto.UserDto;
 import com.app.estation.dto.UserPassDto;
 import com.app.estation.entity.User;
-import com.app.estation.repository.ProfileRepository;
-import com.app.estation.repository.UserRepository;
+import com.app.estation.mappers.UserMapper;
 import com.app.estation.service.implementation.UserServiceImpl;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,21 +25,20 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
-    @Autowired
-    private ModelMapper modelMapper;
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<User> getAll(){
-        return userService.getAll();
+    public List<UserDto> getAll(){
+        List<UserDto> users = UserMapper.INSTANCE.usersToUserDtos(userService.getAll());
+        return users;
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getById(@PathVariable Long id){
         User u = userService.getUser(id);
-        if(u != null){
-            UserPassDto user = modelMapper.map(u, UserPassDto.class);
+        if(null != u){
+            UserPassDto user = UserMapper.INSTANCE.userToUserPassDto(u);
             return ResponseEntity.ok().body(user);
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","user_not_found"));
@@ -52,8 +49,8 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getByToken(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
         User u = userService.getUserByToken(token);
-        if(u != null){
-            UserPassDto user = modelMapper.map(u, UserPassDto.class);
+        if(null != u){
+            UserPassDto user = UserMapper.INSTANCE.userToUserPassDto(u);
             return ResponseEntity.ok().body(user);
         }else{
             return ResponseEntity.notFound().build();
@@ -64,7 +61,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> addUser(@Validated(InsertValidation.class) @RequestBody UserDto userDto){
         User user = userService.addUser(userDto);
-        if(user == null){
+        if(null == user){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","user_exists"));
         }else {
             return ResponseEntity.status(HttpStatus.CREATED).body(user);
@@ -78,7 +75,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
     }
 
-    @DeleteMapping (value = "/{id}", produces = "application/json", consumes = "application/json")
+    @DeleteMapping (value = "/{id}", produces = "application/json")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> deleteUser(@PathVariable Long id){
         if(userService.deleteUser(id)){
