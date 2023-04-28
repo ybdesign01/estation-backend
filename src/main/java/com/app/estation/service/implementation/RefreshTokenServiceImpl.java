@@ -36,13 +36,12 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     public RefreshToken createRefreshToken(User u) {
         RefreshToken refreshToken = new RefreshToken();
            boolean a = deleteRefreshToken(u);
-           if (a) {
+           System.out.println("a = " + a);
                refreshToken.setUser(u);
                refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
                refreshToken.setToken(UUID.randomUUID().toString());
                refreshToken = refreshTokenRepository.save(refreshToken);
 
-           }
             return refreshToken;
     }
 
