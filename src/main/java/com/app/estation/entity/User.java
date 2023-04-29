@@ -33,6 +33,12 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private RefreshToken refreshToken;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<StationUser> stations;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<PompeUser> pompes;
+
     public User() {
     }
 
@@ -43,6 +49,19 @@ public class User implements UserDetails {
         this.password = new BCryptPasswordEncoder().encode(password);
         this.matricule = matricule;
         this.profile = profile;
+    }
+
+
+    public User(Long id, String nom, String prenom, String email, String password, String matricule, Profile profile, List<StationUser> stations, List<PompeUser> pompes) {
+        this.id_user = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.password = new BCryptPasswordEncoder().encode(password);
+        this.matricule = matricule;
+        this.profile = profile;
+        this.stations = stations;
+        this.pompes = pompes;
     }
 
     public User(Long id, String nom, String prenom, String email, String password, String matricule, Profile profile) {

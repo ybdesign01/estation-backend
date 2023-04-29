@@ -2,10 +2,12 @@ package com.app.estation.mappers;
 
 import com.app.estation.dto.ReleveDto;
 import com.app.estation.entity.Releve;
+import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
+@Mapper(uses = {PompeMapper.class})
 public interface ReleveMapper {
 
     ReleveMapper INSTANCE = Mappers.getMapper(ReleveMapper.class);
@@ -17,8 +19,5 @@ public interface ReleveMapper {
     List<Releve> releveDtoListToReleveList(List<ReleveDto> releveDtoList);
 
     List<ReleveDto> releveListToReleveDtoList(List<Releve> releveList);
-
-
-
 
 }

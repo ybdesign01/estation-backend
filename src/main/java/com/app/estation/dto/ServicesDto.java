@@ -13,12 +13,12 @@ public class ServicesDto {
     @NotBlank(message = "Description obligatoire!")
     private String description;
 
-    private Set<StationWithoutServices> stations;
+    private Set<StationDto> stations;
 
      public ServicesDto() {
     }
 
-    public ServicesDto(Long id, String nom_service, String description, Set<StationWithoutServices> stations) {
+    public ServicesDto(Long id, String nom_service, String description, Set<StationDto> stations) {
         this.id = id;
         this.nom_service = nom_service;
         this.description = description;

@@ -17,38 +17,41 @@ public class ReleveServiceImpl implements ReleveService {
     @Autowired
     ReleveRepository releveRepository;
 
+
     @Override
-    public List<Releve> getAll() {
-        return (List<Releve>) releveRepository.findAll();
+    public List<ReleveDto> getAll() {
+        List<ReleveDto> list = ReleveMapper.INSTANCE.releveListToReleveDtoList((List<Releve>) releveRepository.findAll());
+        return list;
     }
 
     @Override
-    public Releve getReleve(Long id) {
-        return releveRepository.findById(id).orElse(null);
+    public ReleveDto getReleve(Long id) {
+        ReleveDto releveDto = ReleveMapper.INSTANCE.releveToReleveDto(releveRepository.findById(id).get());
+        return releveDto;
     }
 
     @Override
-    public Releve addReleve(ReleveDto releve) {
+    public boolean addReleve(ReleveDto releve) {
         Releve r = ReleveMapper.INSTANCE.releveDtoToReleve(releve);
         try {
             releveRepository.save(r);
-            return r;
+            return true;
         } catch (Exception e) {
-            return null;
+            return false;
         }
     }
 
     @Override
-    public Releve updateReleve(Long id, ReleveDto releve) {
+    public boolean updateReleve(Long id, ReleveDto releve) {
         if (releveRepository.findById(id).isEmpty()) {
-            return null;
+            return false;
         }
         Releve r = ReleveMapper.INSTANCE.releveDtoToReleve(releve);
         try {
             releveRepository.save(r);
-            return r;
+            return true;
         } catch (Exception e) {
-            return null;
+            return false;
         }
     }
 

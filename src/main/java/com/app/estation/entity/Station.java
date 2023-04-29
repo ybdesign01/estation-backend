@@ -26,6 +26,9 @@ public class Station {
             inverseJoinColumns = @JoinColumn(name = "id_service"))
     private Set<Services> services;
 
+    @OneToMany(mappedBy = "station")
+    private Set<StationUser> users;
+
 
     public Station(Long id, String nom_station, String adresse, Set<Services> services) {
         this.id = id;

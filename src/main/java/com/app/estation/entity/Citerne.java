@@ -13,17 +13,14 @@ public class Citerne {
     private Long id_citerne;
     private String nom_citerne;
     private String capacite;
-    private Long id_produit;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Produit id_produit;
 
-    @ManyToMany
-    @JoinTable(
-            name = "citerne_pompe",
-            joinColumns = @JoinColumn(name = "id_citerne"),
-            inverseJoinColumns = @JoinColumn(name = "id_pompe"))
+    @ManyToMany(mappedBy = "citernes", cascade = CascadeType.ALL)
     private List<Pompe> pompes;
 
 
-    public Citerne(Long id_citerne, String nom_citerne, String capacite, Long id_produit, List<Pompe> pompes) {
+    public Citerne(Long id_citerne, String nom_citerne, String capacite, Produit id_produit, List<Pompe> pompes) {
         this.id_citerne = id_citerne;
         this.nom_citerne = nom_citerne;
         this.capacite = capacite;
@@ -58,11 +55,11 @@ public class Citerne {
         this.capacite = capacite;
     }
 
-    public Long getId_produit() {
+    public Produit getId_produit() {
         return id_produit;
     }
 
-    public void setId_produit(Long id_produit) {
+    public void setId_produit(Produit id_produit) {
         this.id_produit = id_produit;
     }
 

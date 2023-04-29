@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface ReleveService {
 
-    List<Releve> getAll();
+    List<ReleveDto> getAll();
 
-    Releve getReleve(Long id);
+    ReleveDto getReleve(Long id);
 
-    Releve addReleve(ReleveDto releve);
+    boolean addReleve(ReleveDto releve);
 
-    Releve updateReleve(Long id, ReleveDto releve);
+    boolean updateReleve(Long id, ReleveDto releve);
 
     boolean deleteReleve(Long id);
 

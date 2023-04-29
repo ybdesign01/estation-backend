@@ -21,7 +21,11 @@ public class Pompe {
             inverseJoinColumns = @JoinColumn(name = "id_citerne"))
     private List<Citerne> citernes;
 
-    public Pompe(Long id_pompe, String nom_pompe, List<Citerne> citernes) {
+    @OneToMany(mappedBy = "pompe")
+    private List<PompeUser> users;
+
+    public Pompe(Long id_pompe, String nom_pompe, List<Citerne> citernes, List<PompeUser> users) {
+        this.users = users;
         this.id_pompe = id_pompe;
         this.nom_pompe = nom_pompe;
         this.citernes = citernes;
@@ -54,5 +58,11 @@ public class Pompe {
         this.citernes = citernes;
     }
 
+    public List<PompeUser> getUsers() {
+        return this.users;
+    }
 
+    public void setUsers(final List<PompeUser> users) {
+        this.users = users;
+    }
 }

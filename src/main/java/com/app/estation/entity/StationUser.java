@@ -3,6 +3,7 @@ package com.app.estation.entity;
 import com.app.estation.entity.keys.StationUserKey;
 import jakarta.persistence.*;
 
+import java.util.Objects;
 
 
 @Entity
@@ -29,7 +30,7 @@ public class StationUser {
     public StationUser() {
     }
 
-public StationUser(Station station, User user, String date_debut, String date_fin) {
+    public StationUser(Station station, User user, String date_debut, String date_fin) {
         this.station = station;
         this.user = user;
         this.date_debut = date_debut;
@@ -76,5 +77,17 @@ public StationUser(Station station, User user, String date_debut, String date_fi
 
     public void setDate_fin(String date_fin) {
         this.date_fin = date_fin;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StationUser that)) return false;
+        return Objects.equals(stationUserKey, that.stationUserKey) && Objects.equals(station, that.station) && Objects.equals(user, that.user) && Objects.equals(date_debut, that.date_debut) && Objects.equals(date_fin, that.date_fin);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(stationUserKey, station, user, date_debut, date_fin);
     }
 }

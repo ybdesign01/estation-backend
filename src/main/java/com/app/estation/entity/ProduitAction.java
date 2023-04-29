@@ -14,10 +14,11 @@ public class ProduitAction {
     private Produit produit;
     private String date_action;
     private String quantite;
-    private Boolean action;
+    @Enumerated(EnumType.STRING)
+    private TypeAction action;
     private String fournisseur;
 
-public ProduitAction(Long id_action, Produit produit, String date_action, String quantite, Boolean action, String fournisseur) {
+public ProduitAction(Long id_action, Produit produit, String date_action, String quantite, TypeAction action, String fournisseur) {
         this.id_action = id_action;
         this.produit = produit;
         this.date_action = date_action;
@@ -61,11 +62,11 @@ public ProduitAction(Long id_action, Produit produit, String date_action, String
         this.quantite = quantite;
     }
 
-    public Boolean getAction() {
+    public TypeAction getAction() {
         return action;
     }
 
-    public void setAction(Boolean action) {
+    public void setAction(TypeAction action) {
         this.action = action;
     }
 
