@@ -28,6 +28,10 @@ public class UserDto {
     private String matricule;
     private ProfileDto profile;
 
+
+
+
+
     public UserDto() {
     }
 

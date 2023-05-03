@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/station")
@@ -27,17 +28,22 @@ public class StationController {
     @Autowired
     ServicesImpl servicesService;
 
-
+    @Autowired
+    ObjectMapper objectMapper;
 
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<?> getAll(){
-            List<Station> stations = stationService.findAll();
-            if (null == stations){
+            List<StationDto> stations = stationService.findAll();
+            if (null == stations ){
                 return ResponseEntity.badRequest().body(Map.of("msg","no_station_found"));
             }
-            List<StationDto> dtos = StationMapper.INSTANCE.stationListToStationDtos(stations);
-            return ResponseEntity.ok().body(dtos);
+        try {
+            String json = objectMapper.writeValueAsString(stations);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.ok().body(stations);
     }
 
     @GetMapping(value = "/getServices/{id}", produces = "application/json")
@@ -53,7 +59,7 @@ public class StationController {
 
     @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> getStation(@PathVariable Long id){
-        Station station = stationService.getStation(id);
+        StationDto station = stationService.getStation(id);
         if (null == station){
             return ResponseEntity.badRequest().body(Map.of("msg","no_station_found"));
         }
@@ -62,11 +68,13 @@ public class StationController {
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> addStation(@Validated @RequestBody StationDto stationDto){
-        if (stationService.addStation(stationDto)){
+        System.out.println(stationDto);
+       /* if (stationService.addStation(stationDto)){
             return ResponseEntity.status(201).body(Map.of("msg","station_added"));
         }else{
             return ResponseEntity.badRequest().body(Map.of("msg","station_not_added"));
-        }
+        }*/
+        return ResponseEntity.ok().body(Map.of("msg","station_added"));
     }
 
     @PutMapping(value = "/{id}", produces = "application/json", consumes = "application/json")

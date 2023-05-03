@@ -21,8 +21,8 @@ public class ServiceController {
     @Autowired
     ServicesImpl servicesService;
 
-
-
+    @Autowired
+    ObjectMapper objectMapper;
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<?> getServices(){
@@ -30,22 +30,30 @@ public class ServiceController {
         if (services == null)
             return ResponseEntity.badRequest().body(Map.of("msg","no_services_found"));
         else {
-                List<ServicesDto> dtos = ServicesMapper.INSTANCE.servicesListToServicesDtos(services);
-                return ResponseEntity.ok().body(dtos);
+                List<ServicesDto> dtos = services.stream().map(ServicesDto::fromEntity).toList();
+            try {
+                String json = objectMapper.writeValueAsString(dtos);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            return ResponseEntity.ok().body(dtos);
         }
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> getService(@PathVariable Long id){
         Services service = servicesService.getService(id);
-        ServicesDto dto = ServicesMapper.INSTANCE.servicesToServicesDto(service);
-        if (null == service)
+        if (null == service){
             return ResponseEntity.badRequest().body(Map.of("msg","no_service_found"));
-        return ResponseEntity.ok(dto);
+        }
+        else{
+            ServicesDto dto = ServicesDto.fromEntity(service);
+            return ResponseEntity.ok().body(dto);
+        }
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
-    public ResponseEntity<?> addService(@Validated @RequestBody ServicesDto service){
+    public ResponseEntity<?> addService(@Validated @RequestBody final ServicesDto service){
         if (servicesService.addService(service)){
             return ResponseEntity.ok().body(Map.of("msg","service_added"));
         }else {

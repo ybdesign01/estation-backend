@@ -27,7 +27,7 @@ public class ServicesImpl implements ServicesService {
     }
 
     public boolean addService(ServicesDto service) {
-        Services s = ServicesMapper.INSTANCE.servicesDtoToServices(service);
+        final Services s = ServicesDto.toEntity(service);
         try {
             serviceRepository.save(s);
             return true;
@@ -36,11 +36,22 @@ public class ServicesImpl implements ServicesService {
         }
     }
 
+    public List<Services> findAllServices(List<Long> ids) {
+        List<Services> services = serviceRepository.findAllById(ids);
+        if (services.isEmpty()) {
+            return null;
+        }else{
+            return services;
+        }
+    }
+
     public boolean updateService(ServicesDto service, Long id) {
-        if (serviceRepository.findById(id).isEmpty()) {
+        Services s =serviceRepository.findById(id).orElse(null);
+        if (s == null) {
             return false;
         }
-        Services s = ServicesMapper.INSTANCE.servicesDtoToServices(service);
+        s.setNom_service(service.getNom_service());
+        s.setDescription(service.getDescription());
         try {
             serviceRepository.save(s);
             return true;

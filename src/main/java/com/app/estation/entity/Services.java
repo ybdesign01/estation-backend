@@ -22,7 +22,6 @@ public class Services {
             CascadeType.PERSIST,
             CascadeType.MERGE
     })
-
     private Set<Station> stations;
 
     public Services(Long id_service, String nom_service, String description) {

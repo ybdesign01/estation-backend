@@ -30,15 +30,17 @@ public class StationServiceImpl implements StationService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Override
-    public List<Station> findAll() {
+
+    public List<StationDto> findAll() {
         List<Station> stations = stationRepository.findAll();
         if (stations.isEmpty()) {
             return null;
         }else{
-            return stations;
+            return StationDto.fromEntityList(stations);
         }
     }
+
+
 
     public List<Services> getServices(Long id) {
         List<Services> s = servicesService.findServicesByStationId(id);
@@ -50,13 +52,18 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
-    public Station getStation(Long id) {
-        return stationRepository.findById(id).orElse(null);
+    public StationDto getStation(Long id) {
+        Station station = stationRepository.findById(id).orElse(null);
+        if (station == null) {
+            return null;
+        }else{
+            return StationDto.fromEntity(station);
+        }
     }
 
     @Override
     public Boolean addStation(StationDto station) {
-            Station station1 = StationMapper.INSTANCE.stationDtoToStation(station);
+            Station station1 = StationDto.toEntity(station);
             Set<Services> servicesSet = new HashSet<>();
             Set<Services> servs = station1.getServices();
             for (Services serv : servs) {

@@ -60,7 +60,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }catch (ExpiredJwtException e) {
                 Map<String, String> responseBody = new HashMap<>();
-                responseBody.put("msg", e.getLocalizedMessage());
+                responseBody.put("msg", "invalid_token");
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
                 response.getWriter().write(objectMapper.writeValueAsString(responseBody));
