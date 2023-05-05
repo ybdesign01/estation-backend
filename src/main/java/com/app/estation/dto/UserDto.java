@@ -2,16 +2,13 @@ package com.app.estation.dto;
 
 import com.app.estation.advice.validation.InsertValidation;
 import com.app.estation.advice.validation.UpdateValidation;
-import com.app.estation.entity.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 
-import org.hibernate.validator.constraints.Length;
+import java.util.List;
 
-
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto {
 
     private Long id_user;
@@ -25,10 +22,22 @@ public class UserDto {
     @NotBlank(message = "matricule obligatoire!", groups = InsertValidation.class)
     private String matricule;
     private ProfileDto profile;
+    private List<StationUserDto> stations;
+
 
 
 
     public UserDto() {
+    }
+
+    public UserDto(Long id_user, String nom, String prenom, String email, String matricule, ProfileDto profile, List<StationUserDto> stations) {
+        this.id_user = id_user;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.matricule = matricule;
+        this.profile = profile;
+        this.stations = stations;
     }
 
     public UserDto(Long id_user, String nom, String prenom, String email, String matricule, ProfileDto profile) {
@@ -38,6 +47,14 @@ public class UserDto {
         this.email = email;
         this.matricule = matricule;
         this.profile = profile;
+    }
+
+    public List<StationUserDto> getStations() {
+        return this.stations;
+    }
+
+    public void setStations(final List<StationUserDto> stations) {
+        this.stations = stations;
     }
 
     public Long getId_user() {

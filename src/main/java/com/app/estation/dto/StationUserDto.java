@@ -2,26 +2,45 @@ package com.app.estation.dto;
 
 import com.app.estation.entity.Station;
 import com.app.estation.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
+import jakarta.validation.constraints.NotBlank;
 
+import java.util.Date;
 import java.util.Objects;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StationUserDto {
-    Station station;
-    User user;
+
+    private StationUserKeyDto stationUserKey;
+    @NotBlank(message = "station_mandatory")
+    private StationDto station;
+    @NotBlank(message = "user_mandatory")
+    private UserDto user;
     private String date_debut;
     private String date_fin;
 
      public StationUserDto() {
+
     }
 
-    public StationUserDto(final Station station, final User user, final String date_debut, final String date_fin) {
-        this.station = station;
-        this.user = user;
-        this.date_debut = date_debut;
-        this.date_fin = date_fin;
+    public StationUserDto(final StationUserKeyDto key, final StationDto station, final UserDto user, final String date_debut, final String date_fin) {
+         this.stationUserKey = key;
+         this.station = station;
+         this.user = user;
+         this.date_debut = Date.from(new Date().toInstant()).toString();
+         this.date_fin = date_fin;
+    }
+
+    public StationUserKeyDto getStationUserKey() {
+        return this.stationUserKey;
+    }
+
+    public void setStationUserKey(final StationUserKeyDto stationUserKey) {
+        this.stationUserKey = stationUserKey;
     }
 
     @Override
@@ -36,19 +55,19 @@ public class StationUserDto {
         return Objects.hash(station, user, date_debut, date_fin);
     }
 
-    public Station getStation() {
+    public StationDto getStation() {
         return this.station;
     }
 
-    public void setStation(final Station station) {
+    public void setStation(final StationDto station) {
         this.station = station;
     }
 
-    public User getUser() {
+    public UserDto getUser() {
         return this.user;
     }
 
-    public void setUser(final User user) {
+    public void setUser(final UserDto user) {
         this.user = user;
     }
 

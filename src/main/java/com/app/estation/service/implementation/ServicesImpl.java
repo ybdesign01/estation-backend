@@ -21,7 +21,7 @@ public class ServicesImpl implements ServicesService {
     @Override
     public List<ServicesDto> getServices() {
         List<ServicesDto> s = ServicesMapper.fromEntityList(serviceRepository.findAll());
-        if (s.isEmpty()) {
+        if (s == null) {
             return null;
         }else{
             return s;

@@ -7,14 +7,13 @@ import java.util.Objects;
 
 
 @Entity
-
 public class StationUser {
 
     @EmbeddedId
     private StationUserKey stationUserKey;
 
     @ManyToOne
-    @MapsId("id_station")
+    @MapsId("id")
     @JoinColumn(name = "id_station")
     Station station;
 
@@ -89,5 +88,16 @@ public class StationUser {
     @Override
     public int hashCode() {
         return Objects.hash(stationUserKey, station, user, date_debut, date_fin);
+    }
+
+    @Override
+    public String toString() {
+        return "StationUser{" +
+                "stationUserKey=" + stationUserKey +
+                ", station=" + station.getId() +
+                ", user=" + user.getId_user() +
+                ", date_debut='" + date_debut + '\'' +
+                ", date_fin='" + date_fin + '\'' +
+                '}';
     }
 }

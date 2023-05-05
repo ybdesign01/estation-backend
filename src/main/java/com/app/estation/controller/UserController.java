@@ -2,10 +2,13 @@ package com.app.estation.controller;
 
 
 import com.app.estation.advice.validation.InsertValidation;
+import com.app.estation.dto.StationUserDto;
 import com.app.estation.dto.UserDto;
 import com.app.estation.dto.UserPassDto;
+import com.app.estation.entity.StationUser;
 import com.app.estation.entity.User;
 import com.app.estation.mappers.UserMapper;
+import com.app.estation.service.implementation.StationUserServiceImpl;
 import com.app.estation.service.implementation.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +27,9 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
+
+    @Autowired
+    private StationUserServiceImpl stationUserService;
 
 
     @GetMapping
@@ -82,6 +88,29 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","user_not_found"));
         }
     }
+
+    @GetMapping(value = "/getStation/{id}", produces = "application/json")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getStation(@PathVariable final Long id){
+        List<StationUserDto> stations = stationUserService.getAllStationsByUser(id);
+        if(null != stations){
+            return ResponseEntity.ok().body(stations);
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","no_station_found"));
+        }
+    }
+
+    @PostMapping(value = "/setStation", produces = "application/json", consumes = "application/json")
+    @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
+    public ResponseEntity<?> setStation(@RequestBody final StationUserDto stationUserDto){
+        StationUserDto station = stationUserService.addStationUser(stationUserDto);
+        if(null != station){
+            return ResponseEntity.status(HttpStatus.CREATED).body(station);
+        }else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","station_user_exists"));
+        }
+    }
+
 
 
 

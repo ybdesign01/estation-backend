@@ -18,6 +18,9 @@ public class UserMapper {
         userDto.setEmail(user.getEmail());
         userDto.setMatricule(user.getMatricule());
         userDto.setProfile(ProfileMapper.fromEntity(user.getProfile()));
+        if (user.getStations() != null){
+            userDto.setStations(user.getStations().stream().map(StationUserMapper::fromEntityWithoutUser).collect(Collectors.toList()));
+        }
         return userDto;
     }
 
@@ -30,6 +33,9 @@ public class UserMapper {
         user.setEmail(userDto.getEmail());
         user.setMatricule(userDto.getMatricule());
         user.setProfile(ProfileMapper.toEntity(userDto.getProfile()));
+        if (userDto.getStations() != null){
+            user.setStations(userDto.getStations().stream().map(StationUserMapper::toEntity).collect(Collectors.toList()));
+        }
         return user;
     }
 

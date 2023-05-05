@@ -23,6 +23,9 @@ public class StationDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Set<ServicesDto> services;
 
+    private Set<StationUserDto> users;
+
+
 
     public StationDto() {
     }

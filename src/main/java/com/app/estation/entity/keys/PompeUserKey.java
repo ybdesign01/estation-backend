@@ -17,6 +17,14 @@ public class PompeUserKey implements Serializable {
     @Column
     Long id_user;
 
+    public PompeUserKey(Long idUser, Long id) {
+        this.id_pompe = id;
+        this.id_user = idUser;
+    }
+
+    public PompeUserKey() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

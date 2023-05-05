@@ -100,6 +100,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     @Override
     public boolean deleteUser(Long id) {
         if (userRepository.existsById(id)){

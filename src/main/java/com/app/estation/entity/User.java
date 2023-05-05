@@ -39,6 +39,23 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<PompeUser> pompes;
 
+
+    public List<StationUser> getStations() {
+        return this.stations;
+    }
+
+    public void setStations(final List<StationUser> stations) {
+        this.stations = stations;
+    }
+
+    public List<PompeUser> getPompes() {
+        return this.pompes;
+    }
+
+    public void setPompes(final List<PompeUser> pompes) {
+        this.pompes = pompes;
+    }
+
     public User() {
     }
 

@@ -1,19 +1,77 @@
 package com.app.estation.mappers;
 
 import com.app.estation.dto.StationUserDto;
+import com.app.estation.dto.StationUserKeyDto;
+import com.app.estation.entity.Station;
 import com.app.estation.entity.StationUser;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import com.app.estation.entity.User;
+import com.app.estation.entity.keys.StationUserKey;
 
 import java.util.List;
 
-@Mapper(uses = {StationMapper.class, UserMapper.class})
-public interface StationUserMapper {
+public class StationUserMapper {
 
-    StationUserMapper INSTANCE = Mappers.getMapper(StationUserMapper.class);
+    public static StationUserDto fromEntity(StationUser entity) {
+        if (entity == null) {
+            return null;
+        }
+        StationUserDto dto = new StationUserDto();
+        dto.setStationUserKey(new StationUserKeyDto(entity.getStationUserKey().getId_station(), entity.getStationUserKey().getId_user()));
+        dto.setStation(StationMapper.fromEntityWithoutServices(entity.getStation()));
+        entity.getUser().setStations(null);
+        dto.setUser(UserMapper.fromEntity(entity.getUser()));
+        dto.setDate_debut(entity.getDate_debut());
+        dto.setDate_fin(entity.getDate_fin());
+        return dto;
+    }
 
-    StationUserDto stationUserToStationUserDto(StationUser stationUser);
-    StationUser stationUserDtoToStationUser(StationUserDto stationUserDto);
-    List<StationUser> stationUserDtosToStationUsers(List<StationUserDto> stationUserDtos);
-    List<StationUserDto> stationUsersToStationUserDtos(List<StationUser> stationUsers);
+    public static StationUser toEntity(StationUserDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        StationUser entity = new StationUser();
+        entity.setStationUserKey(new StationUserKey(dto.getStationUserKey().getId_user(), dto.getStationUserKey().getId_station()));
+        entity.setStation(StationMapper.toEntity(dto.getStation()));
+        entity.setUser(UserMapper.toEntity(dto.getUser()));
+        entity.setDate_debut(dto.getDate_debut());
+        entity.setDate_fin(dto.getDate_fin());
+        System.out.println(entity);
+        return entity;
+    }
+
+    public static StationUserDto fromEntityWithoutUser(StationUser entity) {
+        if (entity == null) {
+            return null;
+        }
+        StationUserDto stationUser = new StationUserDto();
+        stationUser.setStation(StationMapper.fromEntityWithoutServices(entity.getStation()));
+        stationUser.setDate_debut(entity.getDate_debut());
+        stationUser.setDate_fin(entity.getDate_fin());
+        return stationUser;
+    }
+
+    public static StationUser fromEntityWithoutStation(StationUser entity) {
+        if (entity == null) {
+            return null;
+        }
+        StationUser stationUser = new StationUser();
+        stationUser.setUser(entity.getUser());
+        stationUser.setDate_debut(entity.getDate_debut());
+        stationUser.setDate_fin(entity.getDate_fin());
+        return stationUser;
+    }
+
+    public static List<StationUserDto> fromEntityList(List<StationUser> stationUsers) {
+        if (stationUsers == null) {
+            return null;
+        }
+        return stationUsers.stream().map(StationUserMapper::fromEntity).collect(java.util.stream.Collectors.toList());
+    }
+
+    public static List<StationUser> toEntityList(List<StationUserDto> stationUsers) {
+        if (stationUsers == null) {
+            return null;
+        }
+        return stationUsers.stream().map(StationUserMapper::toEntity).collect(java.util.stream.Collectors.toList());
+    }
 }
