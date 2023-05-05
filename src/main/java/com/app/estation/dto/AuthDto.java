@@ -5,14 +5,14 @@ import java.util.Objects;
 public class AuthDto {
     private String token;
     private String msg;
-    private UserPassDto user;
+    private UserDto user;
 
     private String refreshToken;
 
     public AuthDto() {
     }
 
-    public AuthDto(String token, String refreshToken, String msg, UserPassDto user) {
+    public AuthDto(String token, String refreshToken, String msg, UserDto user) {
         this.token = token;
         this.refreshToken = refreshToken;
         this.msg = msg;
@@ -55,11 +55,11 @@ public class AuthDto {
         this.msg = msg;
     }
 
-    public UserPassDto getUser() {
+    public UserDto getUser() {
         return user;
     }
 
-    public void setUser(UserPassDto user) {
+    public void setUser(UserDto user) {
         this.user = user;
     }
 }

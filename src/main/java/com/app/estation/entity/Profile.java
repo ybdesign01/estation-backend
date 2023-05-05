@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class Profile implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_profile;
     private String nom;
     private String description;

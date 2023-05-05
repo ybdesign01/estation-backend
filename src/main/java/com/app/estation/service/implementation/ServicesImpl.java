@@ -17,65 +17,61 @@ public class ServicesImpl implements ServicesService {
 
     @Autowired
     private ServiceRepository serviceRepository;
-    public List<Services> getServices() {
-        List<Services> s = serviceRepository.findAll();
+
+    @Override
+    public List<ServicesDto> getServices() {
+        List<ServicesDto> s = ServicesMapper.fromEntityList(serviceRepository.findAll());
         if (s.isEmpty()) {
             return null;
         }else{
             return s;
         }
     }
-
-    public boolean addService(ServicesDto service) {
-        final Services s = ServicesDto.toEntity(service);
+    @Override
+    public ServicesDto addService(ServicesDto service) {
+        final Services s = ServicesMapper.toEntity(service);
         try {
             serviceRepository.save(s);
-            return true;
+            return ServicesMapper.fromEntity(serviceRepository.findById(s.getId()).orElse(null));
         } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public List<Services> findAllServices(List<Long> ids) {
-        List<Services> services = serviceRepository.findAllById(ids);
-        if (services.isEmpty()) {
             return null;
-        }else{
-            return services;
         }
     }
 
-    public boolean updateService(ServicesDto service, Long id) {
+    public ServicesDto updateService(ServicesDto service, Long id) {
         Services s =serviceRepository.findById(id).orElse(null);
         if (s == null) {
-            return false;
+            return null;
         }
         s.setNom_service(service.getNom_service());
         s.setDescription(service.getDescription());
         try {
             serviceRepository.save(s);
-            return true;
+            return ServicesMapper.fromEntity(s);
         } catch (Exception e) {
-            return false;
+            return null;
         }
     }
 
-    public boolean deleteService(Long id) {
-        if (serviceRepository.findById(id).isPresent()) {
-            serviceRepository.deleteById(id);
-            return true;
-        }else{
-            return false;
+    public ServicesDto deleteService(Long id) {
+        Services s = serviceRepository.findById(id).orElse(null);
+        if (s == null) {
+            return null;
         }
-
+        try {
+            serviceRepository.delete(s);
+            return ServicesMapper.fromEntity(s);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
-    public List<Services> findServicesByStationId(Long stationId){
-        return serviceRepository.findServicesByStationsId(stationId);
+    public List<ServicesDto> findServicesByStationId(Long stationId){
+        return ServicesMapper.fromEntityList(serviceRepository.findServicesByStationsId(stationId));
     }
 
-    public Services getService(Long id) {
-        return serviceRepository.findById(id).orElse(null);
+    public ServicesDto getService(Long id) {
+        return ServicesMapper.fromEntity(serviceRepository.findById(id).orElse(null));
     }
 
 }

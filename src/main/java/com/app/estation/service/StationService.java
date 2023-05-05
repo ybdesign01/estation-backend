@@ -7,10 +7,10 @@ import java.util.List;
 public interface StationService {
     List<StationDto> findAll();
     StationDto getStation(Long id);
-    Boolean addStation(StationDto station);
-    Boolean updateStation(StationDto station, Long id);
-    Boolean deleteStation(Long id);
-    List<Station> findStationByServicesId(Long id);
+    StationDto addStation(StationDto station);
+    StationDto updateStation(StationDto station, Long id);
+    StationDto deleteStation(Long id);
+    List<StationDto> findStationByServicesId(Long id);
 
 
 }

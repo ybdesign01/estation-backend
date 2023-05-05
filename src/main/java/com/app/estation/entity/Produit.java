@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Produit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_produit;
     private String nom_produit;
     private String prix_achat;

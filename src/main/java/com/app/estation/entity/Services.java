@@ -13,15 +13,12 @@ import java.util.Set;
 public class Services {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nom_service;
     private String description;
 
-    @ManyToMany(mappedBy = "services", fetch = FetchType.LAZY,  cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
+    @ManyToMany(mappedBy = "services", fetch = FetchType.LAZY,  cascade = CascadeType.MERGE)
     private Set<Station> stations;
 
     public Services(Long id_service, String nom_service, String description) {

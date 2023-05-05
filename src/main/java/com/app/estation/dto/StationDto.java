@@ -3,6 +3,7 @@ package com.app.estation.dto;
 
 import com.app.estation.entity.Station;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -19,29 +20,14 @@ public class StationDto {
     @NotBlank(message = "Adresse obligatoires!")
     private String adresse;
     @NotEmpty(message = "Services obligatoires!")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Set<ServicesDto> services;
 
 
     public StationDto() {
     }
 
-    public static StationDto fromEntity(Station station){
-        StationDto stationDto = new StationDto();
-        stationDto.setId(stationDto.getId());
-        stationDto.setNom_station(stationDto.getNom_station());
-        stationDto.setAdresse(stationDto.getAdresse());
-        Set<ServicesDto> servicesDtos = station.getServices().stream().map(ServicesDto::fromEntity).collect(Collectors.toSet());
-        stationDto.setServices(servicesDtos);
-        return stationDto;
-    }
 
-    public static StationDto fromEntityWithoutServices(Station station){
-        StationDto stationDto = new StationDto();
-        stationDto.setId(station.getId());
-        stationDto.setNom_station(station.getNom_station());
-        stationDto.setAdresse(station.getAdresse());
-        return stationDto;
-    }
 
     public StationDto(Long id, String nom_station, String adresse, Set<ServicesDto> services) {
         this.id = id;
@@ -50,18 +36,7 @@ public class StationDto {
         this.services = services;
     }
 
-    public static List<StationDto> fromEntityList(List<Station> stations) {
-        return stations.stream().map(StationDto::fromEntity).collect(Collectors.toList());
-    }
 
-    public static Station toEntity(StationDto station) {
-        Station station1 = new Station();
-        station1.setId(station.getId());
-        station1.setNom_station(station.getNom_station());
-        station1.setAdresse(station.getAdresse());
-
-        return station1;
-    }
 
 
     public Long getId() {

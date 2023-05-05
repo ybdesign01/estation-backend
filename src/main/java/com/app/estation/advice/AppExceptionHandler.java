@@ -36,7 +36,8 @@ public class AppExceptionHandler {
     @ExceptionHandler(value = TokenRefreshException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResponseEntity<?> handleTokenRefreshException(TokenRefreshException ex) {
-        return new ResponseEntity<>(Map.of("msg",ex.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
+        System.out.println("TokenRefreshException: " + ex.getMessage());
+        return new ResponseEntity<>(Map.of("msg",ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
 /*    @ExceptionHandler(value = Exception.class)

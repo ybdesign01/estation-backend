@@ -3,6 +3,7 @@ package com.app.estation.dto;
 import com.app.estation.entity.Services;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 
 
@@ -15,6 +16,8 @@ public class ServicesDto {
     private String nom_service;
     @NotBlank(message = "Description obligatoire!")
     private String description;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Set<StationDto> stations;
 
      public ServicesDto() {
@@ -27,24 +30,7 @@ public class ServicesDto {
         this.stations = stations;
     }
 
-    public static ServicesDto fromEntity(Services services){
-         ServicesDto servicesDto = new ServicesDto();
-            servicesDto.setId(services.getId());
-            servicesDto.setNom_service(services.getNom_service());
-            servicesDto.setDescription(services.getDescription());
-            Set<StationDto> stationDtos = services.getStations().stream().map(StationDto::fromEntityWithoutServices).collect(Collectors.toSet());
-             System.out.println(stationDtos);
-            servicesDto.setStations(stationDtos);
-            return servicesDto;
-    }
 
-    public static Services toEntity(ServicesDto service) {
-        Services services = new Services();
-        services.setId(service.getId());
-        services.setNom_service(service.getNom_service());
-        services.setDescription(service.getDescription());
-        return services;
-    }
 
     public Long getId() {
         return id;

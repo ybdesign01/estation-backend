@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,21 +36,27 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public RefreshToken createRefreshToken(User u) {
         RefreshToken refreshToken = new RefreshToken();
-           boolean a = deleteRefreshToken(u);
-           System.out.println("a = " + a);
-               refreshToken.setUser(u);
-               refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
-               refreshToken.setToken(UUID.randomUUID().toString());
-               refreshToken = refreshTokenRepository.save(refreshToken);
-
-            return refreshToken;
+        final boolean isExpired = deleteRefreshToken(u);
+        System.out.println("token is = " + u.getRefreshToken() + " isExpired = " + isExpired);
+        if (null != u.getRefreshToken() && !isExpired) {
+            return u.getRefreshToken();
+        }
+        refreshToken.setUser(u);
+        refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
+        refreshToken.setToken(UUID.randomUUID().toString());
+        refreshToken = refreshTokenRepository.save(refreshToken);
+        return refreshToken;
     }
 
     public boolean deleteRefreshToken(User u) {
         RefreshToken r = u.getRefreshToken();
         if(r != null) {
-            refreshTokenRepository.deleteById(r.getId());
-            return true;
+            if (checkExpiration(r)) {
+                refreshTokenRepository.deleteById(r.getId());
+                return true;
+            }else {
+                return false;
+            }
         }
         return false;
     }
@@ -58,9 +65,16 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     public RefreshToken verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);
-            throw new TokenRefreshException(token.getToken(), "refresh_token_expired");
+            throw new TokenRefreshException("refresh_token_expired");
         }
         return token;
+    }
+
+    public boolean checkExpiration(RefreshToken token) {
+        if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
+            return true;
+        }
+        return false;
     }
 
     @Override

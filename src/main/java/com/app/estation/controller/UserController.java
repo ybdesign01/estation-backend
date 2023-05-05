@@ -29,16 +29,15 @@ public class UserController {
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<UserDto> getAll(){
-        List<UserDto> users = UserMapper.INSTANCE.usersToUserDtos(userService.getAll());
+        List<UserDto> users = userService.getAll();
         return users;
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getById(@PathVariable Long id){
-        User u = userService.getUser(id);
-        if(null != u){
-            UserPassDto user = UserMapper.INSTANCE.userToUserPassDto(u);
+        UserDto user = userService.getUser(id);
+        if(null != user){
             return ResponseEntity.ok().body(user);
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","user_not_found"));
@@ -48,9 +47,8 @@ public class UserController {
     @GetMapping(value = "/getUser", produces = "application/json")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getByToken(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
-        User u = userService.getUserByToken(token);
-        if(null != u){
-            UserPassDto user = UserMapper.INSTANCE.userToUserPassDto(u);
+        UserDto user = userService.getUserByToken(token);
+        if(null != user){
             return ResponseEntity.ok().body(user);
         }else{
             return ResponseEntity.notFound().build();
@@ -59,8 +57,8 @@ public class UserController {
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> addUser(@Validated(InsertValidation.class) @RequestBody UserDto userDto){
-        User user = userService.addUser(userDto);
+    public ResponseEntity<?> addUser(@Validated(InsertValidation.class) @RequestBody UserPassDto userDto){
+        UserDto user = userService.addUser(userDto);
         if(null == user){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","user_exists"));
         }else {
@@ -70,8 +68,8 @@ public class UserController {
 
     @PutMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateUser(@Validated(InsertValidation.class) @RequestBody UserDto userDto, @PathVariable Long id){
-        User user = userService.updateUser(id, userDto);
+    public ResponseEntity<?> updateUser(@Validated(InsertValidation.class) @RequestBody UserPassDto userDto, @PathVariable Long id){
+        UserDto user = userService.updateUser(id, userDto);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
     }
 

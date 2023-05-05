@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 public class ProduitAction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_action;
     @ManyToOne
     private Produit produit;

@@ -2,8 +2,10 @@ package com.app.estation.service.implementation;
 
 
 import com.app.estation.dto.UserDto;
+import com.app.estation.dto.UserPassDto;
 import com.app.estation.entity.Profile;
 import com.app.estation.entity.User;
+import com.app.estation.mappers.UserMapper;
 import com.app.estation.repository.UserRepository;
 import com.app.estation.service.UserService;
 import com.app.estation.util.PassEncode;
@@ -31,25 +33,30 @@ public class UserServiceImpl implements UserService {
     private JwtService jwtService;
 
     @Override
-    public List<User> getAll(){
-        return userRepository.findAll();
+    public List<UserDto> getAll(){
+        List<UserDto> users = UserMapper.fromEntityList(userRepository.findAll());
+        return users;
     }
 
     @Override
-    public User getUser(Long id) {
-        Optional<User> result = userRepository.findById(id);
-        return result.orElse(null);
+    public UserDto getUser(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        UserDto result = UserMapper.fromEntity(user);
+        return result;
     }
     @Override
-    public User getUserByToken(String token) {
+    public UserDto getUserByToken(String token) {
         String jwt = token.substring(7);
         String userEmail = jwtService.extractEmail(jwt);
         Optional<User> result = userRepository.findByEmail(userEmail);
-        return result.orElse(null);
+        return result.map(UserMapper::fromEntity).orElse(null);
     }
 
     @Override
-    public User addUser(UserDto userDto){
+    public UserDto addUser(UserPassDto userDto){
         Profile profile = profileService.findProfileByNom(userDto.getProfile().getNom());
         User user = userRepository.findByEmail(userDto.getEmail()).orElse(null);
         if (null != user){
@@ -63,30 +70,31 @@ public class UserServiceImpl implements UserService {
                 profile);
         userRepository.save(user);
         if (userRepository.existsByEmail(user.getEmail())){
-            return user;
+            return UserMapper.fromEntity(user);
         }else{
             return null;
         }
     }
 
     @Override
-    public User updateUser(Long id, UserDto userDto) {
+    public UserDto updateUser(Long id, UserPassDto userDto) {
         Profile profile = profileService.findProfileByNom(userDto.getProfile().getNom());
         if(null == profile){
             return null;
         }
-        User user = new User(
-                id,
-                userDto.getNom(),
-                userDto.getPrenom(),
-                userDto.getEmail(),
-                passEncode.encode(userDto.getPassword()),
-                userDto.getMatricule(),
-                profile
-        );
+        User user = userRepository.findById(id).orElse(null);
+        if (null == user){
+            return null;
+        }
+        user.setNom(userDto.getNom());
+        user.setPrenom(userDto.getPrenom());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passEncode.encode(userDto.getPassword()));
+        user.setMatricule(userDto.getMatricule());
+        user.setProfile(profile);
         userRepository.save(user);
         if (userRepository.existsByEmail(user.getEmail())){
-            return user;
+            return UserMapper.fromEntity(user);
         }else{
             return null;
         }

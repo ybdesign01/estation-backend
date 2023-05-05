@@ -12,14 +12,12 @@ import java.util.Set;
 public class Station {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nom_station;
     private String adresse;
-    @ManyToMany(targetEntity = Services.class,  cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    }, fetch = FetchType.LAZY)
+    @ManyToMany(targetEntity = Services.class,  cascade =
+            CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(
             name = "station_service",
             joinColumns = @JoinColumn(name = "id_station"),

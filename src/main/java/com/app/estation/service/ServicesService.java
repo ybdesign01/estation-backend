@@ -7,17 +7,17 @@ import com.app.estation.entity.Services;
 
 public interface ServicesService {
 
-    List<Services> getServices();
+    List<ServicesDto> getServices();
 
-    Services getService(Long id);
+    ServicesDto getService(Long id);
 
-    boolean addService(ServicesDto service);
+    ServicesDto addService(ServicesDto service);
 
-    boolean updateService(ServicesDto service, Long id);
+    ServicesDto updateService(ServicesDto service, Long id);
 
-    boolean deleteService(Long id);
+    ServicesDto deleteService(Long id);
 
-    List<Services> findServicesByStationId(Long id);
+    List<ServicesDto> findServicesByStationId(Long id);
 
 
 

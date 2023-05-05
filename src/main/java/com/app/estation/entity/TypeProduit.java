@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 public class TypeProduit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_type;
 
     private String nom_type;

@@ -2,6 +2,8 @@ package com.app.estation.dto;
 
 import com.app.estation.advice.validation.InsertValidation;
 import com.app.estation.advice.validation.UpdateValidation;
+import com.app.estation.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -20,27 +22,20 @@ public class UserDto {
     @NotBlank(message = "email obligatore!", groups = InsertValidation.class)
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "l'email invalide!", groups = {InsertValidation.class, UpdateValidation.class})
     private String email;
-    @NotBlank(message = "mot de passe obligatore!", groups = InsertValidation.class)
-    @Length(min = 8, max = 20, message = "le mot de passe doit contenir entre 8 et 20 caracteres!", groups = {InsertValidation.class, UpdateValidation.class})
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$", message = "Le mot de passe doit contenir une majuscule une miniscule et un caractere special!", groups = {InsertValidation.class, UpdateValidation.class})
-    private String password;
     @NotBlank(message = "matricule obligatoire!", groups = InsertValidation.class)
     private String matricule;
     private ProfileDto profile;
 
 
 
-
-
     public UserDto() {
     }
 
-    public UserDto(Long id_user, String nom, String prenom, String email, String password, String matricule, ProfileDto profile) {
+    public UserDto(Long id_user, String nom, String prenom, String email, String matricule, ProfileDto profile) {
         this.id_user = id_user;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
-        this.password = password;
         this.matricule = matricule;
         this.profile = profile;
     }
@@ -75,14 +70,6 @@ public class UserDto {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getMatricule() {

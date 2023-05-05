@@ -1,32 +1,66 @@
 package com.app.estation.mappers;
 
 import com.app.estation.dto.ServicesDto;
+import com.app.estation.dto.StationDto;
 import com.app.estation.entity.Services;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface ServicesMapper {
+public class ServicesMapper {
 
-    ServicesMapper INSTANCE = Mappers.getMapper(ServicesMapper.class);
+    public static ServicesDto fromEntity(Services services){
+        if (services == null) return null;
+        ServicesDto servicesDto = new ServicesDto();
+        servicesDto.setId(services.getId());
+        servicesDto.setNom_service(services.getNom_service());
+        servicesDto.setDescription(services.getDescription());
+        if (services.getStations() != null){
+            Set<StationDto> stationDtos = services.getStations().stream().map(StationMapper::fromEntityWithoutServices).collect(Collectors.toSet());
+            System.out.println(stationDtos);
+            servicesDto.setStations(stationDtos);
+        }
+        return servicesDto;
+    }
 
-    @Mapping(target = "stations.services", ignore = true)
-    ServicesDto servicesToServicesDto(Services services);
-    @Mapping(target = "stations.services", ignore = true)
-    Services servicesDtoToServices(ServicesDto servicesDto);
-    @Mapping(target = "stations.services", ignore = true)
-    List<ServicesDto> servicesListToServicesDtos(List<Services> services);
-    @Mapping(target = "stations.services", ignore = true)
-    List<ServicesDto> servicesListToServicesDtosWithStations(List<Services> services);
+    public static Services toEntity(ServicesDto service) {
+        if (service == null) return null;
+        Services services = new Services();
+        services.setId(service.getId());
+        services.setNom_service(service.getNom_service());
+        services.setDescription(service.getDescription());
+        return services;
+    }
 
-    @Mapping(target = "stations.services", ignore = true)
-    List<Services> servicesDtosListToServices(List<ServicesDto> servicesDtos);
+    public static ServicesDto fromEntityWithoutStations(Services services){
+        ServicesDto servicesDto = new ServicesDto();
+        servicesDto.setId(services.getId());
+        servicesDto.setNom_service(services.getNom_service());
+        servicesDto.setDescription(services.getDescription());
+        return servicesDto;
+    }
+
+    public static List<ServicesDto> fromEntityList(List<Services> services) {
+        if (services == null || services.isEmpty()) return null;
+        return services.stream().map(ServicesMapper::fromEntity).collect(Collectors.toList());
+    }
+
+    public static List<Services> toEntityList(List<ServicesDto> servicesDtos) {
+        if (servicesDtos == null || servicesDtos.isEmpty()) return null;
+        return servicesDtos.stream().map(ServicesMapper::toEntity).collect(Collectors.toList());
+    }
+
+    public static Set<ServicesDto> fromEntitySet(Set<Services> services) {
+        if (services == null || services.isEmpty()) return null;
+        return services.stream().map(ServicesMapper::fromEntity).collect(Collectors.toSet());
+    }
+
+    public static Set<Services> toEntitySet(Set<ServicesDto> servicesDtos) {
+        if (servicesDtos == null || servicesDtos.isEmpty()) return null;
+        return servicesDtos.stream().map(ServicesMapper::toEntity).collect(Collectors.toSet());
+    }
+
 
 
 

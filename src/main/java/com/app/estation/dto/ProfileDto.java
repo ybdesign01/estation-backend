@@ -1,6 +1,7 @@
 package com.app.estation.dto;
 
 import com.app.estation.advice.validation.InsertValidation;
+import com.app.estation.entity.Profile;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -11,6 +12,9 @@ public class ProfileDto {
     private String nom;
     @NotBlank(message = "description obligatore!", groups = InsertValidation.class)
     private String description;
+
+
+
 
     public ProfileDto() {
     }

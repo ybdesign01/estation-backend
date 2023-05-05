@@ -1,28 +1,52 @@
 package com.app.estation.mappers;
 
+import com.app.estation.dto.ServicesDto;
 import com.app.estation.dto.StationDto;
 import com.app.estation.entity.Station;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-@Mapper(uses = ServicesMapper.class, unmappedTargetPolicy = ReportingPolicy.WARN)
-public interface StationMapper {
+public class StationMapper {
 
-    StationMapper INSTANCE = Mappers.getMapper(StationMapper.class);
-    @Mapping(target = "services.stations", ignore = true)
-    StationDto stationToStationDto(Station station);
-    @Mapping(target = "services.stations", ignore = true)
-    Station stationDtoToStation(StationDto stationDto);
-    @Mapping(target = "services.stations", ignore = true)
-    Set<StationDto> stationSetToStationDtoSet(List<Station> stations);
-    @Mapping(target = "services.stations", ignore = true)
-    List<Station> stationDtosListToStations(List<StationDto> stationDtos);
+    public static StationDto fromEntity(Station station){
+        if (station == null) return null;
+        final StationDto stationDto = new StationDto();
+        stationDto.setId(station.getId());
+        stationDto.setNom_station(station.getNom_station());
+        stationDto.setAdresse(station.getAdresse());
+        final Set<ServicesDto> servicesDtos = station.getServices().stream().map(ServicesMapper::fromEntityWithoutStations).collect(Collectors.toSet());
+        stationDto.setServices(servicesDtos);
+        return stationDto;
+    }
 
+    public static StationDto fromEntityWithoutServices(Station station){
+        if (station == null) return null;
+        StationDto stationDto = new StationDto();
+        stationDto.setId(station.getId());
+        stationDto.setNom_station(station.getNom_station());
+        stationDto.setAdresse(station.getAdresse());
+        return stationDto;
+    }
 
+    public static List<StationDto> fromEntityList(List<Station> stations) {
+        if (stations == null || stations.isEmpty()) return null;
+        return stations.stream().map(StationMapper::fromEntity).collect(Collectors.toList());
+    }
 
+    public static List<StationDto> fromEntityListWithoutServices(List<Station> stations) {
+        if (stations == null || stations.isEmpty()) return null;
+        return stations.stream().map(StationMapper::fromEntity).collect(Collectors.toList());
+    }
+
+    public static Station toEntity(StationDto station) {
+        if (station == null) return null;
+        Station station1 = new Station();
+        station1.setId(station.getId());
+        station1.setNom_station(station.getNom_station());
+        station1.setAdresse(station.getAdresse());
+        station1.setServices(ServicesMapper.toEntitySet(station.getServices()));
+        return station1;
+    }
 }

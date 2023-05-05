@@ -10,7 +10,7 @@ import java.util.List;
 public class Pompe {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_pompe;
     private String nom_pompe;
 

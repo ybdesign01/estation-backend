@@ -9,7 +9,7 @@ import java.util.Objects;
 public class RefreshToken {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
@@ -75,5 +75,15 @@ public class RefreshToken {
 
     public void setUser(final User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "RefreshToken{" +
+                "id=" + id +
+                ", token='" + token + '\'' +
+                ", expiryDate=" + expiryDate +
+                ", user=" + user.getEmail() +
+                '}';
     }
 }

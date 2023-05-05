@@ -26,36 +26,35 @@ public class ServiceController {
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<?> getServices(){
-        List<Services> services = servicesService.getServices();
+        List<ServicesDto> services = servicesService.getServices();
         if (services == null)
             return ResponseEntity.badRequest().body(Map.of("msg","no_services_found"));
         else {
-                List<ServicesDto> dtos = services.stream().map(ServicesDto::fromEntity).toList();
             try {
-                String json = objectMapper.writeValueAsString(dtos);
+                String json = objectMapper.writeValueAsString(services);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
-            return ResponseEntity.ok().body(dtos);
+            return ResponseEntity.ok().body(services);
         }
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> getService(@PathVariable Long id){
-        Services service = servicesService.getService(id);
+        ServicesDto service = servicesService.getService(id);
         if (null == service){
             return ResponseEntity.badRequest().body(Map.of("msg","no_service_found"));
         }
         else{
-            ServicesDto dto = ServicesDto.fromEntity(service);
-            return ResponseEntity.ok().body(dto);
+            return ResponseEntity.ok().body(service);
         }
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> addService(@Validated @RequestBody final ServicesDto service){
-        if (servicesService.addService(service)){
-            return ResponseEntity.ok().body(Map.of("msg","service_added"));
+        ServicesDto s = servicesService.addService(service);
+        if (s != null){
+            return ResponseEntity.ok().body(Map.of("msg","service_added", "service", s));
         }else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","service_not_added"));
         }
@@ -64,8 +63,9 @@ public class ServiceController {
     @PutMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> updateService(@Validated @RequestBody ServicesDto service, @PathVariable Long id){
         service.setId(id);
-        if (servicesService.updateService(service, id)){
-            return ResponseEntity.ok().body(Map.of("msg","service_updated"));
+        ServicesDto s = servicesService.updateService(service, id);
+        if (s != null){
+            return ResponseEntity.ok().body(Map.of("msg","service_updated", "service", s));
         }else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","service_not_updated"));
         }
@@ -73,8 +73,9 @@ public class ServiceController {
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> deleteService(@PathVariable Long id){
-        if (servicesService.deleteService(id)){
-            return ResponseEntity.ok().body(Map.of("msg","service_deleted"));
+        ServicesDto s = servicesService.deleteService(id);
+        if (s != null){
+            return ResponseEntity.ok().body(Map.of("msg","service_deleted", "service", s));
         }else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","service_not_deleted"));
         }

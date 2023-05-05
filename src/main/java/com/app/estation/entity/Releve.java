@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Releve {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_releve;
     private String date_releve;
     @Enumerated(EnumType.STRING)
