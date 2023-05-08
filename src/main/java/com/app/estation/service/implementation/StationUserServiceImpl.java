@@ -1,6 +1,9 @@
 package com.app.estation.service.implementation;
 
+import com.app.estation.dto.StationDto;
 import com.app.estation.dto.StationUserDto;
+import com.app.estation.dto.StationUserKeyDto;
+import com.app.estation.dto.UserDto;
 import com.app.estation.entity.Station;
 import com.app.estation.entity.StationUser;
 import com.app.estation.entity.User;
@@ -32,14 +35,25 @@ public class StationUserServiceImpl implements StationUserService {
 
 
     @Override
-    public StationUserDto addStationUser(StationUserDto stationUserDto) {
-        if (stationUserDto == null){
+    public StationUserDto addStationUser(StationUserKeyDto stationUserKeyDto) {
+        if (stationUserKeyDto == null){
             return null;
         }
-        StationUser stationUser = StationUserMapper.toEntity(stationUserDto);
+        final StationUserKey key = StationUserMapper.toEntityKey(stationUserKeyDto);
+        final StationUser stationUser = new StationUser();
+        stationUser.setStationUserKey(key);
+        final StationDto stationDto = stationService.getStation(stationUserKeyDto.getId_station());
+        if (stationDto == null){
+            return null;
+        }
+        stationUser.setStation(StationMapper.toEntity(stationDto));
+        final UserDto user = userService.getUser(stationUserKeyDto.getId_user());
+        if (user == null){
+            return null;
+        }
+        stationUser.setUser(UserMapper.toEntity(user));
         stationUser.setDate_debut(Date.from(new Date().toInstant()).toString());
         stationUserRepository.save(stationUser);
-        StationUserKey key = new StationUserKey(stationUserDto.getUser().getId_user(), stationUserDto.getStation().getId());
         System.out.println(stationUserRepository.findById(key).orElse(null));
         return StationUserMapper.fromEntity(stationUserRepository.findById(key).orElse(null));
     }

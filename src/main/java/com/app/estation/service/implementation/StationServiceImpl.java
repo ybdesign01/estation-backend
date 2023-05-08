@@ -37,6 +37,7 @@ public class StationServiceImpl implements StationService {
         if (stations.isEmpty()) {
             return null;
         }else{
+            System.out.println(stations.get(0).getUsers());
             return StationMapper.fromEntityList(stations);
         }
     }

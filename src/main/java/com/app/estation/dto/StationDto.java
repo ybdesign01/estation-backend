@@ -1,17 +1,14 @@
 package com.app.estation.dto;
 
 
-import com.app.estation.entity.Station;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
-
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class StationDto {
 
     private Long id;
@@ -23,7 +20,7 @@ public class StationDto {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Set<ServicesDto> services;
 
-    private Set<StationUserDto> users;
+    private List<StationUserDto> users;
 
 
 
@@ -32,15 +29,21 @@ public class StationDto {
 
 
 
-    public StationDto(Long id, String nom_station, String adresse, Set<ServicesDto> services) {
+    public StationDto(Long id, String nom_station, String adresse, Set<ServicesDto> services, List<StationUserDto> users) {
         this.id = id;
+        this.users = users;
         this.nom_station = nom_station;
         this.adresse = adresse;
         this.services = services;
     }
 
+    public List<StationUserDto> getUsers() {
+        return this.users;
+    }
 
-
+    public void setUsers(final List<StationUserDto> users) {
+        this.users = users;
+    }
 
     public Long getId() {
         return id;

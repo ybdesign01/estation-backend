@@ -1,8 +1,16 @@
 package com.app.estation.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 public class StationUserKeyDto {
 
+    @NotNull(message = "station_mandatory")
+    @NotEmpty(message = "station_mandatory")
     Long id_station;
+    @NotNull(message = "user_mandatory")
+    @NotEmpty(message = "user_mandatory")
     Long id_user;
 
     public StationUserKeyDto(Long id_station, Long id_user) {

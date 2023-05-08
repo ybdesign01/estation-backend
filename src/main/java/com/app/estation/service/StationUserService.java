@@ -1,12 +1,13 @@
 package com.app.estation.service;
 
 import com.app.estation.dto.StationUserDto;
+import com.app.estation.dto.StationUserKeyDto;
 
 import java.util.List;
 
 public interface StationUserService {
 
-    StationUserDto addStationUser(StationUserDto stationUserDto);
+    StationUserDto addStationUser(StationUserKeyDto stationUserDto);
 
     StationUserDto updateStationUser(StationUserDto stationUserDto);
 

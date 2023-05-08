@@ -8,6 +8,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
 import java.util.Objects;
@@ -16,9 +18,9 @@ import java.util.Objects;
 public class StationUserDto {
 
     private StationUserKeyDto stationUserKey;
-    @NotBlank(message = "station_mandatory")
+    @NotNull(message = "station_mandatory")
     private StationDto station;
-    @NotBlank(message = "user_mandatory")
+    @NotNull(message = "user_mandatory")
     private UserDto user;
     private String date_debut;
     private String date_fin;

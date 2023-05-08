@@ -3,10 +3,12 @@ package com.app.estation.controller;
 
 import com.app.estation.advice.validation.InsertValidation;
 import com.app.estation.dto.StationUserDto;
+import com.app.estation.dto.StationUserKeyDto;
 import com.app.estation.dto.UserDto;
 import com.app.estation.dto.UserPassDto;
 import com.app.estation.entity.StationUser;
 import com.app.estation.entity.User;
+import com.app.estation.entity.keys.StationUserKey;
 import com.app.estation.mappers.UserMapper;
 import com.app.estation.service.implementation.StationUserServiceImpl;
 import com.app.estation.service.implementation.UserServiceImpl;
@@ -102,12 +104,23 @@ public class UserController {
 
     @PostMapping(value = "/setStation", produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
-    public ResponseEntity<?> setStation(@RequestBody final StationUserDto stationUserDto){
+    public ResponseEntity<?> setStation(@Validated @RequestBody final StationUserKeyDto stationUserDto){
         StationUserDto station = stationUserService.addStationUser(stationUserDto);
         if(null != station){
             return ResponseEntity.status(HttpStatus.CREATED).body(station);
         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","station_user_exists"));
+        }
+    }
+
+    @PostMapping(value = "/updateStation", produces = "application/json", consumes = "application/json")
+    @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
+    public ResponseEntity<?> updateStation(@Validated @RequestBody final StationUserDto stationUserDto){
+        StationUserDto station = stationUserService.updateStationUser(stationUserDto);
+        if(null != station){
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(station);
+        }else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","station_user_not_found"));
         }
     }
 

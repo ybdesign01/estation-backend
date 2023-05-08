@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Set;
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Entity
@@ -25,17 +26,28 @@ public class Station {
     private Set<Services> services;
 
     @OneToMany(mappedBy = "station")
-    private Set<StationUser> users;
+    private List<StationUser> users;
 
 
-    public Station(Long id, String nom_station, String adresse, Set<Services> services) {
+    public Station(Long id, String nom_station, String adresse, Set<Services> services, List<StationUser> users) {
         this.id = id;
         this.nom_station = nom_station;
+        this.users = users;
         this.adresse = adresse;
         this.services = services;
     }
 
+
+
     public Station() {
+    }
+
+    public List<StationUser> getUsers() {
+        return this.users;
+    }
+
+    public void setUsers(final List<StationUser> users) {
+        this.users = users;
     }
 
     public Set<Services> getServices() {
@@ -79,6 +91,7 @@ public class Station {
                 ", nom_station='" + nom_station + '\'' +
                 ", adresse='" + adresse + '\'' +
                 ", services=" + services +
+                ", users=" + users +
                 '}';
     }
 }

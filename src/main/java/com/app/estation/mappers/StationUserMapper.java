@@ -25,6 +25,22 @@ public class StationUserMapper {
         return dto;
     }
 
+    public static StationUserKeyDto fromEntityKey(StationUserKey entity) {
+        if (entity == null) {
+            return null;
+        }
+        StationUserKeyDto dto = new StationUserKeyDto(entity.getId_station(), entity.getId_user());
+        return dto;
+    }
+
+    public static StationUserKey toEntityKey(StationUserKeyDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        StationUserKey entity = new StationUserKey(dto.getId_station(), dto.getId_user());
+        return entity;
+    }
+
     public static StationUser toEntity(StationUserDto dto) {
         if (dto == null) {
             return null;
@@ -50,12 +66,12 @@ public class StationUserMapper {
         return stationUser;
     }
 
-    public static StationUser fromEntityWithoutStation(StationUser entity) {
+    public static StationUserDto fromEntityWithoutStation(StationUser entity) {
         if (entity == null) {
             return null;
         }
-        StationUser stationUser = new StationUser();
-        stationUser.setUser(entity.getUser());
+        StationUserDto stationUser = new StationUserDto();
+        stationUser.setUser(UserMapper.fromEntityWithoutStation(entity.getUser()));
         stationUser.setDate_debut(entity.getDate_debut());
         stationUser.setDate_fin(entity.getDate_fin());
         return stationUser;

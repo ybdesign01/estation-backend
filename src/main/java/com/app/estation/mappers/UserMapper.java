@@ -24,6 +24,19 @@ public class UserMapper {
         return userDto;
     }
 
+
+    public static UserDto fromEntityWithoutStation(User user) {
+        if (user == null) return null;
+        final UserDto userDto = new UserDto();
+        userDto.setId_user(user.getId_user());
+        userDto.setNom(user.getNom());
+        userDto.setPrenom(user.getPrenom());
+        userDto.setEmail(user.getEmail());
+        userDto.setMatricule(user.getMatricule());
+        userDto.setProfile(ProfileMapper.fromEntity(user.getProfile()));
+        return userDto;
+    }
+
     public static User toEntity(UserDto userDto) {
         if (userDto == null) return null;
         final User user = new User();

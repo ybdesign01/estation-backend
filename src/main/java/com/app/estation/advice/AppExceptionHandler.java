@@ -40,10 +40,14 @@ public class AppExceptionHandler {
         return new ResponseEntity<>(Map.of("msg",ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
-/*    @ExceptionHandler(value = Exception.class)
-    public final ResponseEntity<?> handleException(Exception ex) {
-        return new ResponseEntity<>(Map.of("msg",ex.getLocalizedMessage()), HttpStatus.BAD_REQUEST);
-    }*/
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException ex) {
+        System.out.println("IllegalArgumentException: " + ex.getMessage());
+        return new ResponseEntity<>(Map.of("msg","invalid_body"), HttpStatus.BAD_REQUEST);
+    }
+
+
 
 
 }

@@ -37,6 +37,7 @@ public class StationController {
             }
         try {
             String json = objectMapper.writeValueAsString(stations);
+            System.out.println(json);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
