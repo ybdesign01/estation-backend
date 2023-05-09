@@ -67,6 +67,7 @@ GET:     /api/user (Get all users)
          /api/user/getUser (Get user by token)
 POST:    /api/user/
          /api/user/setStation (Requires admin or manager role)  
+         /api/user/updateStation (Requires admin or manager role)
 PUT:     /api/user/{id} 
 DELETE:  /api/user/{id} (Requires admin role)
 
@@ -103,24 +104,20 @@ An example of setStation body:
         "id_station": 1,
         "id_user": 1    
     },
-    "station":  {
-        "id": 1,
-        "nom_station": "Station 1",
-        "adresse": "Description 1"
-    },
-    "user":  {
-        "id_user": 1,
-        "nom": "Yasser",
-        "prenom": "yass",
-        "email": "mail@mail.cpm",
-        "matricule": "dd88",
-        "profile": {
-            "id_profile": 1,
-            "nom": "USER",
-            "description": "User profile"
-        }
-    }
+    "date_debut": "Fri May 05 19:33:44 WEST 2023"
+    "date_fin": "Fri May 05 19:33:44 WEST 2023"
 }
+
+An example of updateStation body:
+{
+    "stationUserKey": {
+        "id_station": 1,
+        "id_user": 1
+    },
+    "date_debut": "2023",
+    "date_fin": "2024"
+}
+
 ```
 ## Service
 ```

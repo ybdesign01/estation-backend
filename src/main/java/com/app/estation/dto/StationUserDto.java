@@ -16,11 +16,9 @@ import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StationUserDto {
-
+    @NotNull(message = "key_mandatory")
     private StationUserKeyDto stationUserKey;
-    @NotNull(message = "station_mandatory")
     private StationDto station;
-    @NotNull(message = "user_mandatory")
     private UserDto user;
     private String date_debut;
     private String date_fin;

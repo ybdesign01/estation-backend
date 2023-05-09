@@ -18,7 +18,9 @@ public class StationUserMapper {
         StationUserDto dto = new StationUserDto();
         dto.setStationUserKey(new StationUserKeyDto(entity.getStationUserKey().getId_station(), entity.getStationUserKey().getId_user()));
         dto.setStation(StationMapper.fromEntityWithoutServices(entity.getStation()));
-        entity.getUser().setStations(null);
+        if (entity.getUser() != null){
+            entity.getUser().setStations(null);
+        }
         dto.setUser(UserMapper.fromEntity(entity.getUser()));
         dto.setDate_debut(entity.getDate_debut());
         dto.setDate_fin(entity.getDate_fin());
@@ -51,7 +53,6 @@ public class StationUserMapper {
         entity.setUser(UserMapper.toEntity(dto.getUser()));
         entity.setDate_debut(dto.getDate_debut());
         entity.setDate_fin(dto.getDate_fin());
-        System.out.println(entity);
         return entity;
     }
 

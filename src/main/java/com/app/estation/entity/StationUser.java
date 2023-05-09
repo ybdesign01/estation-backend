@@ -94,8 +94,8 @@ public class StationUser {
     public String toString() {
         return "StationUser{" +
                 "stationUserKey=" + stationUserKey +
-                ", station=" + station.getId() +
-                ", user=" + user.getId_user() +
+                ", station=" + (station == null ? null : station.getId()) +
+                ", user=" + (user==null ? null : user.getId_user()) +
                 ", date_debut='" + date_debut + '\'' +
                 ", date_fin='" + date_fin + '\'' +
                 '}';

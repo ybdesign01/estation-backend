@@ -18,7 +18,9 @@ public class StationMapper {
         stationDto.setNom_station(station.getNom_station());
         stationDto.setAdresse(station.getAdresse());
         final Set<ServicesDto> servicesDtos = station.getServices().stream().map(ServicesMapper::fromEntityWithoutStations).collect(Collectors.toSet());
-        final List<StationUserDto> stationUserDtos = station.getUsers().stream().map(StationUserMapper::fromEntityWithoutStation).toList();
+        if (station.getUsers() != null){
+            stationDto.setUsers(station.getUsers().stream().map(StationUserMapper::fromEntityWithoutStation).toList());
+        }
         stationDto.setServices(servicesDtos);
         return stationDto;
     }

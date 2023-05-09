@@ -125,6 +125,13 @@ public class UserController {
     }
 
 
+    @GetMapping(value = "/getStationUser", produces = "application/json")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getStationUser(){
+        return ResponseEntity.ok().body(stationUserService.getAll());
+    }
+
+
 
 
 }

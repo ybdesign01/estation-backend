@@ -11,6 +11,7 @@ import com.app.estation.entity.keys.StationUserKey;
 import com.app.estation.mappers.StationMapper;
 import com.app.estation.mappers.StationUserMapper;
 import com.app.estation.mappers.UserMapper;
+import com.app.estation.repository.StationRepository;
 import com.app.estation.repository.UserRepository;
 import com.app.estation.service.StationUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,17 @@ public class StationUserServiceImpl implements StationUserService {
     @Autowired
     private StationServiceImpl stationService;
 
+    @Autowired
+    StationRepository stationRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
+
+    public List<StationUserDto> getAll() {
+        List<StationUser> stationUsers = stationUserRepository.findAll();
+        return StationUserMapper.fromEntityList(stationUsers);
+    }
 
     @Override
     public StationUserDto addStationUser(StationUserKeyDto stationUserKeyDto) {
@@ -64,10 +75,14 @@ public class StationUserServiceImpl implements StationUserService {
             return null;
         }
         StationUser stationUser = StationUserMapper.toEntity(stationUserDto);
-
+        Station st = stationRepository.findById(stationUser.getStationUserKey().getId_station()).orElse(null);
+        User us = userRepository.findById(stationUser.getStationUserKey().getId_user()).orElse(null);
+        stationUser.setStation(st);
+        stationUser.setUser(us);
         stationUserRepository.save(stationUser);
-        StationUserKey key = new StationUserKey(stationUserDto.getUser().getId_user(), stationUserDto.getStation().getId());
-        return StationUserMapper.fromEntity(stationUserRepository.findById(key).orElse(null));
+        StationUserKey key = new StationUserKey(stationUserDto.getStationUserKey().getId_user(),stationUserDto.getStationUserKey().getId_station());
+        StationUser dto = stationUserRepository.findById(key).orElse(null);
+        return StationUserMapper.fromEntity(dto);
     }
 
     @Override
