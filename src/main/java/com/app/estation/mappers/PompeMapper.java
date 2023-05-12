@@ -12,8 +12,10 @@ public class PompeMapper {
         Pompe entity = new Pompe();
         entity.setId_pompe(dto.getId_pompe());
         entity.setNom_pompe(dto.getNom_pompe());
-        entity.setUsers(UserMapper.toEntityList(dto.getUsers()));
-
+        entity.setUsers(PompeUserMapper.toEntityList(dto.getUsers()));
+        return entity;
     }
+
+
 
 }

@@ -1,7 +1,9 @@
 package com.app.estation.dto;
 
+import com.app.estation.dto.User.PompeUserDto;
 import com.app.estation.dto.User.UserDto;
 import com.app.estation.entity.Citerne;
+import com.app.estation.entity.PompeUser;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -17,9 +19,9 @@ public class PompeDto {
     private String nom_pompe;
     private List<CiterneDto> citernes;
 
-    private List<UserDto> users;
+    private List<PompeUserDto> users;
 
-    public PompeDto(Long id_pompe, String nom_pompe, List<CiterneDto> citernes, List<UserDto> users) {
+    public PompeDto(Long id_pompe, String nom_pompe, List<CiterneDto> citernes, List<PompeUserDto> users) {
         this.users = users;
         this.id_pompe = id_pompe;
         this.nom_pompe = nom_pompe;
@@ -41,11 +43,11 @@ public class PompeDto {
         return Objects.hash(id_pompe, nom_pompe, this.getCiternes(), this.users);
     }
 
-    public List<UserDto> getUsers() {
+    public List<PompeUserDto> getUsers() {
         return this.users;
     }
 
-    public void setUsers(final List<UserDto> users) {
+    public void setUsers(final List<PompeUserDto> users) {
         this.users = users;
     }
 
@@ -65,11 +67,11 @@ public class PompeDto {
         this.nom_pompe = nom_pompe;
     }
 
-    public List<Citerne> getCiternes() {
+    public List<CiterneDto> getCiternes() {
         return this.citernes;
     }
 
-    public void setCiternes(final List<Citerne> citernes) {
+    public void setCiternes(final List<CiterneDto> citernes) {
         this.citernes = citernes;
     }
 }
