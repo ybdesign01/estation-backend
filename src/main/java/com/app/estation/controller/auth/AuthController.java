@@ -3,7 +3,6 @@ package com.app.estation.controller.auth;
 import com.app.estation.dto.AuthDto;
 import com.app.estation.dto.LoginDto;
 import com.app.estation.dto.RefreshTokenRequest;
-import com.app.estation.dto.UserDto;
 import com.app.estation.service.implementation.AuthService;
 import com.app.estation.util.PassEncode;
 import org.springframework.beans.factory.annotation.Autowired;

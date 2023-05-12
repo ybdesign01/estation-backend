@@ -1,9 +1,9 @@
 package com.app.estation.service.implementation;
 
 import com.app.estation.dto.StationDto;
-import com.app.estation.dto.StationUserDto;
-import com.app.estation.dto.StationUserKeyDto;
-import com.app.estation.dto.UserDto;
+import com.app.estation.dto.User.StationUserDto;
+import com.app.estation.dto.User.StationUserKeyDto;
+import com.app.estation.dto.User.UserDto;
 import com.app.estation.entity.Station;
 import com.app.estation.entity.StationUser;
 import com.app.estation.entity.User;

@@ -1,4 +1,4 @@
-package com.app.estation.dto;
+package com.app.estation.dto.User;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

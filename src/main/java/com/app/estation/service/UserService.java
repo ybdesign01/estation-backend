@@ -1,8 +1,7 @@
 package com.app.estation.service;
 
-import com.app.estation.dto.UserDto;
-import com.app.estation.dto.UserPassDto;
-import com.app.estation.entity.User;
+import com.app.estation.dto.User.UserDto;
+import com.app.estation.dto.User.UserPassDto;
 
 import java.util.List;
 

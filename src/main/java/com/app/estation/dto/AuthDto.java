@@ -1,5 +1,7 @@
 package com.app.estation.dto;
 
+import com.app.estation.dto.User.UserDto;
+
 import java.util.Objects;
 
 public class AuthDto {

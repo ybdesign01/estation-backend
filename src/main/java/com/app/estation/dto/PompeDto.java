@@ -1,5 +1,6 @@
 package com.app.estation.dto;
 
+import com.app.estation.dto.User.UserDto;
 import com.app.estation.entity.Citerne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -14,9 +15,12 @@ public class PompeDto {
     private Long id_pompe;
     @NotBlank(message = "nom_pompe_mandatory")
     private String nom_pompe;
-    private List<Citerne> citernes;
+    private List<CiterneDto> citernes;
 
-    public PompeDto(Long id_pompe, String nom_pompe, List<Citerne> citernes) {
+    private List<UserDto> users;
+
+    public PompeDto(Long id_pompe, String nom_pompe, List<CiterneDto> citernes, List<UserDto> users) {
+        this.users = users;
         this.id_pompe = id_pompe;
         this.nom_pompe = nom_pompe;
         this.citernes = citernes;
@@ -29,12 +33,20 @@ public class PompeDto {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof PompeDto pompeDto)) return false;
-        return Objects.equals(id_pompe, pompeDto.id_pompe) && Objects.equals(nom_pompe, pompeDto.nom_pompe) && Objects.equals(citernes, pompeDto.citernes);
+        return Objects.equals(id_pompe, pompeDto.id_pompe) && Objects.equals(nom_pompe, pompeDto.nom_pompe) && Objects.equals(this.getCiternes(), pompeDto.getCiternes()) && Objects.equals(this.users, pompeDto.users);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id_pompe, nom_pompe, citernes);
+        return Objects.hash(id_pompe, nom_pompe, this.getCiternes(), this.users);
+    }
+
+    public List<UserDto> getUsers() {
+        return this.users;
+    }
+
+    public void setUsers(final List<UserDto> users) {
+        this.users = users;
     }
 
     public Long getId_pompe() {

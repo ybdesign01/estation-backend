@@ -1,8 +1,7 @@
 package com.app.estation.mappers;
 
-import com.app.estation.dto.ProfileDto;
-import com.app.estation.dto.UserDto;
-import com.app.estation.dto.UserPassDto;
+import com.app.estation.dto.User.UserDto;
+import com.app.estation.dto.User.UserPassDto;
 import com.app.estation.entity.User;
 
 import java.util.List;

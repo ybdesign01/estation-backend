@@ -1,14 +1,7 @@
-package com.app.estation.dto;
+package com.app.estation.dto.User;
 
-import com.app.estation.entity.Station;
-import com.app.estation.entity.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.app.estation.dto.StationDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;

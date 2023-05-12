@@ -1,8 +1,8 @@
 package com.app.estation.service.implementation;
 
 
-import com.app.estation.dto.UserDto;
-import com.app.estation.dto.UserPassDto;
+import com.app.estation.dto.User.UserDto;
+import com.app.estation.dto.User.UserPassDto;
 import com.app.estation.entity.Profile;
 import com.app.estation.entity.User;
 import com.app.estation.mappers.UserMapper;

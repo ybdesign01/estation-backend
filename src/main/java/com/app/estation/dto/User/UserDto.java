@@ -1,18 +1,16 @@
-package com.app.estation.dto;
+package com.app.estation.dto.User;
 
 import com.app.estation.advice.validation.InsertValidation;
 import com.app.estation.advice.validation.UpdateValidation;
-import com.app.estation.entity.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.app.estation.dto.ProfileDto;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 
-import org.hibernate.validator.constraints.Length;
+import java.util.List;
 
-
-
-public class UserPassDto {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class UserDto {
 
     private Long id_user;
     @NotBlank(message = "nom obligatoire!", groups = InsertValidation.class)
@@ -22,27 +20,42 @@ public class UserPassDto {
     @NotBlank(message = "email obligatore!", groups = InsertValidation.class)
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "l'email invalide!", groups = {InsertValidation.class, UpdateValidation.class})
     private String email;
-    @NotBlank(message = "mot de passe obligatore!", groups = InsertValidation.class)
-    @Length(min = 8, max = 20, message = "le mot de passe doit contenir entre 8 et 20 caracteres!", groups = {InsertValidation.class, UpdateValidation.class})
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$", message = "Le mot de passe doit contenir une majuscule une miniscule et un caractere special!", groups = {InsertValidation.class, UpdateValidation.class})
-    private String password;
     @NotBlank(message = "matricule obligatoire!", groups = InsertValidation.class)
     private String matricule;
     private ProfileDto profile;
+    private List<StationUserDto> stations;
 
 
 
-    public UserPassDto() {
+
+    public UserDto() {
     }
 
-    public UserPassDto(Long id_user, String nom, String prenom, String email, String password, String matricule, ProfileDto profile) {
+    public UserDto(Long id_user, String nom, String prenom, String email, String matricule, ProfileDto profile, List<StationUserDto> stations) {
         this.id_user = id_user;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
-        this.password = password;
         this.matricule = matricule;
         this.profile = profile;
+        this.stations = stations;
+    }
+
+    public UserDto(Long id_user, String nom, String prenom, String email, String matricule, ProfileDto profile) {
+        this.id_user = id_user;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.matricule = matricule;
+        this.profile = profile;
+    }
+
+    public List<StationUserDto> getStations() {
+        return this.stations;
+    }
+
+    public void setStations(final List<StationUserDto> stations) {
+        this.stations = stations;
     }
 
     public Long getId_user() {
@@ -75,14 +88,6 @@ public class UserPassDto {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getMatricule() {

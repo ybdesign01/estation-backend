@@ -1,10 +1,8 @@
 package com.app.estation.mappers;
 
-import com.app.estation.dto.StationUserDto;
-import com.app.estation.dto.StationUserKeyDto;
-import com.app.estation.entity.Station;
+import com.app.estation.dto.User.StationUserDto;
+import com.app.estation.dto.User.StationUserKeyDto;
 import com.app.estation.entity.StationUser;
-import com.app.estation.entity.User;
 import com.app.estation.entity.keys.StationUserKey;
 
 import java.util.List;

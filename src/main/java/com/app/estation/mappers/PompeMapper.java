@@ -2,21 +2,18 @@ package com.app.estation.mappers;
 
 import com.app.estation.dto.PompeDto;
 import com.app.estation.entity.Pompe;
-import com.app.estation.entity.PompeUser;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
-import java.util.List;
+public class PompeMapper {
 
-@Mapper(uses = {CiterneMapper.class})
-public interface PompeMapper {
+    public static Pompe toEntity(PompeDto dto){
+        if (dto == null) {
+            return null;
+        }
+        Pompe entity = new Pompe();
+        entity.setId_pompe(dto.getId_pompe());
+        entity.setNom_pompe(dto.getNom_pompe());
+        entity.setUsers(UserMapper.toEntityList(dto.getUsers()));
 
-    PompeMapper INSTANCE = Mappers.getMapper(PompeMapper.class);
+    }
 
-    Pompe pompeDtoToPompe(PompeDto pompeDto);
-    PompeDto pompeToPompeDto(Pompe pompe);
-
-    List<Pompe> pompeDtosToPompes(List<PompeDto> pompeDtos);
-
-    List<PompeDto> pompesToPompeDtos(List<Pompe> pompes);
 }

@@ -1,7 +1,7 @@
 package com.app.estation.service;
 
-import com.app.estation.dto.StationUserDto;
-import com.app.estation.dto.StationUserKeyDto;
+import com.app.estation.dto.User.StationUserDto;
+import com.app.estation.dto.User.StationUserKeyDto;
 
 import java.util.List;
 

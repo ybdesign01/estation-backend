@@ -1,6 +1,7 @@
 package com.app.estation.dto;
 
 
+import com.app.estation.dto.User.StationUserDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

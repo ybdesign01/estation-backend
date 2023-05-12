@@ -2,14 +2,10 @@ package com.app.estation.controller;
 
 
 import com.app.estation.advice.validation.InsertValidation;
-import com.app.estation.dto.StationUserDto;
-import com.app.estation.dto.StationUserKeyDto;
-import com.app.estation.dto.UserDto;
-import com.app.estation.dto.UserPassDto;
-import com.app.estation.entity.StationUser;
-import com.app.estation.entity.User;
-import com.app.estation.entity.keys.StationUserKey;
-import com.app.estation.mappers.UserMapper;
+import com.app.estation.dto.User.StationUserDto;
+import com.app.estation.dto.User.StationUserKeyDto;
+import com.app.estation.dto.User.UserDto;
+import com.app.estation.dto.User.UserPassDto;
 import com.app.estation.service.implementation.StationUserServiceImpl;
 import com.app.estation.service.implementation.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,6 +126,8 @@ public class UserController {
     public ResponseEntity<?> getStationUser(){
         return ResponseEntity.ok().body(stationUserService.getAll());
     }
+
+
 
 
 

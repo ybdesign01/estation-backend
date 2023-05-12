@@ -3,6 +3,9 @@ package com.app.estation.config;
 import com.app.estation.service.implementation.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,6 +62,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     }
                 }
             }catch (ExpiredJwtException e) {
+                Map<String, String> responseBody = new HashMap<>();
+                responseBody.put("msg", "expired_token");
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.getWriter().write(objectMapper.writeValueAsString(responseBody));
+                return;
+            }catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e){
                 Map<String, String> responseBody = new HashMap<>();
                 responseBody.put("msg", "invalid_token");
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
