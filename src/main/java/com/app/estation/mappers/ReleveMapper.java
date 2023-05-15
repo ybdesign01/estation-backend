@@ -2,22 +2,49 @@ package com.app.estation.mappers;
 
 import com.app.estation.dto.ReleveDto;
 import com.app.estation.entity.Releve;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Mapper(uses = {PompeMapper.class})
-public interface ReleveMapper {
+public class ReleveMapper {
 
-    ReleveMapper INSTANCE = Mappers.getMapper(ReleveMapper.class);
+    public static ReleveDto fromEntity(Releve entity){
+        if (null == entity){
+            return null;
+        }
+        ReleveDto dto = new ReleveDto();
+        dto.setId_releve(entity.getId_releve());
+        dto.setCompteur(entity.getCompteur());
+        dto.setDate_releve(entity.getDate_releve());
+        dto.setPompe(PompeMapper.fromEntity(entity.getPompe()));
+        dto.setType_releve(entity.getType_releve());
+        return dto;
+    }
 
-    ReleveDto releveToReleveDto(Releve releve);
+    public static Releve toEntity(ReleveDto dto){
+        if (null == dto){
+            return null;
+        }
+        Releve entity = new Releve();
+        entity.setId_releve(dto.getId_releve());
+        entity.setCompteur(dto.getCompteur());
+        entity.setDate_releve(dto.getDate_releve());
+        entity.setPompe(PompeMapper.toEntity(dto.getPompe()));
+        entity.setType_releve(dto.getType_releve());
+        return entity;
+    }
 
-    Releve releveDtoToReleve(ReleveDto releveDto);
+    public static List<ReleveDto> fromEntityList(List<Releve> releves) {
+        if (releves == null){
+            return null;
+        }
+        return releves.stream().map(ReleveMapper::fromEntity).collect(Collectors.toList());
+    }
 
-    List<Releve> releveDtoListToReleveList(List<ReleveDto> releveDtoList);
-
-    List<ReleveDto> releveListToReleveDtoList(List<Releve> releveList);
-
+    public static List<Releve> toEntityList(List<ReleveDto> releves) {
+        if (releves == null){
+            return null;
+        }
+        return releves.stream().map(ReleveMapper::toEntity).collect(Collectors.toList());
+    }
 }

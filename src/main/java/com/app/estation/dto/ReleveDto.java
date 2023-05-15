@@ -14,11 +14,11 @@ public class ReleveDto {
     @NotBlank(message = "type_releve_mandatory")
     private TypeReleve type_releve;
     @NotBlank(message = "pompe_mandatory")
-    private Pompe pompe;
+    private PompeDto pompe;
     @NotBlank(message = "compteur_mandatory")
     private Long compteur;
 
-    public ReleveDto(Long id_releve, String date_releve, TypeReleve type_releve, Pompe pompe, Long compteur) {
+    public ReleveDto(Long id_releve, String date_releve, TypeReleve type_releve, PompeDto pompe, Long compteur) {
         this.id_releve = id_releve;
         this.date_releve = date_releve;
         this.type_releve = type_releve;
@@ -65,11 +65,11 @@ public class ReleveDto {
         this.type_releve = type_releve;
     }
 
-    public Pompe getPompe() {
+    public PompeDto getPompe() {
         return this.pompe;
     }
 
-    public void setPompe(final Pompe pompe) {
+    public void setPompe(final PompeDto pompe) {
         this.pompe = pompe;
     }
 

@@ -6,6 +6,7 @@ import com.app.estation.entity.PompeUser;
 import com.app.estation.entity.keys.PompeUserKey;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PompeUserMapper {
 
@@ -57,14 +58,14 @@ public class PompeUserMapper {
         if (dtoList == null) {
             return null;
         }
-        return dtoList.stream().map(PompeUserMapper::toEntity).collect(java.util.stream.Collectors.toList());
+        return dtoList.stream().map(PompeUserMapper::toEntity).collect(Collectors.toList());
     }
 
     public static List<PompeUserDto> fromEntityList(List<PompeUser> entityList) {
         if (entityList == null) {
             return null;
         }
-        return entityList.stream().map(PompeUserMapper::fromEntity).collect(java.util.stream.Collectors.toList());
+        return entityList.stream().map(PompeUserMapper::fromEntity).collect(Collectors.toList());
     }
 
 

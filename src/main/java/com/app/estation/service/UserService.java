@@ -12,8 +12,6 @@ public interface UserService {
     UserDto getUserByToken(String token);
     UserDto addUser(UserPassDto user);
     UserDto updateUser(Long id, UserPassDto user);
-
-
     boolean deleteUser(Long id);
 
 }

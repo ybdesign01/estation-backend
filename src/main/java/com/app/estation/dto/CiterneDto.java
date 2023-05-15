@@ -2,6 +2,7 @@ package com.app.estation.dto;
 
 import com.app.estation.entity.Pompe;
 import com.app.estation.entity.Produit;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.NotBlank;
@@ -9,6 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Objects;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CiterneDto {
 
     private Long id_citerne;
@@ -17,10 +19,10 @@ public class CiterneDto {
     @NotBlank(message = "capacite_mandatory")
     private String capacite;
     @NotBlank(message = "produit_mandatory")
-    private Produit id_produit;
+    private ProduitDto id_produit;
     private List<PompeDto> pompes;
 
-    public CiterneDto(Long id_citerne, String nom_citerne, String capacite, Produit id_produit, List<PompeDto> pompes) {
+    public CiterneDto(Long id_citerne, String nom_citerne, String capacite, ProduitDto id_produit, List<PompeDto> pompes) {
         this.id_citerne = id_citerne;
         this.nom_citerne = nom_citerne;
         this.capacite = capacite;
@@ -67,11 +69,11 @@ public class CiterneDto {
         this.capacite = capacite;
     }
 
-    public Produit getId_produit() {
+    public ProduitDto getId_produit() {
         return this.id_produit;
     }
 
-    public void setId_produit(final Produit id_produit) {
+    public void setId_produit(final ProduitDto id_produit) {
         this.id_produit = id_produit;
     }
 
