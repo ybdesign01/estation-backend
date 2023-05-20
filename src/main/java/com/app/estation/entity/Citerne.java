@@ -13,7 +13,7 @@ public class Citerne {
     private Long id_citerne;
     private String nom_citerne;
     private String capacite;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Produit id_produit;
 
     @ManyToMany(mappedBy = "citernes", cascade = CascadeType.ALL)
@@ -69,5 +69,15 @@ public class Citerne {
 
     public void setPompes(List<Pompe> pompes) {
         this.pompes = pompes;
+    }
+
+    @Override
+    public String toString() {
+        return "Citerne{" +
+                "id_citerne=" + id_citerne +
+                ", nom_citerne='" + nom_citerne + '\'' +
+                ", capacite='" + capacite + '\'' +
+                ", id_produit=" + id_produit +
+                '}';
     }
 }

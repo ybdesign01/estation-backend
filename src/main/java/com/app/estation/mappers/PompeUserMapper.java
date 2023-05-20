@@ -17,7 +17,9 @@ public class PompeUserMapper {
         PompeUser entity = new PompeUser();
         entity.setDate_debut(dto.getDate_debut());
         entity.setDate_fin(dto.getDate_fin());
-        entity.setPompeUserKey(toEntityKey(dto.getPompeUserKey()));
+        entity.setPompeUserKey(PompeUserMapper.toEntityKey(dto.getPompeUserKey()));
+        entity.setUser(UserMapper.toEntity(dto.getUser()));
+        entity.setPompe(PompeMapper.toEntity(dto.getPompe()));
         return entity;
     }
 
@@ -28,7 +30,20 @@ public class PompeUserMapper {
         PompeUserDto dto = new PompeUserDto();
         dto.setDate_debut(entity.getDate_debut());
         dto.setDate_fin(entity.getDate_fin());
-        dto.setPompeUserKey(fromEntityKey(entity.getPompeUserKey()));
+        dto.setPompeUserKey(PompeUserMapper.fromEntityKey(entity.getPompeUserKey()));
+        dto.setUser(UserMapper.fromEntityWithoutSubclasses(entity.getUser()));
+        dto.setPompe(PompeMapper.fromEntityWithoutSubclasses(entity.getPompe()));
+        return dto;
+    }
+
+    public static PompeUserDto fromEntityWithPompe(PompeUser entity){
+        if (entity == null){
+            return null;
+        }
+        PompeUserDto dto = new PompeUserDto();
+        dto.setDate_debut(entity.getDate_debut());
+        dto.setDate_fin(entity.getDate_fin());
+        dto.setPompe(PompeMapper.fromEntityWithoutSubclasses(entity.getPompe()));
         return dto;
     }
 
@@ -67,6 +82,7 @@ public class PompeUserMapper {
         }
         return entityList.stream().map(PompeUserMapper::fromEntity).collect(Collectors.toList());
     }
+
 
 
 

@@ -25,13 +25,15 @@ public class UserDto {
     private ProfileDto profile;
     private List<StationUserDto> stations;
 
+    private List<PompeUserDto> pompes;
+
 
 
 
     public UserDto() {
     }
 
-    public UserDto(Long id_user, String nom, String prenom, String email, String matricule, ProfileDto profile, List<StationUserDto> stations) {
+    public UserDto(Long id_user, String nom, String prenom, String email, String matricule, List<PompeUserDto> pompes, ProfileDto profile, List<StationUserDto> stations) {
         this.id_user = id_user;
         this.nom = nom;
         this.prenom = prenom;
@@ -39,6 +41,7 @@ public class UserDto {
         this.matricule = matricule;
         this.profile = profile;
         this.stations = stations;
+        this.pompes = pompes;
     }
 
     public UserDto(Long id_user, String nom, String prenom, String email, String matricule, ProfileDto profile) {
@@ -104,5 +107,13 @@ public class UserDto {
 
     public void setProfile(ProfileDto profile) {
         this.profile = profile;
+    }
+
+    public List<PompeUserDto> getPompes() {
+        return this.pompes;
+    }
+
+    public void setPompes(final List<PompeUserDto> pompes) {
+        this.pompes = pompes;
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PompeUserService {
 
-    PompeUserDto addPompeUser(PompeUserDto dto);
+    PompeUserDto addPompeUser(PompeUserKeyDto dto);
     PompeUserDto updatePompeUser(PompeUserDto dto);
     PompeUserDto deletePompeUser(PompeUserKeyDto id);
     PompeUserDto getPompeUser(PompeUserKeyDto id);

@@ -2,10 +2,11 @@ package com.app.estation.dto;
 
 import com.app.estation.entity.Produit;
 import com.app.estation.entity.TypeAction;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 
 import java.util.Objects;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProduitActionDto {
 
     private Long id_action;

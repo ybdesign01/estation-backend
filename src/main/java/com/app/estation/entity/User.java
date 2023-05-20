@@ -184,4 +184,20 @@ public class User implements UserDetails {
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id_user=" + id_user +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", matricule='" + matricule + '\'' +
+                ", profile=" + profile +
+                ", refreshToken=" + refreshToken +
+                ", stations=" + stations +
+                ", pompes=" + pompes +
+                '}';
+    }
 }

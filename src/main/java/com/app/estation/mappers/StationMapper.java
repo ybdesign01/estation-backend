@@ -53,4 +53,13 @@ public class StationMapper {
         station1.setServices(ServicesMapper.toEntitySet(station.getServices()));
         return station1;
     }
+
+    public static Station toEntityWithoutSubclasses(StationDto station) {
+        if (station == null) return null;
+        Station station1 = new Station();
+        station1.setId(station.getId());
+        station1.setNom_station(station.getNom_station());
+        station1.setAdresse(station.getAdresse());
+        return station1;
+    }
 }

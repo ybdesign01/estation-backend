@@ -1,5 +1,9 @@
 package com.app.estation.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+
 public class RefreshTokenDto {
 
     private String token;

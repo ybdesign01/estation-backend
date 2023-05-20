@@ -1,11 +1,16 @@
 package com.app.estation.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotEmpty;
+
 import java.util.Objects;
+@JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class TypeProduitDto {
 
-    private Long id_type;
 
+    private Long id_type;
+    @NotEmpty(message = "nom_type_mandatory")
     private String nom_type;
 
     public TypeProduitDto(Long id_type, String nom_type) {

@@ -15,8 +15,9 @@ public class ProduitMapper {
         dto.setId_produit(entity.getId_produit());
         dto.setNom_produit(entity.getNom_produit());
         dto.setActions(ProduitActionMapper.fromEntityList(entity.getActions()));
-        dto.setType(entity.getType());
-        dto.setId_service(ServicesMapper.fromEntity(entity.getId_service()));
+        dto.setType(TypeProduitMapper.fromEntity(entity.getType()));
+        System.out.println("id serv  " + entity.getId_service());
+        dto.setService(ServicesMapper.fromEntityWithoutStations(entity.getId_service()));
         dto.setPrix_achat(entity.getPrix_achat());
         dto.setPrix_vente(entity.getPrix_vente());
         return dto;
@@ -30,12 +31,27 @@ public class ProduitMapper {
         entity.setId_produit(dto.getId_produit());
         entity.setNom_produit(dto.getNom_produit());
         entity.setActions(ProduitActionMapper.toEntityList(dto.getActions()));
-        entity.setType(dto.getType());
-        entity.setId_service(ServicesMapper.toEntity(dto.getId_service()));
+        entity.setType(TypeProduitMapper.toEntity(dto.getType()));
+        entity.setId_service(ServicesMapper.toEntity(dto.getService()));
         entity.setPrix_achat(dto.getPrix_achat());
         entity.setPrix_vente(dto.getPrix_vente());
         return entity;
     }
+
+    public static Produit toEntityWithoutServices(ProduitDto dto){
+        if (null == dto){
+            return null;
+        }
+        Produit entity = new Produit();
+        entity.setId_produit(dto.getId_produit());
+        entity.setNom_produit(dto.getNom_produit());
+        entity.setActions(ProduitActionMapper.toEntityList(dto.getActions()));
+        entity.setType(TypeProduitMapper.toEntity(dto.getType()));
+        entity.setPrix_achat(dto.getPrix_achat());
+        entity.setPrix_vente(dto.getPrix_vente());
+        return entity;
+    }
+
 
     public static List<ProduitDto> fromEntityList(List<Produit> entities){
         if (entities == null){

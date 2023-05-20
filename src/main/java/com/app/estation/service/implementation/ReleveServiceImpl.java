@@ -2,6 +2,7 @@ package com.app.estation.service.implementation;
 
 import com.app.estation.dto.ReleveDto;
 import com.app.estation.entity.Releve;
+import com.app.estation.mappers.ReleveMapper;
 import com.app.estation.repository.ReleveRepository;
 import com.app.estation.service.ReleveService;
 import jakarta.transaction.Transactional;
@@ -19,19 +20,19 @@ public class ReleveServiceImpl implements ReleveService {
 
     @Override
     public List<ReleveDto> getAll() {
-        List<ReleveDto> list = ReleveMapper.INSTANCE.releveListToReleveDtoList((List<Releve>) releveRepository.findAll());
+        List<ReleveDto> list = ReleveMapper.fromEntityList(releveRepository.findAll());
         return list;
     }
 
     @Override
     public ReleveDto getReleve(Long id) {
-        ReleveDto releveDto = ReleveMapper.INSTANCE.releveToReleveDto(releveRepository.findById(id).get());
+        ReleveDto releveDto = ReleveMapper.fromEntity(releveRepository.findById(id).get());
         return releveDto;
     }
 
     @Override
     public boolean addReleve(ReleveDto releve) {
-        Releve r = ReleveMapper.INSTANCE.releveDtoToReleve(releve);
+        Releve r = ReleveMapper.toEntity(releve);
         try {
             releveRepository.save(r);
             return true;
@@ -45,7 +46,7 @@ public class ReleveServiceImpl implements ReleveService {
         if (releveRepository.findById(id).isEmpty()) {
             return false;
         }
-        Releve r = ReleveMapper.INSTANCE.releveDtoToReleve(releve);
+        Releve r = ReleveMapper.toEntity(releve);
         try {
             releveRepository.save(r);
             return true;

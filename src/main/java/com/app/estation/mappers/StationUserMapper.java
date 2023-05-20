@@ -29,7 +29,7 @@ public class StationUserMapper {
         if (entity == null) {
             return null;
         }
-        StationUserKeyDto dto = new StationUserKeyDto(entity.getId_station(), entity.getId_user());
+        StationUserKeyDto dto = new StationUserKeyDto(entity.getId_user(), entity.getId_station());
         return dto;
     }
 
@@ -37,7 +37,7 @@ public class StationUserMapper {
         if (dto == null) {
             return null;
         }
-        StationUserKey entity = new StationUserKey(dto.getId_station(), dto.getId_user());
+        StationUserKey entity = new StationUserKey(dto.getId_user(), dto.getId_station());
         return entity;
     }
 

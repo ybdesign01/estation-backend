@@ -2,10 +2,9 @@ package com.app.estation.controller;
 
 
 import com.app.estation.advice.validation.InsertValidation;
-import com.app.estation.dto.User.StationUserDto;
-import com.app.estation.dto.User.StationUserKeyDto;
-import com.app.estation.dto.User.UserDto;
-import com.app.estation.dto.User.UserPassDto;
+import com.app.estation.dto.User.*;
+import com.app.estation.service.implementation.PompeServiceImpl;
+import com.app.estation.service.implementation.PompeUserServiceImpl;
 import com.app.estation.service.implementation.StationUserServiceImpl;
 import com.app.estation.service.implementation.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,9 @@ public class UserController {
 
     @Autowired
     private StationUserServiceImpl stationUserService;
+
+    @Autowired
+    private PompeUserServiceImpl pompeUserService;
 
 
     @GetMapping
@@ -117,6 +119,17 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(station);
         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","station_user_not_found"));
+        }
+    }
+
+    @PostMapping(value = "/setPompe", produces = "application/json", consumes = "application/json")
+    @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
+    public ResponseEntity<?> setPompe(@Validated @RequestBody final PompeUserKeyDto pompeUserKeyDto){
+        PompeUserDto pompeUserDto = pompeUserService.addPompeUser(pompeUserKeyDto);
+        if(null != pompeUserDto){
+            return ResponseEntity.status(HttpStatus.CREATED).body(pompeUserDto);
+        }else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","pompe_user_exists"));
         }
     }
 

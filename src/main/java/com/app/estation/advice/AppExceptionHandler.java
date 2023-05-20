@@ -40,6 +40,11 @@ public class AppExceptionHandler {
         return new ResponseEntity<>(Map.of("msg",ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = ApiRequestException.class)
+    public ResponseEntity<?> handleApiRequestException(ApiRequestException ex) {
+        return new ResponseEntity<>(Map.of("msg",ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(value = IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException ex) {

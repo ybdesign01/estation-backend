@@ -20,16 +20,15 @@ public class PompeServiceImpl implements PompeService {
     @Override
     public PompeDto addPompe(PompeDto dto) {
         Pompe pompe = PompeMapper.toEntity(dto);
-
         pompeRepository.save(pompe);
-        return null;
+        return PompeMapper.fromEntity(pompeRepository.findById(pompe.getId_pompe()).orElse(null));
     }
 
     @Override
     public PompeDto updatePompe(PompeDto dto) {
         Pompe pompe = PompeMapper.toEntity(dto);
         pompeRepository.save(pompe);
-        return null;
+        return PompeMapper.fromEntity(pompeRepository.findById(dto.getId_pompe()).orElse(null));
     }
 
     @Override

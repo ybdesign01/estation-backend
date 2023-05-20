@@ -69,4 +69,13 @@ public class PompeUser {
     public void setDate_fin(String date_fin) {
         this.date_fin = date_fin;
     }
+
+    @Override
+    public String toString() {
+        return "PompeUser{" +
+                ", pompeUserKey=" + pompeUserKey +
+                ", date_debut='" + date_debut + '\'' +
+                ", date_fin='" + date_fin + '\'' +
+                '}';
+    }
 }

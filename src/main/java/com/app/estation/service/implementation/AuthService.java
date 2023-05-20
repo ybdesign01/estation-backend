@@ -48,4 +48,8 @@ public class AuthService {
                 }).orElseThrow(() -> new TokenRefreshException("refresh_token_invalid"));
     }
 
+    public int logout(RefreshTokenRequest dto) {
+        RefreshToken token = refreshTokenService.findByToken(dto.getRefreshToken()).orElseThrow(() -> new TokenRefreshException("refresh_token_invalid"));
+        return refreshTokenService.deleteByUserId(token.getUser().getId_user());
+    }
 }

@@ -13,12 +13,11 @@ import java.util.Set;
 public class StationDto {
 
     private Long id;
-    @NotBlank(message = "Nom obligatoires!")
+    @NotBlank(message = "nom_station_mandatory")
     private String nom_station;
-    @NotBlank(message = "Adresse obligatoires!")
+    @NotBlank(message = "adresse_manatory")
     private String adresse;
-    @NotEmpty(message = "Services obligatoires!")
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty(message = "services_mandatory")
     private Set<ServicesDto> services;
 
     private List<StationUserDto> users;

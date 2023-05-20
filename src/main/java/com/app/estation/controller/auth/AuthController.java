@@ -34,5 +34,17 @@ public class AuthController {
         return ResponseEntity.ok(authService.refreshToken(dto));
     }
 
+    @PostMapping(value ="/logout", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> logout(@RequestBody RefreshTokenRequest dto){
+        int i = authService.logout(dto);
+        if (i == 0){
+            return ResponseEntity.badRequest().body("logout_failed");
+        }else{
+            return ResponseEntity.ok().body("logout_success");
+        }
+    }
+
+
+
 
 }

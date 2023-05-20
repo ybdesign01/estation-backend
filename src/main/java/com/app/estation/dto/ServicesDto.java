@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+@JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class ServicesDto {
     private Long id;
@@ -17,7 +18,6 @@ public class ServicesDto {
     @NotBlank(message = "Description obligatoire!")
     private String description;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Set<StationDto> stations;
 
      public ServicesDto() {

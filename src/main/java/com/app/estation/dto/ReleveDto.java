@@ -2,20 +2,23 @@ package com.app.estation.dto;
 
 import com.app.estation.entity.Pompe;
 import com.app.estation.entity.TypeReleve;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@NotNull(message = "releve_not_null")
 public class ReleveDto {
     private Long id_releve;
     @NotBlank(message = "date_releve_mandatory")
     private String date_releve;
-    @NotBlank(message = "type_releve_mandatory")
+    @NotNull(message = "type_releve_mandatory")
     private TypeReleve type_releve;
-    @NotBlank(message = "pompe_mandatory")
+    @NotNull(message = "pompe_mandatory")
     private PompeDto pompe;
-    @NotBlank(message = "compteur_mandatory")
+    @NotNull(message = "compteur_mandatory")
     private Long compteur;
 
     public ReleveDto(Long id_releve, String date_releve, TypeReleve type_releve, PompeDto pompe, Long compteur) {

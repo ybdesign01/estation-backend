@@ -1,11 +1,11 @@
 package com.app.estation.dto;
 
-import com.app.estation.entity.ProduitAction;
-import com.app.estation.entity.Services;
-import com.app.estation.entity.TypeProduit;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,22 +14,30 @@ import java.util.Objects;
 public class ProduitDto {
 
     private Long id_produit;
+
+    @NotBlank(message = "nom_produit_mandatory")
     private String nom_produit;
-    private String prix_achat;
-    private String prix_vente;
-    private ServicesDto id_service;
-    private TypeProduit type;
+    @NotNull(message = "prix_achat_mandatory")
+    private Double prix_achat;
+    @NotNull(message = "prix_vente_mandatory")
+    private Double prix_vente;
+
+    @NotNull(message = "service_mandatory")
+    private ServicesDto service;
+    private TypeProduitDto type;
     private List<ProduitActionDto> actions;
 
     public ProduitDto() {
+        this.prix_achat = 0.0;
+        this.prix_vente = 0.0;
     }
 
-    public ProduitDto(Long id_produit, String nom_produit, String prix_achat, String prix_vente, ServicesDto id_service, TypeProduit type, List<ProduitActionDto> actions) {
+    public ProduitDto(Long id_produit, String nom_produit, Double prix_achat, Double prix_vente, ServicesDto service, TypeProduitDto type, List<ProduitActionDto> actions) {
         this.id_produit = id_produit;
         this.nom_produit = nom_produit;
         this.prix_achat = prix_achat;
         this.prix_vente = prix_vente;
-        this.id_service = id_service;
+        this.service = service;
         this.type = type;
         this.actions = actions;
     }
@@ -38,12 +46,12 @@ public class ProduitDto {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof ProduitDto that)) return false;
-        return Objects.equals(id_produit, that.id_produit) && Objects.equals(nom_produit, that.nom_produit) && Objects.equals(prix_achat, that.prix_achat) && Objects.equals(prix_vente, that.prix_vente) && Objects.equals(id_service, that.id_service) && Objects.equals(type, that.type) && Objects.equals(actions, that.actions);
+        return Objects.equals(id_produit, that.id_produit) && Objects.equals(nom_produit, that.nom_produit) && Objects.equals(prix_achat, that.prix_achat) && Objects.equals(prix_vente, that.prix_vente) && Objects.equals(service, that.service) && Objects.equals(type, that.type) && Objects.equals(actions, that.actions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id_produit, nom_produit, prix_achat, prix_vente, id_service, type, actions);
+        return Objects.hash(id_produit, nom_produit, prix_achat, prix_vente, service, type, actions);
     }
 
 
@@ -63,35 +71,35 @@ public class ProduitDto {
         this.nom_produit = nom_produit;
     }
 
-    public String getPrix_achat() {
+    public Double getPrix_achat() {
         return this.prix_achat;
     }
 
-    public void setPrix_achat(final String prix_achat) {
+    public void setPrix_achat(final Double prix_achat) {
         this.prix_achat = prix_achat;
     }
 
-    public String getPrix_vente() {
+    public Double getPrix_vente() {
         return this.prix_vente;
     }
 
-    public void setPrix_vente(final String prix_vente) {
+    public void setPrix_vente(final Double prix_vente) {
         this.prix_vente = prix_vente;
     }
 
-    public ServicesDto getId_service() {
-        return this.id_service;
+    public ServicesDto getService() {
+        return this.service;
     }
 
-    public void setId_service(final ServicesDto id_service) {
-        this.id_service = id_service;
+    public void setService(final ServicesDto service) {
+        this.service = service;
     }
 
-    public TypeProduit getType() {
+    public TypeProduitDto getType() {
         return this.type;
     }
 
-    public void setType(final TypeProduit type) {
+    public void setType(final TypeProduitDto type) {
         this.type = type;
     }
 
@@ -101,5 +109,18 @@ public class ProduitDto {
 
     public void setActions(final List<ProduitActionDto> actions) {
         this.actions = actions;
+    }
+
+    @Override
+    public String toString() {
+        return "ProduitDto{" +
+                "id_produit=" + id_produit +
+                ", nom_produit='" + nom_produit + '\'' +
+                ", prix_achat=" + prix_achat +
+                ", prix_vente=" + prix_vente +
+                ", service=" + service +
+                ", type=" + type +
+                ", actions=" + actions +
+                '}';
     }
 }

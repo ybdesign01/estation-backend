@@ -2,9 +2,11 @@ package com.app.estation.dto.User;
 
 import com.app.estation.dto.PompeDto;
 import com.app.estation.entity.keys.PompeUserKey;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Objects;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PompeUserDto {
     private PompeUserKeyDto pompeUserKey;
     private PompeDto pompe;
@@ -74,5 +76,16 @@ public class PompeUserDto {
 
     public void setDate_fin(final String date_fin) {
         this.date_fin = date_fin;
+    }
+
+    @Override
+    public String toString() {
+        return "PompeUserDto{" +
+                "pompeUserKey=" + pompeUserKey +
+                ", pompe=" + (pompe == null ? null : pompe.getId_pompe())+
+                ", user=" + (user == null ? null : user.getId_user())+
+                ", date_debut='" + date_debut + '\'' +
+                ", date_fin='" + date_fin + '\'' +
+                '}';
     }
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,15 +19,15 @@ public class CiterneDto {
     private String nom_citerne;
     @NotBlank(message = "capacite_mandatory")
     private String capacite;
-    @NotBlank(message = "produit_mandatory")
-    private ProduitDto id_produit;
+    @NotNull(message = "produit_mandatory")
+    private ProduitDto produit;
     private List<PompeDto> pompes;
 
-    public CiterneDto(Long id_citerne, String nom_citerne, String capacite, ProduitDto id_produit, List<PompeDto> pompes) {
+    public CiterneDto(Long id_citerne, String nom_citerne, String capacite, ProduitDto produit, List<PompeDto> pompes) {
         this.id_citerne = id_citerne;
         this.nom_citerne = nom_citerne;
         this.capacite = capacite;
-        this.id_produit = id_produit;
+        this.produit = produit;
         this.pompes = pompes;
     }
 
@@ -37,12 +38,12 @@ public class CiterneDto {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof CiterneDto that)) return false;
-        return Objects.equals(id_citerne, that.id_citerne) && Objects.equals(nom_citerne, that.nom_citerne) && Objects.equals(capacite, that.capacite) && Objects.equals(id_produit, that.id_produit) && Objects.equals(pompes, that.pompes);
+        return Objects.equals(id_citerne, that.id_citerne) && Objects.equals(nom_citerne, that.nom_citerne) && Objects.equals(capacite, that.capacite) && Objects.equals(produit, that.produit) && Objects.equals(pompes, that.pompes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id_citerne, nom_citerne, capacite, id_produit, pompes);
+        return Objects.hash(id_citerne, nom_citerne, capacite, produit, pompes);
     }
 
     public Long getId_citerne() {
@@ -69,12 +70,12 @@ public class CiterneDto {
         this.capacite = capacite;
     }
 
-    public ProduitDto getId_produit() {
-        return this.id_produit;
+    public ProduitDto getProduit() {
+        return this.produit;
     }
 
-    public void setId_produit(final ProduitDto id_produit) {
-        this.id_produit = id_produit;
+    public void setProduit(final ProduitDto id_produit) {
+        this.produit = id_produit;
     }
 
     public List<PompeDto> getPompes() {

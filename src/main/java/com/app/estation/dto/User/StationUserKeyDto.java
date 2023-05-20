@@ -7,10 +7,8 @@ import jakarta.validation.constraints.NotNull;
 public class StationUserKeyDto {
 
     @NotNull(message = "station_mandatory")
-    @NotEmpty(message = "station_mandatory")
     Long id_station;
     @NotNull(message = "user_mandatory")
-    @NotEmpty(message = "user_mandatory")
     Long id_user;
 
     public StationUserKeyDto(Long id_station, Long id_user) {
@@ -35,5 +33,13 @@ public class StationUserKeyDto {
 
     public void setId_user(Long id) {
         this.id_user = id;
+    }
+
+    @Override
+    public String toString() {
+        return "StationUserKeyDto{" +
+                "id_station=" + id_station +
+                ", id_user=" + id_user +
+                '}';
     }
 }

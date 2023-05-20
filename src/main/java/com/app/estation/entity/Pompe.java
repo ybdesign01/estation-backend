@@ -65,4 +65,12 @@ public class Pompe {
     public void setUsers(final List<PompeUser> users) {
         this.users = users;
     }
+
+    @Override
+    public String toString() {
+        return "Pompe{" +
+                "id_pompe=" + id_pompe +
+                ", nom_pompe='" + nom_pompe + '\'' +
+                '}';
+    }
 }

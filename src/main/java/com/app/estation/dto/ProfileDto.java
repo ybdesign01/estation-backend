@@ -2,9 +2,11 @@ package com.app.estation.dto;
 
 import com.app.estation.advice.validation.InsertValidation;
 import com.app.estation.entity.Profile;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class ProfileDto {
     private Long id_profile;

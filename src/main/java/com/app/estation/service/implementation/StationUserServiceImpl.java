@@ -47,25 +47,26 @@ public class StationUserServiceImpl implements StationUserService {
 
     @Override
     public StationUserDto addStationUser(StationUserKeyDto stationUserKeyDto) {
-        if (stationUserKeyDto == null){
+        StationUser get = stationUserRepository.findById(StationUserMapper.toEntityKey(stationUserKeyDto)).orElse(null);
+        if (get != null){
             return null;
         }
         final StationUserKey key = StationUserMapper.toEntityKey(stationUserKeyDto);
         final StationUser stationUser = new StationUser();
         stationUser.setStationUserKey(key);
-        final StationDto stationDto = stationService.getStation(stationUserKeyDto.getId_station());
-        if (stationDto == null){
+        final Station station = stationRepository.findById(key.getId_station()).orElse(null);
+        if (station == null){
             return null;
         }
-        stationUser.setStation(StationMapper.toEntity(stationDto));
-        final UserDto user = userService.getUser(stationUserKeyDto.getId_user());
+        stationUser.setStation(station);
+        final User user = userRepository.findById(key.getId_user()).orElse(null);
         if (user == null){
             return null;
         }
-        stationUser.setUser(UserMapper.toEntity(user));
+        stationUser.setUser(user);
+        if (stationUser.getDate_debut() == null)
         stationUser.setDate_debut(Date.from(new Date().toInstant()).toString());
         stationUserRepository.save(stationUser);
-        System.out.println(stationUserRepository.findById(key).orElse(null));
         return StationUserMapper.fromEntity(stationUserRepository.findById(key).orElse(null));
     }
 

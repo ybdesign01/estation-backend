@@ -14,8 +14,8 @@ public class Produit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_produit;
     private String nom_produit;
-    private String prix_achat;
-    private String prix_vente;
+    private Double prix_achat;
+    private Double prix_vente;
     @ManyToOne
     private Services id_service;
     @ManyToOne
@@ -25,7 +25,7 @@ public class Produit {
     private List<ProduitAction> actions;
 
 
-    public Produit(Long id_produit, String nom_produit, String prix_achat, String prix_vente, Services id_service, TypeProduit type, List<ProduitAction> actions) {
+    public Produit(Long id_produit, String nom_produit, Double prix_achat, Double prix_vente, Services id_service, TypeProduit type, List<ProduitAction> actions) {
         this.id_produit = id_produit;
         this.actions = actions;
         this.nom_produit = nom_produit;
@@ -54,19 +54,19 @@ public class Produit {
         this.nom_produit = nom_produit;
     }
 
-    public String getPrix_achat() {
+    public Double getPrix_achat() {
         return prix_achat;
     }
 
-    public void setPrix_achat(String prix_achat) {
+    public void setPrix_achat(Double prix_achat) {
         this.prix_achat = prix_achat;
     }
 
-    public String getPrix_vente() {
+    public Double getPrix_vente() {
         return prix_vente;
     }
 
-    public void setPrix_vente(String prix_vente) {
+    public void setPrix_vente(Double prix_vente) {
         this.prix_vente = prix_vente;
     }
 
@@ -104,5 +104,18 @@ public class Produit {
     @Override
     public int hashCode() {
         return Objects.hash(id_produit, nom_produit, prix_achat, prix_vente, id_service, type, actions);
+    }
+
+    @Override
+    public String toString() {
+        return "Produit{" +
+                "id_produit=" + id_produit +
+                ", nom_produit='" + nom_produit + '\'' +
+                ", prix_achat=" + prix_achat +
+                ", prix_vente=" + prix_vente +
+                ", id_service=" + id_service +
+                ", type=" + type +
+                ", actions=" + actions +
+                '}';
     }
 }

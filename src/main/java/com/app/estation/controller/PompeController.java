@@ -18,7 +18,7 @@ public class PompeController {
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<?> getPompes(){
-        if (pompeService.getAllPompes().isEmpty()){
+        if (null == pompeService.getAllPompes()){
             return ResponseEntity.badRequest().body(Map.of("msg","no_pompe_found"));
         }else{
             return ResponseEntity.ok().body(pompeService.getAllPompes());

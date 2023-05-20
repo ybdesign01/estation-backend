@@ -4,6 +4,7 @@ import com.app.estation.dto.User.PompeUserDto;
 import com.app.estation.dto.User.UserDto;
 import com.app.estation.entity.Citerne;
 import com.app.estation.entity.PompeUser;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -12,13 +13,13 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Objects;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PompeDto {
 
     private Long id_pompe;
     @NotBlank(message = "nom_pompe_mandatory")
     private String nom_pompe;
     private List<CiterneDto> citernes;
-
     private List<PompeUserDto> users;
 
     public PompeDto(Long id_pompe, String nom_pompe, List<CiterneDto> citernes, List<PompeUserDto> users) {

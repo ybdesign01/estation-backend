@@ -91,7 +91,6 @@ public class Station {
                 ", nom_station='" + nom_station + '\'' +
                 ", adresse='" + adresse + '\'' +
                 ", services=" + services +
-                ", users=" + users +
                 '}';
     }
 }

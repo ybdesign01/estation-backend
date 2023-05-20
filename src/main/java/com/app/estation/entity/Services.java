@@ -22,6 +22,7 @@ public class Services {
     private Set<Station> stations;
 
     public Services(Long id_service, String nom_service, String description) {
+        this.id = id_service;
         this.nom_service = nom_service;
         this.description = description;
     }
