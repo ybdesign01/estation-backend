@@ -46,12 +46,12 @@ public class StationUserServiceImpl implements StationUserService {
     }
 
     @Override
-    public StationUserDto addStationUser(StationUserKeyDto stationUserKeyDto) {
-        StationUser get = stationUserRepository.findById(StationUserMapper.toEntityKey(stationUserKeyDto)).orElse(null);
+    public StationUserDto addStationUser(StationUserDto stationUserDto) {
+        StationUser get = stationUserRepository.findById(StationUserMapper.toEntityKey(stationUserDto.getStationUserKey())).orElse(null);
         if (get != null){
             return null;
         }
-        final StationUserKey key = StationUserMapper.toEntityKey(stationUserKeyDto);
+        final StationUserKey key = StationUserMapper.toEntityKey(stationUserDto.getStationUserKey());
         final StationUser stationUser = new StationUser();
         stationUser.setStationUserKey(key);
         final Station station = stationRepository.findById(key.getId_station()).orElse(null);
@@ -64,8 +64,9 @@ public class StationUserServiceImpl implements StationUserService {
             return null;
         }
         stationUser.setUser(user);
-        if (stationUser.getDate_debut() == null)
-        stationUser.setDate_debut(Date.from(new Date().toInstant()).toString());
+        if (stationUser.getDate_debut() == null){
+            stationUser.setDate_debut(Date.from(new Date().toInstant()).toString());
+        }
         stationUserRepository.save(stationUser);
         return StationUserMapper.fromEntity(stationUserRepository.findById(key).orElse(null));
     }

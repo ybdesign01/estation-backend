@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface StationUserService {
 
-    StationUserDto addStationUser(StationUserKeyDto stationUserDto);
+    StationUserDto addStationUser(StationUserDto stationUserDto);
 
     StationUserDto updateStationUser(StationUserDto stationUserDto);
 

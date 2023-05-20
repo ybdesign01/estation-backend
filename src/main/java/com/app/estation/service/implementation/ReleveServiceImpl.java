@@ -21,12 +21,19 @@ public class ReleveServiceImpl implements ReleveService {
     @Override
     public List<ReleveDto> getAll() {
         List<ReleveDto> list = ReleveMapper.fromEntityList(releveRepository.findAll());
+        if (list.isEmpty()){
+            return null;
+        }
         return list;
     }
 
     @Override
     public ReleveDto getReleve(Long id) {
-        ReleveDto releveDto = ReleveMapper.fromEntity(releveRepository.findById(id).get());
+        Releve releve = releveRepository.findById(id).orElse(null);
+        if (releve == null) {
+            return null;
+        }
+        ReleveDto releveDto = ReleveMapper.fromEntity(releve);
         return releveDto;
     }
 

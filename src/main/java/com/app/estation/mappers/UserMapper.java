@@ -12,7 +12,6 @@ public class UserMapper {
     public static UserDto fromEntity(User user) {
         if (user == null) return null;
         final UserDto userDto = new UserDto();
-        System.out.println(user);
         userDto.setId_user(user.getId_user());
         userDto.setNom(user.getNom());
         userDto.setPrenom(user.getPrenom());

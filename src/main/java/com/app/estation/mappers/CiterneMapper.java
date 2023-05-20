@@ -15,7 +15,7 @@ public class CiterneMapper {
         dto.setId_citerne(entity.getId_citerne());
         dto.setNom_citerne(entity.getNom_citerne());
         dto.setCapacite(entity.getCapacite());
-        dto.setPompes(PompeMapper.fromEntityList(entity.getPompes()));
+        dto.setPompes(PompeMapper.fromEntityListWithoutSubclasses(entity.getPompes()));
         dto.setProduit(ProduitMapper.fromEntity(entity.getId_produit()));
         return dto;
     }

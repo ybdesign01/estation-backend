@@ -43,6 +43,7 @@ public class CiterneServiceImpl implements CiterneService {
         return CiterneMapper.fromEntity(citerneRepository.findById(citerne.getId_citerne()).orElse(null));
     }
 
+
     @Override
     public CiterneDto updateCiterne(CiterneDto dto) {
         Citerne citerne = CiterneMapper.toEntity(dto);
@@ -50,11 +51,11 @@ public class CiterneServiceImpl implements CiterneService {
         return CiterneMapper.fromEntity(citerneRepository.findById(citerne.getId_citerne()).orElse(null));
     }
 
-    public CiterneDto setPompes(List<PompeDto> pompeDtos, Long id){
+    public CiterneDto setPompes(List<Long> pompeDtos, Long id){
         List<Pompe> pompes = new ArrayList<>();
         PompeDto pompe = null;
-        for (PompeDto dto : pompeDtos) {
-            pompe = pompeService.getPompe(dto.getId_pompe());
+        for (Long pompeId : pompeDtos) {
+            pompe = pompeService.getPompe(pompeId);
             if (pompe == null){
                 return null;
             }
@@ -62,7 +63,7 @@ public class CiterneServiceImpl implements CiterneService {
         }
         Citerne citerne = citerneRepository.findById(id).orElse(null);
         if (citerne == null){
-            return null;
+            throw new ApiRequestException("citerne_not_found");
         }
         citerne.setPompes(pompes);
         citerneRepository.save(citerne);
@@ -76,7 +77,7 @@ public class CiterneServiceImpl implements CiterneService {
 
     @Override
     public CiterneDto getCiterne(Long id) {
-        return CiterneMapper.fromEntity(citerneRepository.findById(id).orElse(null));
+        return CiterneMapper.fromEntity(citerneRepository.findById(id).orElseThrow(() -> new ApiRequestException("citerne_not_found")));
     }
 
     @Override

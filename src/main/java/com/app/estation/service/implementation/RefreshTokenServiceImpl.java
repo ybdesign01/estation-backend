@@ -37,7 +37,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     public RefreshToken createRefreshToken(User u) {
         RefreshToken refreshToken = new RefreshToken();
         final boolean isExpired = deleteRefreshToken(u);
-        System.out.println("token is = " + u.getRefreshToken() + " isExpired = " + isExpired);
         if (null != u.getRefreshToken() && !isExpired) {
             return u.getRefreshToken();
         }

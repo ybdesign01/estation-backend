@@ -5,6 +5,7 @@ import com.app.estation.entity.Releve;
 import com.app.estation.service.implementation.ReleveServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,19 +22,30 @@ public class ReleveController {
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<?> getReleves(){
-        return ResponseEntity.ok().body(releveService.getAll());
+        List<ReleveDto> releves = releveService.getAll();
+        if (null == releves){
+            return ResponseEntity.badRequest().body(Map.of("msg","no_releve_found"));
+        }else{
+            return ResponseEntity.ok().body(releves);
+        }
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<?> getReleve(@PathVariable Long id){
-        return ResponseEntity.ok().body(releveService.getReleve(id));
+    public ResponseEntity<?> getReleve(@PathVariable Long id) {
+        ReleveDto releve = releveService.getReleve(id);
+        if (null == releve){
+            return ResponseEntity.badRequest().body(Map.of("msg", "releve_not_found"));
+    }else {
+            return ResponseEntity.ok().body(releve);
+        }
+
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> addReleve(@Validated @RequestBody ReleveDto releve){
         boolean added = releveService.addReleve(releve);
         if (added)
-            return ResponseEntity.ok().body(Map.of("msg","releve_added"));
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("msg","releve_added"));
         else
             return ResponseEntity.badRequest().body(Map.of("msg","releve_not_added"));
     }

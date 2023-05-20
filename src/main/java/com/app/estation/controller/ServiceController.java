@@ -28,7 +28,7 @@ public class ServiceController {
     public ResponseEntity<?> getServices(){
         List<ServicesDto> services = servicesService.getServices();
         if (services == null)
-            return ResponseEntity.badRequest().body(Map.of("msg","no_services_found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","no_services_found"));
         else {
             try {
                 String json = objectMapper.writeValueAsString(services);
@@ -43,7 +43,7 @@ public class ServiceController {
     public ResponseEntity<?> getService(@PathVariable Long id){
         ServicesDto service = servicesService.getService(id);
         if (null == service){
-            return ResponseEntity.badRequest().body(Map.of("msg","no_service_found"));
+            return ResponseEntity.badRequest().body(Map.of("msg","service_not_found"));
         }
         else{
             return ResponseEntity.ok().body(service);

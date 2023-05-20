@@ -34,9 +34,13 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<UserDto> getAll(){
+    public ResponseEntity<?> getAll(){
         List<UserDto> users = userService.getAll();
-        return users;
+        if(null != users) {
+            return ResponseEntity.ok().body(users);
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","no_users_found"));
+        }
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
@@ -57,7 +61,7 @@ public class UserController {
         if(null != user){
             return ResponseEntity.ok().body(user);
         }else{
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","user_not_found"));
         }
     }
 
@@ -76,7 +80,11 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> updateUser(@Validated(InsertValidation.class) @RequestBody UserPassDto userDto, @PathVariable Long id){
         UserDto user = userService.updateUser(id, userDto);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(user);
+        if (null == user) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg", "user_not_updated"));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        }
     }
 
     @DeleteMapping (value = "/{id}", produces = "application/json")
@@ -102,7 +110,7 @@ public class UserController {
 
     @PostMapping(value = "/setStation", produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
-    public ResponseEntity<?> setStation(@Validated @RequestBody final StationUserKeyDto stationUserDto){
+    public ResponseEntity<?> setStation(@Validated @RequestBody final StationUserDto stationUserDto){
         StationUserDto station = stationUserService.addStationUser(stationUserDto);
         if(null != station){
             return ResponseEntity.status(HttpStatus.CREATED).body(station);
@@ -116,7 +124,7 @@ public class UserController {
     public ResponseEntity<?> updateStation(@Validated @RequestBody final StationUserDto stationUserDto){
         StationUserDto station = stationUserService.updateStationUser(stationUserDto);
         if(null != station){
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(station);
+            return ResponseEntity.status(HttpStatus.OK).body(station);
         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","station_user_not_found"));
         }
@@ -124,12 +132,23 @@ public class UserController {
 
     @PostMapping(value = "/setPompe", produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
-    public ResponseEntity<?> setPompe(@Validated @RequestBody final PompeUserKeyDto pompeUserKeyDto){
+    public ResponseEntity<?> setPompe(@Validated @RequestBody final PompeUserDto pompeUserKeyDto){
         PompeUserDto pompeUserDto = pompeUserService.addPompeUser(pompeUserKeyDto);
         if(null != pompeUserDto){
             return ResponseEntity.status(HttpStatus.CREATED).body(pompeUserDto);
         }else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","pompe_user_exists"));
+        }
+    }
+
+    @GetMapping(value = "/getPompes/{id}", produces = "application/json")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getPompe(@PathVariable final Long id){
+        List<PompeUserDto> pompes = pompeUserService.getAllPompesByUser(id);
+        if(null != pompes){
+            return ResponseEntity.ok().body(pompes);
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","no_pompe_found"));
         }
     }
 

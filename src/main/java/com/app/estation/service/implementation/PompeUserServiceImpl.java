@@ -1,5 +1,6 @@
 package com.app.estation.service.implementation;
 
+import com.app.estation.advice.ApiRequestException;
 import com.app.estation.dto.User.PompeUserDto;
 import com.app.estation.dto.User.PompeUserKeyDto;
 import com.app.estation.entity.Pompe;
@@ -34,27 +35,27 @@ public class PompeUserServiceImpl implements PompeUserService {
 
 
     @Override
-    public PompeUserDto addPompeUser(PompeUserKeyDto dto) {
-        PompeUser get = pompeUserRepository.findById(PompeUserMapper.toEntityKey(dto)).orElse(null);
+    public PompeUserDto addPompeUser(PompeUserDto dto) {
+        PompeUser get = pompeUserRepository.findById(PompeUserMapper.toEntityKey(dto.getPompeUserKey())).orElse(null);
         System.out.println(get);
         if (get != null){
             return null;
         }
         PompeUser pompeUser = new PompeUser();
-        pompeUser.setPompeUserKey(PompeUserMapper.toEntityKey(dto));
-        User user = userRepository.findById(dto.getId_user()).orElse(null);
+        pompeUser.setPompeUserKey(PompeUserMapper.toEntityKey(dto.getPompeUserKey()));
+        User user = userRepository.findById(dto.getPompeUserKey().getId_user()).orElse(null);
         if (user == null) {
             return null;
         }
         pompeUser.setUser(user);
-        Pompe pompe = pompeRepository.findById(dto.getId_pompe()).orElse(null);
+        Pompe pompe = pompeRepository.findById(dto.getPompeUserKey().getId_pompe()).orElse(null);
         if (pompe == null) {
             return null;
         }
         pompeUser.setPompe(pompe);
-        System.out.println("date is:" + pompeUser.getDate_debut());
-        if (pompeUser.getDate_debut() == null)
-        pompeUser.setDate_debut(Date.from(new Date().toInstant()).toString());
+        if (pompeUser.getDate_debut() == null){
+            pompeUser.setDate_debut(Date.from(new Date().toInstant()).toString());
+        }
         pompeUserRepository.save(pompeUser);
         return PompeUserMapper.fromEntity(pompeUserRepository.findById(pompeUser.getPompeUserKey()).orElse(null));
     }
@@ -77,5 +78,13 @@ public class PompeUserServiceImpl implements PompeUserService {
     @Override
     public List<PompeUserDto> getAllPompeUsers() {
         return PompeUserMapper.fromEntityList(pompeUserRepository.findAll());
+    }
+
+    public List<PompeUserDto> getAllPompesByUser(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null){
+            throw new ApiRequestException("user_not_found");
+        }
+        return PompeUserMapper.fromEntityList(pompeUserRepository.findAllByUser(user));
     }
 }

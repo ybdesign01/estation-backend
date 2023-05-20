@@ -1,6 +1,7 @@
 package com.app.estation.service.implementation;
 
 
+import com.app.estation.advice.ApiRequestException;
 import com.app.estation.dto.User.UserDto;
 import com.app.estation.dto.User.UserPassDto;
 import com.app.estation.entity.Profile;
@@ -80,11 +81,11 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(Long id, UserPassDto userDto) {
         Profile profile = profileService.findProfileByNom(userDto.getProfile().getNom());
         if(null == profile){
-            return null;
+            throw new ApiRequestException("profile_not_found");
         }
         User user = userRepository.findById(id).orElse(null);
         if (null == user){
-            return null;
+            throw new ApiRequestException("user_not_found");
         }
         user.setNom(userDto.getNom());
         user.setPrenom(userDto.getPrenom());

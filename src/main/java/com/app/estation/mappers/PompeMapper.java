@@ -71,5 +71,11 @@ public class PompeMapper {
     }
 
 
-
+    public static List<PompeDto> fromEntityListWithoutSubclasses(List<Pompe> entities) {
+        if (entities == null){
+            return null;
+        }
+        List<PompeDto> dtos = entities.stream().map(PompeMapper::fromEntityWithoutSubclasses).collect(Collectors.toList());
+        return dtos;
+    }
 }

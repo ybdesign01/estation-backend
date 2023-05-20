@@ -5,10 +5,12 @@ import com.app.estation.dto.TypeProduitDto;
 import com.app.estation.service.implementation.ProduitServiceImpl;
 import com.app.estation.service.implementation.TypeProduitServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -48,7 +50,12 @@ public class ProduitController {
 
     @GetMapping(value = "/getTypes", produces = "application/json")
     public ResponseEntity<?> getTypes(){
-        return ResponseEntity.ok().body(typeProduitService.getAllTypeProduits());
+        List<TypeProduitDto> typeProduitDtos = typeProduitService.getAllTypeProduits();
+        if (typeProduitDtos == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no_types_found");
+        }else{
+            return ResponseEntity.ok().body(typeProduitDtos);
+        }
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")

@@ -20,12 +20,17 @@ public class CiterneController {
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<?> getCiternes(){
-        return ResponseEntity.ok().body(citerneService.getAllCiterne());
+        List<CiterneDto> citerneDtos = citerneService.getAllCiterne();
+        if (citerneDtos == null) {
+            return ResponseEntity.badRequest().body(Map.of("msg", "no_citernes_found"));
+        }else {
+            return ResponseEntity.ok().body(citerneDtos);
+        }
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> addCiterne(@Validated @RequestBody CiterneDto citerneDto){
-        return ResponseEntity.ok().body(citerneService.addCiterne(citerneDto));
+        return ResponseEntity.ok().body(Map.of("msg","citerne_added", "citerne",citerneService.addCiterne(citerneDto)));
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
@@ -34,7 +39,7 @@ public class CiterneController {
     }
 
     @PostMapping(value = "/setPompes/{id}", produces = "application/json")
-    public ResponseEntity<?> setPompes(@RequestBody List<PompeDto> pompeDtos, @PathVariable Long id){
+    public ResponseEntity<?> setPompes(@RequestBody List<Long> pompeDtos, @PathVariable Long id){
         CiterneDto citerneDto = citerneService.setPompes(pompeDtos,id);
         if (citerneDto == null){
             return ResponseEntity.badRequest().body(Map.of("msg","pompes_not_set"));

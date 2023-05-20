@@ -59,7 +59,7 @@ public class StationController {
     public ResponseEntity<?> getStation(@PathVariable Long id){
         StationDto station = stationService.getStation(id);
         if (null == station){
-            return ResponseEntity.badRequest().body(Map.of("msg","no_station_found"));
+            return ResponseEntity.badRequest().body(Map.of("msg","station_not_found"));
         }
         return ResponseEntity.ok().body(station);
     }
