@@ -19,14 +19,11 @@ public class StationDto {
     private String adresse;
     @NotEmpty(message = "services_mandatory")
     private Set<ServicesDto> services;
-
     private List<StationUserDto> users;
-
 
 
     public StationDto() {
     }
-
 
 
     public StationDto(Long id, String nom_station, String adresse, Set<ServicesDto> services, List<StationUserDto> users) {

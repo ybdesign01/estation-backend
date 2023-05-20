@@ -65,14 +65,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Map<String, String> responseBody = new HashMap<>();
                 responseBody.put("msg", "expired_token");
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
                 response.getWriter().write(objectMapper.writeValueAsString(responseBody));
                 return;
             }catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e){
                 Map<String, String> responseBody = new HashMap<>();
                 responseBody.put("msg", "invalid_token");
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
                 response.getWriter().write(objectMapper.writeValueAsString(responseBody));
                 return;
             }

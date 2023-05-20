@@ -7,7 +7,7 @@ The link of the api is : https://estation-api.herokuapp.com/api/
 ## Auth
 ### The following routes do not require authentication:
 ```
-POST: /api/auth  | Status: 404 - msg: user_not_found / msg: password_not_match, 200 
+POST: /api/auth  | Status: 400 - msg: user_not_found, msg: password_not_match, msg: expired_token / Status: 200 
 
 {
     "email": "mail@mail.com",
@@ -40,7 +40,7 @@ The expiration time for the refresh token is 3 days.
 
 #### Refresh token
 ```
-POST: /api/auth/refresh | Status: 404 - msg: refresh_token_invalid, 200
+POST: /api/auth/refresh | Status: 400 - msg: refresh_token_invalid / Status: 200
 
 {
     "refreshToken": "f8e716f9-a262-4878-96ff-080f06e028bb"
@@ -58,7 +58,7 @@ The refresh token is the same as the one you sent in the request.
 When the refreshToken expires you'll have to authenticate again.
 
 ```
-POST: /api/auth/logout | Status: 404 - msg: refresh_token_invalid, 200
+POST: /api/auth/logout | Status: 400 - msg: refresh_token_invalid / Status: 200
 
 {
     "refreshToken": "f8e716f9-a262-4878-96ff-080f06e028bb"

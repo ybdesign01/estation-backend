@@ -69,4 +69,15 @@ public class ReleveController {
             return ResponseEntity.badRequest().body(Map.of("msg","releve_not_deleted"));
     }
 
+    @GetMapping(value = "/getByPompe/{id}", produces = "application/json")
+    public ResponseEntity<?> getReleveByPompe(@PathVariable Long id){
+        List<ReleveDto> releves = releveService.getReleveByPompe(id);
+        if (null == releves){
+            return ResponseEntity.badRequest().body(Map.of("msg","no_releve_found"));
+        }else{
+            return ResponseEntity.ok().body(releves);
+        }
+    }
+
+
 }

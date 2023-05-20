@@ -17,7 +17,6 @@ public class ReleveServiceImpl implements ReleveService {
     @Autowired
     ReleveRepository releveRepository;
 
-
     @Override
     public List<ReleveDto> getAll() {
         List<ReleveDto> list = ReleveMapper.fromEntityList(releveRepository.findAll());
@@ -71,4 +70,12 @@ public class ReleveServiceImpl implements ReleveService {
             return false;
         }
     }
+
+ /*   public List<ReleveDto> getReleveByPompe(Long id) {
+        List<ReleveDto> list = ReleveMapper.fromEntityList(releveRepository.findAllById(id));
+        if (list.isEmpty()){
+            return null;
+        }
+        return list;
+    }*/
 }
