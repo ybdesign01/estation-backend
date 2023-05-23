@@ -75,7 +75,7 @@ public class UserController {
     @GetMapping(value = "/getStation/{id}", produces = "application/json")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getStation(@PathVariable final Long id){
-            return ResponseEntity.ok().body(stationUserService.getAllStationsByUser(id));
+        return ResponseEntity.ok().body(stationUserService.getCurrentStation(id));
     }
 
     @PostMapping(value = "/setStation", produces = "application/json", consumes = "application/json")

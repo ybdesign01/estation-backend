@@ -2,6 +2,7 @@ package com.app.estation.service.implementation;
 
 import com.app.estation.advice.exceptions.ApiRequestException;
 import com.app.estation.advice.exceptions.EntityNotFoundException;
+import com.app.estation.dto.StationDto;
 import com.app.estation.dto.User.StationUserDto;
 import com.app.estation.dto.User.StationUserKeyDto;
 import com.app.estation.entity.Station;
@@ -56,12 +57,12 @@ public class StationUserServiceImpl implements StationUserService {
         stationUser.setStationUserKey(key);
         final Station station = stationRepository.findById(key.getId_station()).orElse(null);
         if (station == null){
-        throw new EntityNotFoundException("station_does_not_exist");
+        throw new EntityNotFoundException("station_not_found");
         }
         stationUser.setStation(station);
         final User user = userRepository.findById(key.getId_user()).orElse(null);
         if (user == null){
-            throw new EntityNotFoundException("user_does_not_exist");
+            throw new EntityNotFoundException("user_not_found");
         }
         stationUser.setUser(user);
         if (stationUser.getDate_debut() == null){
@@ -116,13 +117,13 @@ public class StationUserServiceImpl implements StationUserService {
         return true;
     }
 
-    public StationUserDto getStationUserById(Long id_user, Long id_station) {
-        StationUserKey key = new StationUserKey(id_user, id_station);
-        StationUser stationUser = stationUserRepository.findById(key).orElse(null);
+    public StationDto getCurrentStation(Long id_user) {
+        userRepository.findById(id_user).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
+        StationUser stationUser = stationUserRepository.findLatestStationUserByUserId(id_user).orElse(null);
         if(stationUser == null){
-            return null;
+            throw new EntityNotFoundException("no_station_assigned_to_user");
         }
-        return StationUserMapper.fromEntity(stationUser);
+        return StationMapper.fromEntityWithoutServices(stationUser.getStation());
     }
 
 
