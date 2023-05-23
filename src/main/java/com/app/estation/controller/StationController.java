@@ -2,7 +2,6 @@ package com.app.estation.controller;
 
 import com.app.estation.dto.ServicesDto;
 import com.app.estation.dto.StationDto;
-import com.app.estation.entity.Services;
 import com.app.estation.service.implementation.ServicesImpl;
 import com.app.estation.service.implementation.StationServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -31,7 +30,7 @@ public class StationController {
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<?> getAll(){
-            List<StationDto> stations = stationService.findAll();
+            List<StationDto> stations = stationService.getAll();
             if (null == stations ){
                 return ResponseEntity.badRequest().body(Map.of("msg","no_station_found"));
             }
@@ -57,17 +56,13 @@ public class StationController {
 
     @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> getStation(@PathVariable Long id){
-        StationDto station = stationService.getStation(id);
-        if (null == station){
-            return ResponseEntity.badRequest().body(Map.of("msg","station_not_found"));
-        }
+        StationDto station = stationService.get(id);
         return ResponseEntity.ok().body(station);
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> addStation(@Validated @RequestBody StationDto stationDto){
-        System.out.println(stationDto);
-        StationDto station = stationService.addStation(stationDto);
+        StationDto station = stationService.add(stationDto);
         if (station != null){
             return ResponseEntity.status(201).body(Map.of("msg","station_added", "station", station));
         }else{
@@ -75,22 +70,17 @@ public class StationController {
         }
     }
 
-    @PutMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<?> updateStation(@Validated @RequestBody StationDto stationDto, @PathVariable Long id){
-        stationDto.setId(id);
-        StationDto station = stationService.updateStation(stationDto, id);
-        if (station != null){
-            return ResponseEntity.ok().body(Map.of("msg","station_updated", "station", station));
-        }else{
-                return ResponseEntity.badRequest().body(Map.of("msg","station_not_updated"));
-        }
+    @PutMapping(produces = "application/json", consumes = "application/json")
+    public ResponseEntity<?> updateStation(@Validated @RequestBody final StationDto stationDto){
+        final StationDto station = stationService.update(stationDto);
+        return ResponseEntity.ok().body(Map.of("msg","station_updated", "station", station));
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> deleteStation(@PathVariable Long id){
-        StationDto station = stationService.deleteStation(id);
-        if (null != station){
-            return ResponseEntity.ok().body(Map.of("msg","station_deleted", "station", station));
+        final boolean station = stationService.delete(id);
+        if (station){
+            return ResponseEntity.ok().body(Map.of("msg","station_deleted"));
         }else{
             return ResponseEntity.badRequest().body(Map.of("msg","station_not_deleted"));
         }

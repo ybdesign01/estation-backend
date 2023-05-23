@@ -1,9 +1,9 @@
 package com.app.estation.service.implementation;
 
-import com.app.estation.dto.StationDto;
+import com.app.estation.advice.exceptions.ApiRequestException;
+import com.app.estation.advice.exceptions.EntityNotFoundException;
 import com.app.estation.dto.User.StationUserDto;
 import com.app.estation.dto.User.StationUserKeyDto;
-import com.app.estation.dto.User.UserDto;
 import com.app.estation.entity.Station;
 import com.app.estation.entity.StationUser;
 import com.app.estation.entity.User;
@@ -12,14 +12,14 @@ import com.app.estation.mappers.StationMapper;
 import com.app.estation.mappers.StationUserMapper;
 import com.app.estation.mappers.UserMapper;
 import com.app.estation.repository.StationRepository;
+import com.app.estation.repository.StationUserRepository;
 import com.app.estation.repository.UserRepository;
 import com.app.estation.service.StationUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import com.app.estation.repository.StationUserRepository;
-import org.springframework.stereotype.Service;
 
 @Service
 public class StationUserServiceImpl implements StationUserService {
@@ -46,33 +46,38 @@ public class StationUserServiceImpl implements StationUserService {
     }
 
     @Override
-    public StationUserDto addStationUser(StationUserDto stationUserDto) {
+    public StationUserDto add(StationUserDto stationUserDto) {
         StationUser get = stationUserRepository.findById(StationUserMapper.toEntityKey(stationUserDto.getStationUserKey())).orElse(null);
         if (get != null){
-            return null;
+           throw new ApiRequestException("station_user_already_exist");
         }
         final StationUserKey key = StationUserMapper.toEntityKey(stationUserDto.getStationUserKey());
         final StationUser stationUser = new StationUser();
         stationUser.setStationUserKey(key);
         final Station station = stationRepository.findById(key.getId_station()).orElse(null);
         if (station == null){
-            return null;
+        throw new EntityNotFoundException("station_does_not_exist");
         }
         stationUser.setStation(station);
         final User user = userRepository.findById(key.getId_user()).orElse(null);
         if (user == null){
-            return null;
+            throw new EntityNotFoundException("user_does_not_exist");
         }
         stationUser.setUser(user);
         if (stationUser.getDate_debut() == null){
             stationUser.setDate_debut(Date.from(new Date().toInstant()).toString());
         }
         stationUserRepository.save(stationUser);
-        return StationUserMapper.fromEntity(stationUserRepository.findById(key).orElse(null));
+        return StationUserMapper.fromEntity(stationUserRepository.findById(key).orElseThrow(() -> new EntityNotFoundException("station_user_not_found")));
     }
 
     @Override
-    public StationUserDto updateStationUser(StationUserDto stationUserDto) {
+    public StationUserDto get(Long id) {
+        return null;
+    }
+
+    @Override
+    public StationUserDto update(StationUserDto stationUserDto) {
         if (stationUserDto == null){
             return null;
         }
@@ -88,15 +93,29 @@ public class StationUserServiceImpl implements StationUserService {
     }
 
     @Override
-    public void deleteStationUser(StationUserDto stationUserDto) {
-        if (stationUserDto == null){
-            return;
+    public boolean delete(Long id) {
+        return false;
+    }
+
+    public StationUserDto get(StationUserKeyDto key){
+        StationUserKey key1 = StationUserMapper.toEntityKey(key);
+        StationUser stationUser = stationUserRepository.findById(key1).orElse(null);
+        if (stationUser == null){
+            throw new EntityNotFoundException("station_user_not_found");
         }
-        StationUser stationUser = StationUserMapper.toEntity(stationUserDto);
-        stationUserRepository.delete(stationUser);
+        return StationUserMapper.fromEntity(stationUser);
     }
 
     @Override
+    public boolean delete(StationUserDto stationUserDto) {
+        if (stationUserDto == null){
+            return false;
+        }
+        StationUser stationUser = StationUserMapper.toEntity(stationUserDto);
+        stationUserRepository.delete(stationUser);
+        return true;
+    }
+
     public StationUserDto getStationUserById(Long id_user, Long id_station) {
         StationUserKey key = new StationUserKey(id_user, id_station);
         StationUser stationUser = stationUserRepository.findById(key).orElse(null);
@@ -106,22 +125,25 @@ public class StationUserServiceImpl implements StationUserService {
         return StationUserMapper.fromEntity(stationUser);
     }
 
-    @Override
+
     public List<StationUserDto> getAllStationsByUser(Long id_user) {
         if (id_user == null){
             return null;
         }
-        User user = UserMapper.toEntity(userService.getUser(id_user));
+        User user = UserMapper.toEntity(userService.get(id_user));
         List<StationUser> stationUsers = stationUserRepository.findAllByUser(user);
+        if (stationUsers == null){
+            throw new EntityNotFoundException("station_user_not_found");
+        }
         return StationUserMapper.fromEntityList(stationUsers);
     }
 
-    @Override
+
     public List<StationUserDto> getAllUsersByStation(Long id_station) {
         if (id_station == null){
             return null;
         }
-        Station station = StationMapper.toEntity(stationService.getStation(id_station));
+        Station station = StationMapper.toEntity(stationService.get(id_station));
         List<StationUser> stationUsers = stationUserRepository.findAllByStation(station);
         return StationUserMapper.fromEntityList(stationUsers);
     }

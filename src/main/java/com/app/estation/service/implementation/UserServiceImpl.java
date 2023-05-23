@@ -1,14 +1,16 @@
 package com.app.estation.service.implementation;
 
 
-import com.app.estation.advice.ApiRequestException;
+import com.app.estation.advice.exceptions.ApiRequestException;
+import com.app.estation.advice.exceptions.EntityNotFoundException;
 import com.app.estation.dto.User.UserDto;
 import com.app.estation.dto.User.UserPassDto;
 import com.app.estation.entity.Profile;
 import com.app.estation.entity.User;
 import com.app.estation.mappers.UserMapper;
+import com.app.estation.repository.ProfileRepository;
 import com.app.estation.repository.UserRepository;
-import com.app.estation.service.UserService;
+import com.app.estation.service.EServices;
 import com.app.estation.util.PassEncode;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ import java.util.Optional;
 
 @Transactional
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements EServices<UserDto,UserPassDto> {
 
     @Autowired
     PassEncode passEncode;
@@ -28,7 +30,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private ProfileServiceImpl profileService;
+    private ProfileRepository profileRepository;
 
     @Autowired
     private JwtService jwtService;
@@ -36,32 +38,31 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAll(){
         List<UserDto> users = UserMapper.fromEntityList(userRepository.findAll());
+        if (users.isEmpty()){
+            throw new EntityNotFoundException("no_users_found");
+        }
         return users;
     }
 
     @Override
-    public UserDto getUser(Long id) {
-        User user = userRepository.findById(id).orElse(null);
-        if (user == null) {
-            return null;
-        }
-        UserDto result = UserMapper.fromEntity(user);
-        return result;
+    public UserDto get(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
+        return UserMapper.fromEntity(user);
     }
-    @Override
+
     public UserDto getUserByToken(String token) {
         String jwt = token.substring(7);
         String userEmail = jwtService.extractEmail(jwt);
         Optional<User> result = userRepository.findByEmail(userEmail);
-        return result.map(UserMapper::fromEntity).orElse(null);
+        return result.map(UserMapper::fromEntity).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
     }
 
     @Override
-    public UserDto addUser(UserPassDto userDto){
-        Profile profile = profileService.findProfileByNom(userDto.getProfile().getNom());
+    public UserDto add(UserPassDto userDto){
+        Profile profile = profileRepository.findProfileByNom(userDto.getProfile().getNom());
         User user = userRepository.findByEmail(userDto.getEmail()).orElse(null);
         if (null != user){
-            return null;
+            throw new ApiRequestException("user_already_exist");
         }
          user = new User( userDto.getNom(),
                 userDto.getPrenom(),
@@ -70,22 +71,18 @@ public class UserServiceImpl implements UserService {
                 userDto.getMatricule(),
                 profile);
         userRepository.save(user);
-        if (userRepository.existsByEmail(user.getEmail())){
-            return UserMapper.fromEntity(user);
-        }else{
-            return null;
-        }
+        return UserMapper.fromEntity(userRepository.findById(user.getId_user()).orElseThrow(() -> new ApiRequestException("user_not_added")));
     }
 
     @Override
-    public UserDto updateUser(Long id, UserPassDto userDto) {
-        Profile profile = profileService.findProfileByNom(userDto.getProfile().getNom());
+    public UserDto update(UserPassDto userDto) {
+        Profile profile = profileRepository.findProfileByNom(userDto.getProfile().getNom());
         if(null == profile){
-            throw new ApiRequestException("profile_not_found");
+            throw new EntityNotFoundException("profile_not_found");
         }
-        User user = userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(userDto.getId_user()).orElse(null);
         if (null == user){
-            throw new ApiRequestException("user_not_found");
+            throw new EntityNotFoundException("user_not_found");
         }
         user.setNom(userDto.getNom());
         user.setPrenom(userDto.getPrenom());
@@ -94,16 +91,12 @@ public class UserServiceImpl implements UserService {
         user.setMatricule(userDto.getMatricule());
         user.setProfile(profile);
         userRepository.save(user);
-        if (userRepository.existsByEmail(user.getEmail())){
-            return UserMapper.fromEntity(user);
-        }else{
-            return null;
-        }
+        return UserMapper.fromEntity(userRepository.findById(userDto.getId_user()).orElseThrow(() -> new ApiRequestException("user_not_updated")));
     }
 
 
     @Override
-    public boolean deleteUser(Long id) {
+    public boolean delete(Long id) {
         if (userRepository.existsById(id)){
             userRepository.deleteById(id);
             return true;

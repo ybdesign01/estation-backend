@@ -1,6 +1,6 @@
 package com.app.estation.service.implementation;
 
-import com.app.estation.advice.TokenRefreshException;
+import com.app.estation.advice.exceptions.TokenRefreshException;
 import com.app.estation.entity.RefreshToken;
 import com.app.estation.entity.User;
 import com.app.estation.repository.RefreshTokenRepository;

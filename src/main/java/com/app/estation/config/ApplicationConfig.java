@@ -1,7 +1,6 @@
 package com.app.estation.config;
 
 import com.app.estation.repository.UserRepository;
-import com.app.estation.service.implementation.ProfileServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,12 +43,6 @@ public class ApplicationConfig {
         return new BCryptPasswordEncoder();
     }
 
-
-
-    @Bean
-    public ProfileServiceImpl profileService() {
-        return new ProfileServiceImpl();
-    }
 
 
 

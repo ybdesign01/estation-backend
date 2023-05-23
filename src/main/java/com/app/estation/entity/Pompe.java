@@ -14,7 +14,7 @@ public class Pompe {
     private Long id_pompe;
     private String nom_pompe;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "citerne_pompe",
             joinColumns = @JoinColumn(name = "id_pompe"),
@@ -32,6 +32,10 @@ public class Pompe {
     }
 
     public Pompe() {
+    }
+
+    public void addCiternetoList(Citerne citerne){
+        this.citernes.add(citerne);
     }
 
     public Long getId_pompe() {
@@ -71,6 +75,7 @@ public class Pompe {
         return "Pompe{" +
                 "id_pompe=" + id_pompe +
                 ", nom_pompe='" + nom_pompe + '\'' +
+                ", citernes=" + citernes +
                 '}';
     }
 }

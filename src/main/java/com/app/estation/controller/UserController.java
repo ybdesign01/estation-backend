@@ -1,9 +1,9 @@
 package com.app.estation.controller;
 
 
-import com.app.estation.advice.validation.InsertValidation;
-import com.app.estation.dto.User.*;
-import com.app.estation.service.implementation.PompeServiceImpl;
+import com.app.estation.dto.PompeUserRequest;
+import com.app.estation.dto.User.StationUserDto;
+import com.app.estation.dto.User.UserPassDto;
 import com.app.estation.service.implementation.PompeUserServiceImpl;
 import com.app.estation.service.implementation.StationUserServiceImpl;
 import com.app.estation.service.implementation.UserServiceImpl;
@@ -15,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -33,64 +32,40 @@ public class UserController {
 
 
     @GetMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
     public ResponseEntity<?> getAll(){
-        List<UserDto> users = userService.getAll();
-        if(null != users) {
-            return ResponseEntity.ok().body(users);
-        }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","no_users_found"));
-        }
+            return ResponseEntity.ok().body(userService.getAll());
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getById(@PathVariable Long id){
-        UserDto user = userService.getUser(id);
-        if(null != user){
-            return ResponseEntity.ok().body(user);
-        }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","user_not_found"));
-        }
+            return ResponseEntity.ok().body(userService.get(id));
     }
 
     @GetMapping(value = "/getUser", produces = "application/json")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getByToken(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
-        UserDto user = userService.getUserByToken(token);
-        if(null != user){
-            return ResponseEntity.ok().body(user);
-        }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","user_not_found"));
-        }
+            return ResponseEntity.ok().body(userService.getUserByToken(token));
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> addUser(@Validated(InsertValidation.class) @RequestBody UserPassDto userDto){
-        UserDto user = userService.addUser(userDto);
-        if(null == user){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","user_exists"));
-        }else {
-            return ResponseEntity.status(HttpStatus.CREATED).body(user);
-        }
+    @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
+    public ResponseEntity<?> addUser(@Validated @RequestBody final UserPassDto userDto){
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("msg","user_created", "user", userService.add(userDto)));
+
     }
 
-    @PutMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
+    @PutMapping(produces = "application/json", consumes = "application/json")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateUser(@Validated(InsertValidation.class) @RequestBody UserPassDto userDto, @PathVariable Long id){
-        UserDto user = userService.updateUser(id, userDto);
-        if (null == user) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg", "user_not_updated"));
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).body(user);
-        }
+    public ResponseEntity<?> updateUser(@Validated@RequestBody UserPassDto userDto){
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("msg","user_updated", "user", userService.update(userDto)));
     }
 
     @DeleteMapping (value = "/{id}", produces = "application/json")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
     public ResponseEntity<?> deleteUser(@PathVariable Long id){
-        if(userService.deleteUser(id)){
+        if(userService.delete(id)){
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("msg","user_deleted"));
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","user_not_found"));
@@ -100,29 +75,20 @@ public class UserController {
     @GetMapping(value = "/getStation/{id}", produces = "application/json")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getStation(@PathVariable final Long id){
-        List<StationUserDto> stations = stationUserService.getAllStationsByUser(id);
-        if(null != stations){
-            return ResponseEntity.ok().body(stations);
-        }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","no_station_found"));
-        }
+            return ResponseEntity.ok().body(stationUserService.getAllStationsByUser(id));
     }
 
     @PostMapping(value = "/setStation", produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
     public ResponseEntity<?> setStation(@Validated @RequestBody final StationUserDto stationUserDto){
-        StationUserDto station = stationUserService.addStationUser(stationUserDto);
-        if(null != station){
-            return ResponseEntity.status(HttpStatus.CREATED).body(station);
-        }else{
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","station_user_exists"));
-        }
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("msg","station_user_created","stationUser",stationUserService.add(stationUserDto)));
+
     }
 
     @PostMapping(value = "/updateStation", produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
     public ResponseEntity<?> updateStation(@Validated @RequestBody final StationUserDto stationUserDto){
-        StationUserDto station = stationUserService.updateStationUser(stationUserDto);
+        StationUserDto station = stationUserService.update(stationUserDto);
         if(null != station){
             return ResponseEntity.status(HttpStatus.OK).body(station);
         }else{
@@ -132,25 +98,23 @@ public class UserController {
 
     @PostMapping(value = "/setPompe", produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
-    public ResponseEntity<?> setPompe(@Validated @RequestBody final PompeUserDto pompeUserKeyDto){
-        PompeUserDto pompeUserDto = pompeUserService.addPompeUser(pompeUserKeyDto);
-        if(null != pompeUserDto){
-            return ResponseEntity.status(HttpStatus.CREATED).body(pompeUserDto);
-        }else{
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","pompe_user_exists"));
-        }
+    public ResponseEntity<?> setPompe(@Validated @RequestBody PompeUserRequest request){
+       return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("msg","pompe_user_created","pompeUser",pompeUserService.setPompeToUser(request)));
     }
 
     @GetMapping(value = "/getPompes/{id}", produces = "application/json")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getPompe(@PathVariable final Long id){
-        List<PompeUserDto> pompes = pompeUserService.getAllPompesByUser(id);
-        if(null != pompes){
-            return ResponseEntity.ok().body(pompes);
-        }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","no_pompe_found"));
-        }
+        return ResponseEntity.ok().body(pompeUserService.getPompsAssignedToUserForToday(id));
     }
+
+    @GetMapping(value = "/getAllPompes/{id}", produces = "application/json")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getAllPompe(@PathVariable final Long id){
+        return ResponseEntity.ok().body(pompeUserService.getAllPompesByUser(id));
+    }
+
+
 
 
     @GetMapping(value = "/getStationUser", produces = "application/json")
@@ -158,6 +122,9 @@ public class UserController {
     public ResponseEntity<?> getStationUser(){
         return ResponseEntity.ok().body(stationUserService.getAll());
     }
+
+
+
 
 
 

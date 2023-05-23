@@ -16,11 +16,15 @@ public class Citerne {
     @ManyToOne
     private Produit id_produit;
 
-    @ManyToMany(mappedBy = "citernes", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "citernes", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private List<Pompe> pompes;
 
+    @ManyToOne
+    private Station station;
 
-    public Citerne(Long id_citerne, String nom_citerne, String capacite, Produit id_produit, List<Pompe> pompes) {
+
+    public Citerne(Long id_citerne, String nom_citerne, String capacite, Produit id_produit, List<Pompe> pompes, Station station) {
+        this.station = station;
         this.id_citerne = id_citerne;
         this.nom_citerne = nom_citerne;
         this.capacite = capacite;
@@ -29,6 +33,14 @@ public class Citerne {
     }
 
     public Citerne() {
+    }
+
+    public Station getStation() {
+        return this.station;
+    }
+
+    public void setStation(final Station station) {
+        this.station = station;
     }
 
     public Long getId_citerne() {

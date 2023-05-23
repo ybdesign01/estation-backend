@@ -21,17 +21,28 @@ public class StationDto {
     private Set<ServicesDto> services;
     private List<StationUserDto> users;
 
+    private List<CiterneDto> citernes;
+
 
     public StationDto() {
     }
 
 
-    public StationDto(Long id, String nom_station, String adresse, Set<ServicesDto> services, List<StationUserDto> users) {
+    public StationDto(Long id, String nom_station, String adresse, Set<ServicesDto> services, List<StationUserDto> users, List<CiterneDto> citernes) {
+        this.citernes = citernes;
         this.id = id;
         this.users = users;
         this.nom_station = nom_station;
         this.adresse = adresse;
         this.services = services;
+    }
+
+    public List<CiterneDto> getCiternes() {
+        return this.citernes;
+    }
+
+    public void setCiternes(final List<CiterneDto> citernes) {
+        this.citernes = citernes;
     }
 
     public List<StationUserDto> getUsers() {

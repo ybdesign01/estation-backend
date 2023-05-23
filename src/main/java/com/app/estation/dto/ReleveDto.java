@@ -1,31 +1,29 @@
 package com.app.estation.dto;
 
-import com.app.estation.entity.Pompe;
+import com.app.estation.dto.User.PompeUserDto;
 import com.app.estation.entity.TypeReleve;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NotNull(message = "releve_not_null")
 public class ReleveDto {
     private Long id_releve;
-    @NotBlank(message = "date_releve_mandatory")
-    private String date_releve;
     @NotNull(message = "type_releve_mandatory")
     private TypeReleve type_releve;
     @NotNull(message = "pompe_mandatory")
-    private PompeDto pompe;
+    private PompeUserDto pompeUser;
+    private LocalDateTime date_releve;
     @NotNull(message = "compteur_mandatory")
     private Long compteur;
 
-    public ReleveDto(Long id_releve, String date_releve, TypeReleve type_releve, PompeDto pompe, Long compteur) {
+    public ReleveDto(Long id_releve, LocalDateTime date_releve, TypeReleve type_releve, PompeUserDto pompeUser, Long compteur) {
         this.id_releve = id_releve;
         this.date_releve = date_releve;
         this.type_releve = type_releve;
-        this.pompe = pompe;
+        this.pompeUser = pompeUser;
         this.compteur = compteur;
     }
 
@@ -36,12 +34,12 @@ public class ReleveDto {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof ReleveDto releveDto)) return false;
-        return Objects.equals(id_releve, releveDto.id_releve) && Objects.equals(date_releve, releveDto.date_releve) && type_releve == releveDto.type_releve && Objects.equals(pompe, releveDto.pompe) && Objects.equals(compteur, releveDto.compteur);
+        return Objects.equals(id_releve, releveDto.id_releve) && Objects.equals(date_releve, releveDto.date_releve) && type_releve == releveDto.type_releve && Objects.equals(pompeUser, releveDto.pompeUser) && Objects.equals(compteur, releveDto.compteur);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id_releve, date_releve, type_releve, pompe, compteur);
+        return Objects.hash(id_releve, date_releve, type_releve, pompeUser, compteur);
     }
 
     public Long getId_releve() {
@@ -52,11 +50,11 @@ public class ReleveDto {
         this.id_releve = id_releve;
     }
 
-    public String getDate_releve() {
+    public LocalDateTime getDate_releve() {
         return this.date_releve;
     }
 
-    public void setDate_releve(final String date_releve) {
+    public void setDate_releve(final LocalDateTime date_releve) {
         this.date_releve = date_releve;
     }
 
@@ -68,12 +66,11 @@ public class ReleveDto {
         this.type_releve = type_releve;
     }
 
-    public PompeDto getPompe() {
-        return this.pompe;
+    public PompeUserDto getPompeUser() {
+        return this.pompeUser;
     }
-
-    public void setPompe(final PompeDto pompe) {
-        this.pompe = pompe;
+    public void setPompeUser(final PompeUserDto pompeUser) {
+        this.pompeUser = pompeUser;
     }
 
     public Long getCompteur() {

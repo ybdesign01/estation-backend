@@ -28,6 +28,9 @@ public class Station {
     @OneToMany(mappedBy = "station")
     private List<StationUser> users;
 
+    @OneToMany(mappedBy = "station")
+    private List<Citerne> citernes;
+
 
     public Station(Long id, String nom_station, String adresse, Set<Services> services, List<StationUser> users) {
         this.id = id;

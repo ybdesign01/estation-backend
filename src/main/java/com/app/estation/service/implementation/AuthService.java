@@ -1,6 +1,7 @@
 package com.app.estation.service.implementation;
 
-import com.app.estation.advice.TokenRefreshException;
+import com.app.estation.advice.exceptions.EntityNotFoundException;
+import com.app.estation.advice.exceptions.TokenRefreshException;
 import com.app.estation.dto.*;
 import com.app.estation.entity.RefreshToken;
 import com.app.estation.entity.User;
@@ -26,7 +27,7 @@ public class AuthService {
     public AuthDto login(LoginDto dto){
         final User user = userRepository.findByEmail(dto.getEmail()).orElse(null);
         if(null == user){
-            return new AuthDto(null,null, "user_not_found", null);
+            throw new EntityNotFoundException("user_not_found");
         }
         if(!passEncode.matches(dto.getPassword(),user.getPassword())){
             return  new AuthDto(null,null, "password_not_match", null);

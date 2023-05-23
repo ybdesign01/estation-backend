@@ -18,31 +18,17 @@ public class PompeController {
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<?> getPompes(){
-        if (null == pompeService.getAllPompes()){
-            return ResponseEntity.badRequest().body(Map.of("msg","no_pompe_found"));
-        }else{
-            return ResponseEntity.ok().body(pompeService.getAllPompes());
-        }
+        return ResponseEntity.ok().body(pompeService.getAll());
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> addPompe(@Validated @RequestBody PompeDto pompeDto){
-        PompeDto pompe = pompeService.addPompe(pompeDto);
-        if (pompe == null){
-            return ResponseEntity.badRequest().body(Map.of("msg","pompe_not_added"));
-        }else {
-            return ResponseEntity.ok().body(pompe);
-        }
+            return ResponseEntity.ok().body(Map.of("msg","pompe_added", "pompe",pompeService.add(pompeDto)));
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> getPompe(@PathVariable Long id){
-        PompeDto pompe = pompeService.getPompe(id);
-        if (pompe == null){
-            return ResponseEntity.badRequest().body(Map.of("msg","pompe_not_found"));
-        }else {
-            return ResponseEntity.ok().body(pompe);
-        }
+        return ResponseEntity.ok().body(pompeService.get(id));
     }
 
 

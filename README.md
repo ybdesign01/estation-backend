@@ -78,7 +78,32 @@ You'll get the following response:
 GET:     /api/user  | Status: 404 - msg: no_users_found, 200
          /api/user/{id} | Status: 404 - msg: user_not_found, 200
          /api/user/getUser (By token) | Status: 404 - msg: user_not_found, 200
-         /api/user/getPompes/{id} | Status: 400 - msg: user_not_found, 404 - no_pompe_found, 200
+         
+GET:     /api/user/getPompes/{id} | Status: 404 - msg: user_not_found, no_pompes_assigned_to_user, 200
+***** This route gets the pompes of a user to which he's set to today
+Response:
+{
+        "idPompeUser": 3,
+        "pompe": {
+            "id_pompe": 1,
+            "nom_pompe": "POMPE1"
+        },
+        "user": {
+            "id_user": 1,
+            "nom": "Oussama",
+            "prenom": "Berhili",
+            "email": "oussama@gmail.com",
+            "matricule": "D47559",
+            "profile": {
+                "id_profile": 1,
+                "nom": "USER",
+                "description": "User profile"
+            }
+        },
+        "dateDebut": "2023-05-23T18:30:00",
+        "dateFin": "2023-05-24T08:30:00"
+    }
+}
 ```
 ```
 POST:    /api/user/  | Status: 404 - msg: user_exists, 200
@@ -97,7 +122,7 @@ Body:
 }
 ```
 ```
-POST:     /api/user/setStation | Status: 400 - msg: station_user_exists, 201
+POST:     /api/user/setStation | Status: 400 - msg: station_user_exists, 201 msg: station_user_created
 Body:
 {
     "stationUserKey":{
@@ -110,88 +135,101 @@ Body:
 
 Response:
 {
-    "stationUserKey": {
-        "id_station": 2,
-        "id_user": 1
-    },
-    "station": {
-        "id": 2,
-        "nom_station": "Station 1",
-        "adresse": "Description 1"
-    },
-    "user": {
-        "id_user": 1,
-        "nom": "Oussama",
-        "prenom": "Berhili",
-        "email": "oussama@gmail.com",
-        "matricule": "D47559",
-        "profile": {
-            "id_profile": 1,
-            "nom": "USER",
-            "description": "User profile"
+    "msg": "station_user_created",
+    "stationUser": {
+        "stationUserKey": {
+            "id_station": 1,
+            "id_user": 1
         },
-        "pompes": [
-            {
-                "pompe": {
-                    "id_pompe": 1,
-                    "nom_pompe": "POMPE1"
-                },
-                "date_debut": "Sat May 20 02:20:08 WEST 2023"
+        "station": {
+            "id": 1,
+            "nom_station": "Station 1",
+            "adresse": "Description 1"
+        },
+        "user": {
+            "id_user": 1,
+            "nom": "Oussama",
+            "prenom": "Berhili",
+            "email": "oussama@gmail.com",
+            "matricule": "D47559",
+            "profile": {
+                "id_profile": 1,
+                "nom": "USER",
+                "description": "User profile"
             },
-            {
-                "pompe": {
-                    "id_pompe": 2,
-                    "nom_pompe": "POMPE1"
+            "pompes": [
+                {
+                    "pompe": {
+                        "id_pompe": 1,
+                        "nom_pompe": "POMPE1"
+                    },
+                    "dateDebut": "2023-05-23T18:30:00",
+                    "dateFin": "2023-05-24T08:30:00"
                 },
-                "date_debut": "Sat May 20 02:39:20 WEST 2023"
-            },
-            {
-                "pompe": {
-                    "id_pompe": 3,
-                    "nom_pompe": "POMPE1"
+                {
+                    "pompe": {
+                        "id_pompe": 1,
+                        "nom_pompe": "POMPE1"
+                    },
+                    "dateDebut": "2023-05-31T18:30:00",
+                    "dateFin": "2023-05-31T20:30:00"
                 },
-                "date_debut": "Sat May 20 02:40:06 WEST 2023"
-            }
-        ]
-    },
-    "date_debut": "Sat May 20 02:42:50 WEST 2023"
+                {
+                    "pompe": {
+                        "id_pompe": 1,
+                        "nom_pompe": "POMPE1"
+                    },
+                    "dateDebut": "2023-05-31T10:30:00",
+                    "dateFin": "2023-05-31T11:30:00"
+                },
+                {
+                    "pompe": {
+                        "id_pompe": 2,
+                        "nom_pompe": "POMPE1"
+                    },
+                    "dateDebut": "2023-05-28T18:30:00",
+                    "dateFin": "2023-05-29T08:30:00"
+                }
+            ]
+        },
+        "date_debut": "Tue May 23 23:23:08 WEST 2023"
+    }
 }
 ```
 ```
-POST:     /api/user/setPompe | Status: 400 - msg: pompe_user_exists, 201
+POST:     /api/user/setPompe | Status: 404 - msg: user_not_found, pompe_not_found / 400 - msg: pompe_unavailable_during_time_range, pompe_user_exists, user_already_has_pompes, invalid_date / 201 msg: pompe_user_created
 Body:
 {
-    "pompeUserKey":{
-    "id_pompe": 1,
-    "id_user":1
-}
-    "date_debut": "Fri May 05 19:33:44 WEST 2023" ---- *Optional default is current date
-    "date_fin": "Fri May 05 19:33:44 WEST 2023" ----- *Optiona
+"idPompe": 2,
+"idUser":1,
+"dateDebut": "2023-05-23T18:30:00", ** Date follows the ISO 8601 format
+"dateFin": "2023-05-24T08:30:00" ** Date follows the ISO 8601 format
 }
 
 Response: 
 {
-    "pompeUserKey": {
-        "id_pompe": 3,
-        "id_user": 1
-    },
-    "pompe": {
-        "id_pompe": 3,
-        "nom_pompe": "POMPE1"
-    },
-    "user": {
-        "id_user": 1,
-        "nom": "Oussama",
-        "prenom": "Berhili",
-        "email": "oussama@gmail.com",
-        "matricule": "D47559",
-        "profile": {
-            "id_profile": 1,
-            "nom": "USER",
-            "description": "User profile"
-        }
-    },
-    "date_debut": "Sat May 20 02:40:06 WEST 2023"
+    "msg": "pompe_user_created",
+    "pompeUser": {
+        "idPompeUser": 7,
+        "pompe": {
+            "id_pompe": 1,
+            "nom_pompe": "POMPE1"
+        },
+        "user": {
+            "id_user": 1,
+            "nom": "Oussama",
+            "prenom": "Berhili",
+            "email": "oussama@gmail.com",
+            "matricule": "D47559",
+            "profile": {
+                "id_profile": 1,
+                "nom": "USER",
+                "description": "User profile"
+            }
+        },
+        "dateDebut": "2023-05-25T18:30:00", ** Date follows the ISO 8601 format
+        "dateFin": "2023-05-26T08:30:00" ** Date follows the ISO 8601 format
+    }
 }
 ```
 ```
@@ -280,10 +318,8 @@ Response:
         "citernes": [], *Optional
         "users": [ *Optional
             {
-                "pompeUserKey": {
-                    "id_pompe": 1,
-                    "id_user": 1
-                },
+               {
+                "idPompeUser": 1,
                 "pompe": {
                     "id_pompe": 1,
                     "nom_pompe": "POMPE1"
@@ -300,7 +336,9 @@ Response:
                         "description": "User profile"
                     }
                 },
-                "date_debut": "Sat May 20 02:20:08 WEST 2023"
+                "dateDebut": "2023-05-31T10:30:00",
+                "dateFin": "2023-05-31T11:30:00"
+            },
             }
         ]
     }
@@ -365,14 +403,13 @@ POST:    /api/releve/ | Status: 400 - msg: releve_not_added, 201 - msg: releve_a
 PUT:     /api/releve/{id} (TO DO)
 DELETE:  /api/releve/{id} (TO DO)
 
-An example of releve body: (POST, PUT)
+An example of releve body: (POST, PUT) ***** ! IMPORTANT ! --- It will only be submitted if the current time corresponds to the time of PompeUser *****
 {
-    "date_releve": "2021-05-20T01:20:08.000+00:00",
-    "type_releve": "RELEVE_ENTREE", (RELEVE_ENTREE, RELEVE_SORTIE)
-    "pompe":{
-        "id_pompe": 1
-    },
-    "compteur": 10055
+    "compteur": 1555,
+    "type_releve": "RELEVE_ENTREE",
+    "pompeUser":{
+        "idPompeUser": 3 ***** Get from /api/user/getPompes/{id} *****
+    }
 }
 
 ```
@@ -382,7 +419,7 @@ Each error response will have a body with a message and a status code.
 
 Example of error response:
 {
-    "msg": "The user with id 1 does not exist"
+    "msg": "user_not_found"
 }
 
 The possible status codes are:

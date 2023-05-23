@@ -16,7 +16,6 @@ public class ProduitMapper {
         dto.setNom_produit(entity.getNom_produit());
         dto.setActions(ProduitActionMapper.fromEntityList(entity.getActions()));
         dto.setType(TypeProduitMapper.fromEntity(entity.getType()));
-        System.out.println("id serv  " + entity.getId_service());
         dto.setService(ServicesMapper.fromEntityWithoutStations(entity.getId_service()));
         dto.setPrix_achat(entity.getPrix_achat());
         dto.setPrix_vente(entity.getPrix_vente());

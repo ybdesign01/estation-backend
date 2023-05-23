@@ -1,16 +1,14 @@
 package com.app.estation.controller;
 
 import com.app.estation.dto.ReleveDto;
-import com.app.estation.entity.Releve;
+import com.app.estation.dto.ReleveResponse;
 import com.app.estation.service.implementation.ReleveServiceImpl;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,61 +20,38 @@ public class ReleveController {
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<?> getReleves(){
-        List<ReleveDto> releves = releveService.getAll();
-        if (null == releves){
-            return ResponseEntity.badRequest().body(Map.of("msg","no_releve_found"));
-        }else{
-            return ResponseEntity.ok().body(releves);
-        }
+        return ResponseEntity.ok().body(releveService.getAll());
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> getReleve(@PathVariable Long id) {
-        ReleveDto releve = releveService.getReleve(id);
-        if (null == releve){
-            return ResponseEntity.badRequest().body(Map.of("msg", "releve_not_found"));
-    }else {
-            return ResponseEntity.ok().body(releve);
-        }
-
+        return ResponseEntity.ok().body(releveService.get(id));
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> addReleve(@Validated @RequestBody ReleveDto releve){
-        boolean added = releveService.addReleve(releve);
-        if (added)
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("msg","releve_added"));
-        else
-            return ResponseEntity.badRequest().body(Map.of("msg","releve_not_added"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("releve", releveService.add(releve),"msg","releve_added"));
     }
 
     @PutMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<?> updateReleve(@Validated @RequestBody ReleveDto releve, @PathVariable Long id){
-        releve.setId_releve(id);
-        boolean updated = releveService.updateReleve( id, releve);
-        if (updated)
-            return ResponseEntity.ok().body(Map.of("msg","releve_updated"));
-        else
-            return ResponseEntity.badRequest().body(Map.of("msg","releve_not_updated"));
+    public ResponseEntity<?> updateReleve(@Validated @RequestBody ReleveDto releve){
+        return ResponseEntity.ok().body(Map.of("releve",releveService.update(releve),"msg","releve_updated"));
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> deleteReleve(@PathVariable Long id){
-        boolean deleted = releveService.deleteReleve(id);
+        boolean deleted = releveService.delete(id);
         if (deleted)
             return ResponseEntity.ok().body(Map.of("msg","releve_deleted"));
         else
             return ResponseEntity.badRequest().body(Map.of("msg","releve_not_deleted"));
     }
 
-    @GetMapping(value = "/getByPompe/{id}", produces = "application/json")
+    @GetMapping(value = "/getByPompeUser/{id}", produces = "application/json")
     public ResponseEntity<?> getReleveByPompe(@PathVariable Long id){
-        List<ReleveDto> releves = releveService.getReleveByPompe(id);
-        if (null == releves){
-            return ResponseEntity.badRequest().body(Map.of("msg","no_releve_found"));
-        }else{
-            return ResponseEntity.ok().body(releves);
-        }
+        ReleveResponse releveResponse = releveService.getStatusByPompeUser(id);
+            return ResponseEntity.ok().body(releveResponse);
+
     }
 
 

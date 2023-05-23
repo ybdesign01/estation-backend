@@ -1,41 +1,43 @@
 package com.app.estation.dto.User;
 
 import com.app.estation.dto.PompeDto;
-import com.app.estation.entity.keys.PompeUserKey;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PompeUserDto {
-    private PompeUserKeyDto pompeUserKey;
+    @NotNull(message = "pompe_user_not_null")
+    private Long idPompeUser;
     private PompeDto pompe;
     private UserDto user;
-    private String date_debut;
-    private String date_fin;
+    private LocalDateTime dateDebut;
+    private LocalDateTime dateFin;
 
 
     public PompeUserDto() {
     }
 
-    public PompeUserDto(PompeUserKeyDto pompeUserKey, String date_debut, String date_fin, PompeDto pompe, UserDto user) {
-        this.pompeUserKey = pompeUserKey;
+    public PompeUserDto(Long id_pompe_user, LocalDateTime date_debut, LocalDateTime date_fin, PompeDto pompe, UserDto user) {
+        this.idPompeUser = id_pompe_user;
         this.user = user;
         this.pompe = pompe;
-        this.date_debut = date_debut;
-        this.date_fin = date_fin;
+        this.dateDebut = date_debut;
+        this.dateFin = date_fin;
     }
 
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof PompeUserDto that)) return false;
-        return Objects.equals(pompeUserKey, that.pompeUserKey) && Objects.equals(this.pompe, that.pompe) && Objects.equals(this.user, that.user) && Objects.equals(date_debut, that.date_debut) && Objects.equals(date_fin, that.date_fin);
+        return Objects.equals(idPompeUser, that.idPompeUser) && Objects.equals(this.pompe, that.pompe) && Objects.equals(this.user, that.user) && Objects.equals(dateDebut, that.dateDebut) && Objects.equals(dateFin, that.dateFin);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pompeUserKey, this.pompe, this.user, date_debut, date_fin);
+        return Objects.hash(idPompeUser, this.pompe, this.user, dateDebut, dateFin);
     }
 
     public PompeDto getPompe() {
@@ -54,38 +56,38 @@ public class PompeUserDto {
         this.user = user;
     }
 
-    public PompeUserKeyDto getPompeUserKey() {
-        return this.pompeUserKey;
+    public Long getIdPompeUser() {
+        return this.idPompeUser;
     }
 
-    public void setPompeUserKey(final PompeUserKeyDto pompeUserKey) {
-        this.pompeUserKey = pompeUserKey;
+    public void setIdPompeUser(final Long idPompeUser) {
+        this.idPompeUser = idPompeUser;
     }
 
-    public String getDate_debut() {
-        return this.date_debut;
+    public LocalDateTime getDateDebut() {
+        return this.dateDebut;
     }
 
-    public void setDate_debut(final String date_debut) {
-        this.date_debut = date_debut;
+    public void setDateDebut(final LocalDateTime dateDebut) {
+        this.dateDebut = dateDebut;
     }
 
-    public String getDate_fin() {
-        return this.date_fin;
+    public LocalDateTime getDateFin() {
+        return this.dateFin;
     }
 
-    public void setDate_fin(final String date_fin) {
-        this.date_fin = date_fin;
+    public void setDateFin(final LocalDateTime dateFin) {
+        this.dateFin = dateFin;
     }
 
     @Override
     public String toString() {
         return "PompeUserDto{" +
-                "pompeUserKey=" + pompeUserKey +
-                ", pompe=" + (pompe == null ? null : pompe.getId_pompe())+
-                ", user=" + (user == null ? null : user.getId_user())+
-                ", date_debut='" + date_debut + '\'' +
-                ", date_fin='" + date_fin + '\'' +
+                "idPompeUser=" + idPompeUser +
+                ", pompe=" + pompe +
+                ", user=" + user +
+                ", dateDebut=" + dateDebut +
+                ", dateFin=" + dateFin +
                 '}';
     }
 }

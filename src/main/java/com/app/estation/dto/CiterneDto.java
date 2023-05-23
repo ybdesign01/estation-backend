@@ -22,8 +22,11 @@ public class CiterneDto {
     @NotNull(message = "produit_mandatory")
     private ProduitDto produit;
     private List<PompeDto> pompes;
+    @NotNull(message = "station_mandatory")
+    private StationDto station;
 
-    public CiterneDto(Long id_citerne, String nom_citerne, String capacite, ProduitDto produit, List<PompeDto> pompes) {
+    public CiterneDto(Long id_citerne, String nom_citerne, String capacite, ProduitDto produit, List<PompeDto> pompes, StationDto station) {
+        this.station = station;
         this.id_citerne = id_citerne;
         this.nom_citerne = nom_citerne;
         this.capacite = capacite;
@@ -38,12 +41,20 @@ public class CiterneDto {
     public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof CiterneDto that)) return false;
-        return Objects.equals(id_citerne, that.id_citerne) && Objects.equals(nom_citerne, that.nom_citerne) && Objects.equals(capacite, that.capacite) && Objects.equals(produit, that.produit) && Objects.equals(pompes, that.pompes);
+        return Objects.equals(id_citerne, that.id_citerne) && Objects.equals(nom_citerne, that.nom_citerne) && Objects.equals(capacite, that.capacite) && Objects.equals(produit, that.produit) && Objects.equals(pompes, that.pompes) && Objects.equals(station, that.station);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id_citerne, nom_citerne, capacite, produit, pompes);
+        return Objects.hash(id_citerne, nom_citerne, capacite, produit, pompes, station);
+    }
+
+    public StationDto getStation() {
+        return this.station;
+    }
+
+    public void setStation(final StationDto station) {
+        this.station = station;
     }
 
     public Long getId_citerne() {
