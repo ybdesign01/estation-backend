@@ -78,7 +78,7 @@ You'll get the following response:
 GET:     /api/user  | Status: 404 - msg: no_users_found, 200
          /api/user/{id} | Status: 404 - msg: user_not_found, 200
          /api/user/getUser (By token) | Status: 404 - msg: user_not_found, 200
-         /api/user/getStation/{id} | Status: 404 - msg: user_not_found, no_station_assigned_to_user, 200
+         /api/user/getCurrentStation/{id} | Status: 404 - msg: user_not_found, no_station_assigned_to_user, 200
          
 GET:     /api/user/getPompes/{id} | Status: 404 - msg: user_not_found, no_pompes_assigned_to_user, 200
 ***** This route gets the pompes of a user to which he's set to today
