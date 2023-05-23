@@ -399,6 +399,7 @@ An example of produit body: (POST, PUT)
 ```
 GET:     /api/releve (Get all releves) | Status: 200, 404 - msg: no_releves_found
          /api/releve/{id} (Get releve by id) | Status: 200, 404 - msg: releve_not_found
+         /api/releve/getByPompeUser/{id} (Get releve by pompeUser id) | Status: 200, 404 - msg: pompe_user_not_found
 POST:    /api/releve/ | Status: 400 - msg: releve_not_added, 201 - msg: releve_added
 PUT:     /api/releve/{id} (TO DO)
 DELETE:  /api/releve/{id} (TO DO)
@@ -410,6 +411,12 @@ An example of releve body: (POST, PUT) ***** ! IMPORTANT ! --- It will only be s
     "pompeUser":{
         "idPompeUser": 3 ***** Get from /api/user/getPompes/{id} *****
     }
+}
+
+An example of GET: /api/releve/getByPompeUser/{id} response:
+{
+"releve_entree": true,
+"releve_sortie": false,
 }
 
 ```
