@@ -175,22 +175,6 @@ Response:
                     "dateDebut": "2023-05-31T18:30:00",
                     "dateFin": "2023-05-31T20:30:00"
                 },
-                {
-                    "pompe": {
-                        "id_pompe": 1,
-                        "nom_pompe": "POMPE1"
-                    },
-                    "dateDebut": "2023-05-31T10:30:00",
-                    "dateFin": "2023-05-31T11:30:00"
-                },
-                {
-                    "pompe": {
-                        "id_pompe": 2,
-                        "nom_pompe": "POMPE1"
-                    },
-                    "dateDebut": "2023-05-28T18:30:00",
-                    "dateFin": "2023-05-29T08:30:00"
-                }
             ]
         },
         "date_debut": "Tue May 23 23:23:08 WEST 2023"
@@ -355,10 +339,13 @@ DELETE:  /api/citerne/{id} (TO DO)
 
 An example of citerne body: (POST, PUT)
 {
-    "nom_citerne": "CITERNE1",
+    "nom_citerne": "CITERNE2",
     "capacite": "1000L",
     "produit": {
         "id_produit": 1
+    },
+    "station":{
+        "id": 1
     }
 }
 
@@ -401,7 +388,7 @@ An example of produit body: (POST, PUT)
 GET:     /api/releve (Get all releves) | Status: 200, 404 - msg: no_releves_found
          /api/releve/{id} (Get releve by id) | Status: 200, 404 - msg: releve_not_found
          /api/releve/getByPompeUser/{id} (Get releve by pompeUser id) | Status: 200, 404 - msg: pompe_user_not_found
-POST:    /api/releve/ | Status: 400 - msg: releve_not_added, 201 - msg: releve_added
+POST:    /api/releve/ | Status: 400 - msg: releve_not_added, pompe_already_in, pompe_already_out / 201 - msg: releve_added
 PUT:     /api/releve/{id} (TO DO)
 DELETE:  /api/releve/{id} (TO DO)
 

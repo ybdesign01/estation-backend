@@ -37,6 +37,14 @@ public class ReleveDto {
         return Objects.equals(id_releve, releveDto.id_releve) && Objects.equals(date_releve, releveDto.date_releve) && type_releve == releveDto.type_releve && Objects.equals(pompeUser, releveDto.pompeUser) && Objects.equals(compteur, releveDto.compteur);
     }
 
+    public boolean isSortie() {
+        return TypeReleve.RELEVE_SORTIE == this.type_releve;
+    }
+
+    public boolean isEntree() {
+        return TypeReleve.RELEVE_ENTREE == this.type_releve;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(id_releve, date_releve, type_releve, pompeUser, compteur);

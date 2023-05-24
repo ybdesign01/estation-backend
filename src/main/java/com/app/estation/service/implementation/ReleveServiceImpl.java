@@ -62,6 +62,15 @@ public class ReleveServiceImpl implements EServices<ReleveDto,ReleveDto> {
 
     @Override
     public ReleveDto add(ReleveDto releve) {
+        Releve re = releveRepository.findAllByPompeUserIdPompeUser(releve.getPompeUser().getIdPompeUser()).stream().findFirst().orElse(null);
+        if (re != null){
+            if (re.isEntree() && releve.isEntree()){
+                throw new ApiRequestException("releve_already_in");
+            }
+            if (re.isSortie() && releve.isSortie()){
+                throw new ApiRequestException("releve_already_out");
+            }
+        }
         PompeUser pompeUser = pompeUserRepository.findById(releve.getPompeUser().getIdPompeUser()).orElseThrow(() -> new EntityNotFoundException("pompe_user_not_found"));
        if (LocalDateTime.now().isBefore(pompeUser.getDateDebut()) || LocalDateTime.now().isAfter(pompeUser.getDateFin())){
            throw new ApiRequestException("date_not_in_range");
