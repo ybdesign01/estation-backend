@@ -6,6 +6,7 @@ import com.app.estation.dto.ReleveDto;
 import com.app.estation.dto.ReleveResponse;
 import com.app.estation.entity.PompeUser;
 import com.app.estation.entity.Releve;
+import com.app.estation.entity.TypeReleve;
 import com.app.estation.mappers.ReleveMapper;
 import com.app.estation.repository.PompeUserRepository;
 import com.app.estation.repository.ReleveRepository;
@@ -60,15 +61,19 @@ public class ReleveServiceImpl implements EServices<ReleveDto,ReleveDto> {
         return new ReleveResponse(entree,sortie);
     }
 
+
+
     @Override
     public ReleveDto add(ReleveDto releve) {
-        Releve re = releveRepository.findAllByPompeUserIdPompeUser(releve.getPompeUser().getIdPompeUser()).stream().findFirst().orElse(null);
-        if (re != null){
-            if (re.isEntree() && releve.isEntree()){
-                throw new ApiRequestException("releve_already_in");
-            }
-            if (re.isSortie() && releve.isSortie()){
-                throw new ApiRequestException("releve_already_out");
+        List<Releve> re = releveRepository.findAllByPompeUserIdPompeUser(releve.getPompeUser().getIdPompeUser());
+        final TypeReleve typeReleve;
+        if (re.isEmpty()){
+            typeReleve = TypeReleve.RELEVE_ENTREE;
+        }else {
+            if(re.get(re.size()-1).isEntree()){
+                typeReleve = TypeReleve.RELEVE_SORTIE;
+            }else {
+                typeReleve = TypeReleve.RELEVE_ENTREE;
             }
         }
         PompeUser pompeUser = pompeUserRepository.findById(releve.getPompeUser().getIdPompeUser()).orElseThrow(() -> new EntityNotFoundException("pompe_user_not_found"));
@@ -78,6 +83,7 @@ public class ReleveServiceImpl implements EServices<ReleveDto,ReleveDto> {
         Releve r = ReleveMapper.toEntity(releve);
         r.setDate_releve(LocalDateTime.now());
         r.setPompeUser(pompeUser);
+        r.setType_releve(typeReleve);
         releveRepository.save(r);
         return ReleveMapper.fromEntity(releveRepository.findById(r.getId_releve()).orElseThrow(()-> new ApiRequestException("releve_not_added")));
     }

@@ -1,6 +1,7 @@
 package com.app.estation.dto.User;
 
 import com.app.estation.dto.PompeDto;
+import com.app.estation.dto.ReleveResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;
 
@@ -15,17 +16,26 @@ public class PompeUserDto {
     private UserDto user;
     private LocalDateTime dateDebut;
     private LocalDateTime dateFin;
+    private ReleveResponse releve;
 
+    public ReleveResponse getReleve() {
+        return this.releve;
+    }
+
+    public void setReleve(final ReleveResponse releve) {
+        this.releve = releve;
+    }
 
     public PompeUserDto() {
     }
 
-    public PompeUserDto(Long id_pompe_user, LocalDateTime date_debut, LocalDateTime date_fin, PompeDto pompe, UserDto user) {
-        this.idPompeUser = id_pompe_user;
-        this.user = user;
+    public PompeUserDto(@NotNull(message = "pompe_user_not_null") final Long idPompeUser, final PompeDto pompe, final UserDto user, final LocalDateTime dateDebut, final LocalDateTime dateFin, final ReleveResponse releve) {
+        this.idPompeUser = idPompeUser;
         this.pompe = pompe;
-        this.dateDebut = date_debut;
-        this.dateFin = date_fin;
+        this.user = user;
+        this.dateDebut = dateDebut;
+        this.dateFin = dateFin;
+        this.releve = releve;
     }
 
     @Override

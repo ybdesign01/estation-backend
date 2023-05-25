@@ -191,6 +191,34 @@ Body:
 "dateFin": "2023-05-24T08:30:00" ** Date follows the ISO 8601 format
 }
 
+[
+    {
+        "idPompeUser": 1,
+        "pompe": {
+            "id_pompe": 1,
+            "nom_pompe": "POMPE1"
+        },
+        "user": {
+            "id_user": 1,
+            "nom": "Oussama",
+            "prenom": "Berhili",
+            "email": "oussama@gmail.com",
+            "matricule": "D47559",
+            "profile": {
+                "id_profile": 1,
+                "nom": "USER",
+                "description": "User profile"
+            }
+        },
+        "dateDebut": "2023-05-24T18:30:00",
+        "dateFin": "2023-05-25T08:30:00",
+        "releve": {
+            "releve_entree": true,
+            "releve_sortie": false
+        }
+    }
+]
+
 Response: 
 {
     "msg": "pompe_user_created",
@@ -213,7 +241,11 @@ Response:
             }
         },
         "dateDebut": "2023-05-25T18:30:00", ** Date follows the ISO 8601 format
-        "dateFin": "2023-05-26T08:30:00" ** Date follows the ISO 8601 format
+        "dateFin": "2023-05-26T08:30:00", ** Date follows the ISO 8601 format
+         "releve": {
+            "releve_entree": true,
+            "releve_sortie": false
+        }
     }
 }
 ```
@@ -395,7 +427,6 @@ DELETE:  /api/releve/{id} (TO DO)
 An example of releve body: (POST, PUT) ***** ! IMPORTANT ! --- It will only be submitted if the current time corresponds to the time of PompeUser *****
 {
     "compteur": 1555,
-    "type_releve": "RELEVE_ENTREE",
     "pompeUser":{
         "idPompeUser": 3 ***** Get from /api/user/getPompes/{id} *****
     }

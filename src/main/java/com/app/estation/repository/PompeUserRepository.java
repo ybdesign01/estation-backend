@@ -31,7 +31,8 @@ public interface PompeUserRepository extends JpaRepository<PompeUser, Long> {
     @Query("SELECT pu FROM PompeUser pu WHERE pu.user.id_user = :userId " +
             "AND ((pu.dateDebut <= :startOfDay AND pu.dateFin >= :startOfDay) " +
             "OR (pu.dateDebut >= :startOfDay AND pu.dateFin <= :endOfDay) " +
-            "OR (pu.dateDebut <= :endOfDay AND pu.dateFin >= :endOfDay))")
-    List<PompeUser> getPompesAssignedToUserForDay(Long userId, LocalDateTime startOfDay, LocalDateTime endOfDay);
+            "OR (pu.dateDebut <= :endOfDay AND pu.dateFin >= :endOfDay))" +
+            "AND pu.dateFin <= :currentTimestamp" )
+    List<PompeUser> getPompesAssignedToUserForDay(Long userId, LocalDateTime startOfDay, LocalDateTime endOfDay, LocalDateTime currentTimestamp);
 
 }

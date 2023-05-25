@@ -8,7 +8,6 @@ import java.util.List;
 public interface ReleveRepository extends JpaRepository<Releve, Long> {
 
     List<Releve> findAllByPompeUserIdPompeUser(Long idPompeUser);
-
     List<Releve> getReleveByPompeUserIdPompeUser(Long idPompeUser);
 
 
