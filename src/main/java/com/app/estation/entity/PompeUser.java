@@ -83,8 +83,8 @@ public class PompeUser {
     public String toString() {
         return "PompeUser{" +
                 "idPompeUser=" + idPompeUser +
-                ", pompe=" + pompe +
-                ", user=" + user +
+                ", pompe=" + pompe.getId_pompe() +
+                ", user=" + user.getId_user() +
                 ", dateDebut=" + dateDebut +
                 ", dateFin=" + dateFin +
                 '}';
