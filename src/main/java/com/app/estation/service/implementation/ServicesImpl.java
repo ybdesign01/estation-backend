@@ -22,33 +22,26 @@ public class ServicesImpl implements EServices<ServicesDto,ServicesDto> {
 
     @Override
     public List<ServicesDto> getAll() {
-        List<ServicesDto> s = ServicesMapper.fromEntityList(serviceRepository.findAll());
-        if (s == null) {
-            return null;
+        List<Services> services = serviceRepository.findAll();
+        if (services.isEmpty()) {
+            throw new EntityNotFoundException("no_service_found");
         }else{
-            return s;
+            return ServicesMapper.fromEntityList(services);
         }
     }
     @Override
     public ServicesDto add(ServicesDto service) {
         final Services s = ServicesMapper.toEntity(service);
-        try {
-            serviceRepository.save(s);
-            return ServicesMapper.fromEntity(serviceRepository.findById(s.getId()).orElse(null));
-        } catch (Exception e) {
-            return null;
-        }
+        serviceRepository.save(s);
+        return ServicesMapper.fromEntity(serviceRepository.findById(s.getId()).orElseThrow(()-> new ApiRequestException("service_not_added")));
     }
 
-    public ServicesDto update(ServicesDto service) {
-        Services s =serviceRepository.findById(service.getId()).orElse(null);
-        if (s == null) {
-            throw new EntityNotFoundException("service_not_found");
-        }
+    public ServicesDto update(ServicesDto service, Long id) {
+        Services s =serviceRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("service_not_found"));
         s.setNom_service(service.getNom_service());
         s.setDescription(service.getDescription());
         serviceRepository.save(s);
-        return ServicesMapper.fromEntity(s);
+        return ServicesMapper.fromEntity(serviceRepository.findById(id).orElseThrow(()-> new ApiRequestException("service_not_updated")));
     }
 
     public boolean delete(Long id) {

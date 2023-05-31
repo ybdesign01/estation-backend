@@ -14,12 +14,12 @@ public class StationUserMapper {
             return null;
         }
         StationUserDto dto = new StationUserDto();
-        dto.setStationUserKey(new StationUserKeyDto(entity.getStationUserKey().getId_station(), entity.getStationUserKey().getId_user()));
+        dto.setIdStationUser(entity.getIdStationUser());
         dto.setStation(StationMapper.fromEntityWithoutServices(entity.getStation()));
         if (entity.getUser() != null){
             entity.getUser().setStations(null);
         }
-        dto.setUser(UserMapper.fromEntity(entity.getUser()));
+        dto.setUser(UserMapper.fromEntityWithoutSubclasses(entity.getUser()));
         dto.setDate_debut(entity.getDate_debut());
         dto.setDate_fin(entity.getDate_fin());
         return dto;
@@ -46,7 +46,7 @@ public class StationUserMapper {
             return null;
         }
         StationUser entity = new StationUser();
-        entity.setStationUserKey(new StationUserKey(dto.getStationUserKey().getId_user(), dto.getStationUserKey().getId_station()));
+        entity.setIdStationUser(dto.getIdStationUser());
         entity.setStation(StationMapper.toEntity(dto.getStation()));
         entity.setUser(UserMapper.toEntity(dto.getUser()));
         entity.setDate_debut(dto.getDate_debut());

@@ -12,24 +12,25 @@ public class Citerne {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_citerne;
     private String nom_citerne;
-    private String capacite;
+    private Double capacite;
     @ManyToOne
     private Produit id_produit;
 
-    @ManyToMany(mappedBy = "citernes", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
-    private List<Pompe> pompes;
+    @OneToMany(mappedBy = "citerne")
+    private List<CiternePompe> pompes;
 
     @ManyToOne
     private Station station;
 
 
-    public Citerne(Long id_citerne, String nom_citerne, String capacite, Produit id_produit, List<Pompe> pompes, Station station) {
-        this.station = station;
+
+    public Citerne(Long id_citerne, String nom_citerne, Double capacite, Produit id_produit, List<CiternePompe> pompes, Station station) {
         this.id_citerne = id_citerne;
         this.nom_citerne = nom_citerne;
         this.capacite = capacite;
         this.id_produit = id_produit;
         this.pompes = pompes;
+        this.station = station;
     }
 
     public Citerne() {
@@ -59,11 +60,11 @@ public class Citerne {
         this.nom_citerne = nom_citerne;
     }
 
-    public String getCapacite() {
+    public Double getCapacite() {
         return capacite;
     }
 
-    public void setCapacite(String capacite) {
+    public void setCapacite(Double capacite) {
         this.capacite = capacite;
     }
 
@@ -75,11 +76,11 @@ public class Citerne {
         this.id_produit = id_produit;
     }
 
-    public List<Pompe> getPompes() {
-        return pompes;
+    public List<CiternePompe> getPompes() {
+        return this.pompes;
     }
 
-    public void setPompes(List<Pompe> pompes) {
+    public void setPompes(final List<CiternePompe> pompes) {
         this.pompes = pompes;
     }
 
@@ -89,7 +90,9 @@ public class Citerne {
                 "id_citerne=" + id_citerne +
                 ", nom_citerne='" + nom_citerne + '\'' +
                 ", capacite='" + capacite + '\'' +
-                ", id_produit=" + id_produit +
+                ", id_produit=" + id_produit.getPrix_vente() +
+                ", pompes=" + pompes +
+                ", station=" + station.getNom_station() +
                 '}';
     }
 }

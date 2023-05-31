@@ -13,18 +13,13 @@ public class Pompe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_pompe;
     private String nom_pompe;
-
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(
-            name = "citerne_pompe",
-            joinColumns = @JoinColumn(name = "id_pompe"),
-            inverseJoinColumns = @JoinColumn(name = "id_citerne"))
-    private List<Citerne> citernes;
-
     @OneToMany(mappedBy = "pompe")
     private List<PompeUser> users;
 
-    public Pompe(Long id_pompe, String nom_pompe, List<Citerne> citernes, List<PompeUser> users) {
+    @OneToMany(mappedBy = "pompe")
+    private List<CiternePompe> citernes;
+
+    public Pompe(Long id_pompe, String nom_pompe, List<CiternePompe> citernes, List<PompeUser> users) {
         this.users = users;
         this.id_pompe = id_pompe;
         this.nom_pompe = nom_pompe;
@@ -34,8 +29,12 @@ public class Pompe {
     public Pompe() {
     }
 
-    public void addCiternetoList(Citerne citerne){
-        this.citernes.add(citerne);
+    public void setCiternes(final List<CiternePompe> citernes) {
+        this.citernes = citernes;
+    }
+
+    public List<CiternePompe> getCiternes() {
+        return this.citernes;
     }
 
     public Long getId_pompe() {
@@ -54,13 +53,6 @@ public class Pompe {
         this.nom_pompe = nom_pompe;
     }
 
-    public List<Citerne> getCiternes() {
-        return citernes;
-    }
-
-    public void setCiternes(List<Citerne> citernes) {
-        this.citernes = citernes;
-    }
 
     public List<PompeUser> getUsers() {
         return this.users;

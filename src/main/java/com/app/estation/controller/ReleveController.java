@@ -34,8 +34,8 @@ public class ReleveController {
     }
 
     @PutMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
-    public ResponseEntity<?> updateReleve(@Validated @RequestBody ReleveDto releve){
-        return ResponseEntity.ok().body(Map.of("releve",releveService.update(releve),"msg","releve_updated"));
+    public ResponseEntity<?> updateReleve(@Validated @RequestBody ReleveDto releve, @PathVariable Long id){
+        return ResponseEntity.ok().body(Map.of("releve",releveService.update(releve, id),"msg","releve_updated"));
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")

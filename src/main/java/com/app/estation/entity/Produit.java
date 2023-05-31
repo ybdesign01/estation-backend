@@ -21,6 +21,9 @@ public class Produit {
     @ManyToOne
     private TypeProduit type;
 
+    @OneToMany(mappedBy = "idProduit")
+    private List<HistoriquePrix> historiquePrix;
+
     @OneToMany(mappedBy = "produit")
     private List<ProduitAction> actions;
 

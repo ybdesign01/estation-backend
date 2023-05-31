@@ -34,6 +34,7 @@ public class AuthService {
         }else{
             final String jwtToken = jwtService.generateToken(user);
             final RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
+            System.out.println(user.getAuthorities());
             return new AuthDto(jwtToken,refreshToken.getToken(), "authentication_success", UserMapper.fromEntity(user));
         }
     }

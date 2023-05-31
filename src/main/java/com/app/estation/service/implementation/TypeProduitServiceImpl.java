@@ -28,7 +28,8 @@ public class TypeProduitServiceImpl implements EServices<TypeProduitDto,TypeProd
     }
 
     @Override
-    public TypeProduitDto update(TypeProduitDto dto) {
+    public TypeProduitDto update(TypeProduitDto dto, Long id) {
+        typeProduitRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("type_not_found"));
         TypeProduit typeProduit = TypeProduitMapper.toEntity(dto);
         typeProduitRepository.save(typeProduit);
         return TypeProduitMapper.fromEntity(typeProduitRepository.findById(typeProduit.getId_type()).orElseThrow(()-> new ApiRequestException("type_not_updated")));

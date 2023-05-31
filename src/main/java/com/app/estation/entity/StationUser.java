@@ -1,99 +1,83 @@
 package com.app.estation.entity;
 
-import com.app.estation.entity.keys.StationUserKey;
 import jakarta.persistence.*;
 
-import java.util.Objects;
+import java.time.LocalDateTime;
 
 
 @Entity
 public class StationUser {
 
-    @EmbeddedId
-    private StationUserKey stationUserKey;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idStationUser;
 
     @ManyToOne
-    @MapsId("id")
-    @JoinColumn(name = "id_station")
-    Station station;
+    private Station station;
 
     @ManyToOne
-    @MapsId("id_user")
-    @JoinColumn(name = "id_user")
-    User user;
+    private User user;
 
-    private String date_debut;
-    private String date_fin;
+    private LocalDateTime date_debut;
+    private LocalDateTime date_fin;
 
 
     public StationUser() {
     }
 
-    public StationUser(Station station, User user, String date_debut, String date_fin) {
+
+    public StationUser(final Long idStationUser, final Station station, final User user, final LocalDateTime date_debut, final LocalDateTime date_fin) {
+        this.idStationUser = idStationUser;
         this.station = station;
         this.user = user;
         this.date_debut = date_debut;
         this.date_fin = date_fin;
     }
 
-
-
-    public StationUserKey getStationUserKey() {
-        return stationUserKey;
+    public Long getIdStationUser() {
+        return this.idStationUser;
     }
 
-    public void setStationUserKey(StationUserKey stationUserKey) {
-        this.stationUserKey = stationUserKey;
+    public void setIdStationUser(final Long idStationUser) {
+        this.idStationUser = idStationUser;
     }
 
     public Station getStation() {
-        return station;
+        return this.station;
     }
 
-    public void setStation(Station station) {
+    public void setStation(final Station station) {
         this.station = station;
     }
 
     public User getUser() {
-        return user;
+        return this.user;
     }
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         this.user = user;
     }
 
-    public String getDate_debut() {
-        return date_debut;
+    public LocalDateTime getDate_debut() {
+        return this.date_debut;
     }
 
-    public void setDate_debut(String date_debut) {
+    public void setDate_debut(final LocalDateTime date_debut) {
         this.date_debut = date_debut;
     }
 
-    public String getDate_fin() {
-        return date_fin;
+    public LocalDateTime getDate_fin() {
+        return this.date_fin;
     }
 
-    public void setDate_fin(String date_fin) {
+    public void setDate_fin(final LocalDateTime date_fin) {
         this.date_fin = date_fin;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof StationUser that)) return false;
-        return Objects.equals(stationUserKey, that.stationUserKey) && Objects.equals(station, that.station) && Objects.equals(user, that.user) && Objects.equals(date_debut, that.date_debut) && Objects.equals(date_fin, that.date_fin);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(stationUserKey, station, user, date_debut, date_fin);
     }
 
     @Override
     public String toString() {
         return "StationUser{" +
-                "stationUserKey=" + stationUserKey +
+                "id=" + idStationUser +
                 ", station=" + (station == null ? null : station.getId()) +
                 ", user=" + (user==null ? null : user.getId_user()) +
                 ", date_debut='" + date_debut + '\'' +

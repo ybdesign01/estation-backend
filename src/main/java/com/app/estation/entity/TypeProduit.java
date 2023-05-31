@@ -14,9 +14,12 @@ public class TypeProduit {
 
     private String nom_type;
 
-    public TypeProduit(Long id_type, String nom_type) {
+    private String unite;
+
+    public TypeProduit(Long id_type, String nom_type, String unite) {
         this.id_type = id_type;
         this.nom_type = nom_type;
+        this.unite = unite;
     }
 
     public TypeProduit() {
@@ -36,5 +39,13 @@ public class TypeProduit {
 
     public void setNom_type(String nom_type) {
         this.nom_type = nom_type;
+    }
+
+    public String getUnite() {
+        return this.unite;
+    }
+
+    public void setUnite(final String unite) {
+        this.unite = unite;
     }
 }

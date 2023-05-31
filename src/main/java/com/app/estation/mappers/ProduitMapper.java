@@ -51,6 +51,33 @@ public class ProduitMapper {
         return entity;
     }
 
+    public static ProduitDto fromEntityWithoutServices(Produit entity){
+        if (null == entity){
+            return null;
+        }
+        ProduitDto dto = new ProduitDto();
+        dto.setId_produit(entity.getId_produit());
+        dto.setNom_produit(entity.getNom_produit());
+        dto.setActions(ProduitActionMapper.fromEntityList(entity.getActions()));
+        dto.setType(TypeProduitMapper.fromEntity(entity.getType()));
+        dto.setPrix_achat(entity.getPrix_achat());
+        dto.setPrix_vente(entity.getPrix_vente());
+        return dto;
+    }
+
+    public static ProduitDto fromEntityWithoutSubclasses(Produit entity){
+        if (null == entity){
+            return null;
+        }
+        ProduitDto dto = new ProduitDto();
+        dto.setId_produit(entity.getId_produit());
+        dto.setNom_produit(entity.getNom_produit());
+        dto.setPrix_achat(entity.getPrix_achat());
+        dto.setPrix_vente(entity.getPrix_vente());
+        dto.setType(TypeProduitMapper.fromEntity(entity.getType()));
+        return dto;
+    }
+
 
     public static List<ProduitDto> fromEntityList(List<Produit> entities){
         if (entities == null){

@@ -4,48 +4,35 @@ import com.app.estation.dto.StationDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.Date;
-import java.util.Objects;
+import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StationUserDto {
     @NotNull(message = "key_mandatory")
-    private StationUserKeyDto stationUserKey;
+    private Long idStationUser;
     private StationDto station;
     private UserDto user;
-    private String date_debut;
-    private String date_fin;
+    private LocalDateTime date_debut;
+    private LocalDateTime date_fin;
 
      public StationUserDto() {
 
     }
 
-    public StationUserDto(final StationUserKeyDto key, final StationDto station, final UserDto user, final String date_debut, final String date_fin) {
-         this.stationUserKey = key;
+    public StationUserDto(final Long idStationUser, final StationDto station, final UserDto user, final LocalDateTime date_debut, final LocalDateTime date_fin) {
+         this.idStationUser = idStationUser;
          this.station = station;
          this.user = user;
-         this.date_debut = Date.from(new Date().toInstant()).toString();
+         this.date_debut = date_debut;
          this.date_fin = date_fin;
     }
 
-    public StationUserKeyDto getStationUserKey() {
-        return this.stationUserKey;
+    public Long getIdStationUser() {
+        return this.idStationUser;
     }
 
-    public void setStationUserKey(final StationUserKeyDto stationUserKey) {
-        this.stationUserKey = stationUserKey;
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof StationUserDto that)) return false;
-        return Objects.equals(station, that.station) && Objects.equals(user, that.user) && Objects.equals(date_debut, that.date_debut) && Objects.equals(date_fin, that.date_fin);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(station, user, date_debut, date_fin);
+    public void setIdStationUser(final Long idStationUser) {
+        this.idStationUser = idStationUser;
     }
 
     public StationDto getStation() {
@@ -64,19 +51,19 @@ public class StationUserDto {
         this.user = user;
     }
 
-    public String getDate_debut() {
+    public LocalDateTime getDate_debut() {
         return this.date_debut;
     }
 
-    public void setDate_debut(final String date_debut) {
+    public void setDate_debut(final LocalDateTime date_debut) {
         this.date_debut = date_debut;
     }
 
-    public String getDate_fin() {
+    public LocalDateTime getDate_fin() {
         return this.date_fin;
     }
 
-    public void setDate_fin(final String date_fin) {
+    public void setDate_fin(final LocalDateTime date_fin) {
         this.date_fin = date_fin;
     }
 }

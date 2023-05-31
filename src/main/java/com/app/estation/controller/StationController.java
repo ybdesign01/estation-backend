@@ -4,7 +4,6 @@ import com.app.estation.dto.ServicesDto;
 import com.app.estation.dto.StationDto;
 import com.app.estation.service.implementation.ServicesImpl;
 import com.app.estation.service.implementation.StationServiceImpl;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,16 +29,7 @@ public class StationController {
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<?> getAll(){
-            List<StationDto> stations = stationService.getAll();
-            if (null == stations ){
-                return ResponseEntity.badRequest().body(Map.of("msg","no_station_found"));
-            }
-        try {
-            String json = objectMapper.writeValueAsString(stations);
-            System.out.println(json);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        List<StationDto> stations = stationService.getAll();
         return ResponseEntity.ok().body(stations);
     }
 
@@ -48,38 +38,29 @@ public class StationController {
         List<ServicesDto> services = servicesService.findServicesByStationId(id);
         if (null == services){
             return ResponseEntity.badRequest().body(Map.of("msg","station_not_found"));
-        } else if (services.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("msg","no_services_found"));
         }
         return ResponseEntity.ok().body(services);
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> getStation(@PathVariable Long id){
-        StationDto station = stationService.get(id);
-        return ResponseEntity.ok().body(station);
+        return ResponseEntity.ok().body(stationService.get(id));
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     public ResponseEntity<?> addStation(@Validated @RequestBody StationDto stationDto){
-        StationDto station = stationService.add(stationDto);
-        if (station != null){
-            return ResponseEntity.status(201).body(Map.of("msg","station_added", "station", station));
-        }else{
-            return ResponseEntity.badRequest().body(Map.of("msg","station_not_added"));
-        }
+        return ResponseEntity.status(201).body(Map.of("msg","station_added", "station", stationService.add(stationDto)));
     }
 
-    @PutMapping(produces = "application/json", consumes = "application/json")
-    public ResponseEntity<?> updateStation(@Validated @RequestBody final StationDto stationDto){
-        final StationDto station = stationService.update(stationDto);
-        return ResponseEntity.ok().body(Map.of("msg","station_updated", "station", station));
+    @PutMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<?> updateStation(@Validated @RequestBody final StationDto stationDto, @PathVariable Long id){
+        return ResponseEntity.ok().body(Map.of("msg","station_updated", "station", stationService.update(stationDto, id)));
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> deleteStation(@PathVariable Long id){
-        final boolean station = stationService.delete(id);
-        if (station){
+        final boolean deleted = stationService.delete(id);
+        if (!deleted){
             return ResponseEntity.ok().body(Map.of("msg","station_deleted"));
         }else{
             return ResponseEntity.badRequest().body(Map.of("msg","station_not_deleted"));

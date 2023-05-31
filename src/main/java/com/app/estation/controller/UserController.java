@@ -2,6 +2,7 @@ package com.app.estation.controller;
 
 
 import com.app.estation.dto.PompeUserRequest;
+import com.app.estation.dto.StationUserRequest;
 import com.app.estation.dto.User.StationUserDto;
 import com.app.estation.dto.User.UserPassDto;
 import com.app.estation.service.implementation.PompeUserServiceImpl;
@@ -32,7 +33,7 @@ public class UserController {
 
 
     @GetMapping
-    @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<?> getAll(){
             return ResponseEntity.ok().body(userService.getAll());
     }
@@ -50,22 +51,21 @@ public class UserController {
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
-    @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<?> addUser(@Validated @RequestBody final UserPassDto userDto){
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("msg","user_created", "user", userService.add(userDto)));
-
     }
 
-    @PutMapping(produces = "application/json", consumes = "application/json")
+    @PutMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> updateUser(@Validated@RequestBody UserPassDto userDto){
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("msg","user_updated", "user", userService.update(userDto)));
+    public ResponseEntity<?> updateUser(@Validated @RequestBody UserPassDto userDto, @PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("msg","user_updated", "user", userService.update(userDto,id)));
     }
 
     @DeleteMapping (value = "/{id}", produces = "application/json")
-    @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<?> deleteUser(@PathVariable Long id){
-        if(userService.delete(id)){
+        if(!userService.delete(id)){
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("msg","user_deleted"));
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","user_not_found"));
@@ -79,25 +79,20 @@ public class UserController {
     }
 
     @PostMapping(value = "/setStation", produces = "application/json", consumes = "application/json")
-    @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
-    public ResponseEntity<?> setStation(@Validated @RequestBody final StationUserDto stationUserDto){
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("msg","station_user_created","stationUser",stationUserService.add(stationUserDto)));
-
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    public ResponseEntity<?> setStation(@Validated @RequestBody final StationUserRequest stationUserRequest){
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("msg","station_user_created","stationUser",stationUserService.setStationtoUser(stationUserRequest)));
     }
 
-    @PostMapping(value = "/updateStation", produces = "application/json", consumes = "application/json")
-    @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
-    public ResponseEntity<?> updateStation(@Validated @RequestBody final StationUserDto stationUserDto){
-        StationUserDto station = stationUserService.update(stationUserDto);
-        if(null != station){
-            return ResponseEntity.status(HttpStatus.OK).body(station);
-        }else{
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","station_user_not_found"));
-        }
+    @PostMapping(value = "/updateStation/{id}", produces = "application/json", consumes = "application/json")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    public ResponseEntity<?> updateStation(@Validated @RequestBody final StationUserDto stationUserDto, @PathVariable final Long id){
+        StationUserDto station = stationUserService.update(stationUserDto,id);
+        return ResponseEntity.status(HttpStatus.OK).body(station);
     }
 
     @PostMapping(value = "/setPompe", produces = "application/json", consumes = "application/json")
-    @PreAuthorize("hasAuthority({'ADMIN', 'MANAGER'})")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<?> setPompe(@Validated @RequestBody PompeUserRequest request){
        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("msg","pompe_user_created","pompeUser",pompeUserService.setPompeToUser(request)));
     }
@@ -121,6 +116,12 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getStationUser(){
         return ResponseEntity.ok().body(stationUserService.getAll());
+    }
+
+    @GetMapping(value = "/getAffectationsMontant/{id}", produces = "application/json")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    public ResponseEntity<?> getAffectationsMontant(@PathVariable final Long id){
+        return ResponseEntity.ok().body(pompeUserService.getAffectationsMontant(id));
     }
 
 

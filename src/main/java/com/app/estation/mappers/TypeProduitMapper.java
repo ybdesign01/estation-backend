@@ -12,6 +12,7 @@ public class TypeProduitMapper {
         }
         return new TypeProduitDto(
             entity.getId_type(),
+            entity.getUnite(),
             entity.getNom_type()
         );
     }
@@ -22,6 +23,7 @@ public class TypeProduitMapper {
         }
         TypeProduit entity = new TypeProduit();
         entity.setId_type(dto.getId_type());
+        entity.setUnite(dto.getUnite());
         entity.setNom_type(dto.getNom_type());
         return entity;
     }

@@ -4,10 +4,12 @@ import com.app.estation.advice.exceptions.ApiRequestException;
 import com.app.estation.advice.exceptions.EntityNotFoundException;
 import com.app.estation.dto.ReleveDto;
 import com.app.estation.dto.ReleveResponse;
+import com.app.estation.entity.CiternePompe;
 import com.app.estation.entity.PompeUser;
 import com.app.estation.entity.Releve;
 import com.app.estation.entity.TypeReleve;
 import com.app.estation.mappers.ReleveMapper;
+import com.app.estation.repository.CiternePompeRepository;
 import com.app.estation.repository.PompeUserRepository;
 import com.app.estation.repository.ReleveRepository;
 import com.app.estation.service.EServices;
@@ -18,6 +20,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static java.lang.Math.abs;
+
 @Transactional
 @Service
 public class ReleveServiceImpl implements EServices<ReleveDto,ReleveDto> {
@@ -27,6 +31,9 @@ public class ReleveServiceImpl implements EServices<ReleveDto,ReleveDto> {
 
     @Autowired
     PompeUserRepository pompeUserRepository;
+
+    @Autowired
+    CiternePompeRepository citernePompeRepository;
 
     @Override
     public List<ReleveDto> getAll() {
@@ -41,6 +48,7 @@ public class ReleveServiceImpl implements EServices<ReleveDto,ReleveDto> {
     public ReleveDto get(Long id) {
         return ReleveMapper.fromEntity(releveRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("releve_not_found")));
     }
+
 
     public ReleveResponse getStatusByPompeUser(Long idPompeUser){
         pompeUserRepository.findById(idPompeUser).orElseThrow(() -> new EntityNotFoundException("pompe_user_not_found"));
@@ -65,32 +73,29 @@ public class ReleveServiceImpl implements EServices<ReleveDto,ReleveDto> {
 
     @Override
     public ReleveDto add(ReleveDto releve) {
-        List<Releve> re = releveRepository.findAllByPompeUserIdPompeUser(releve.getPompeUser().getIdPompeUser());
-        final TypeReleve typeReleve;
-        if (re.isEmpty()){
-            typeReleve = TypeReleve.RELEVE_ENTREE;
-        }else {
-            if(re.get(re.size()-1).isEntree()){
-                typeReleve = TypeReleve.RELEVE_SORTIE;
-            }else {
-                typeReleve = TypeReleve.RELEVE_ENTREE;
-            }
-        }
         PompeUser pompeUser = pompeUserRepository.findById(releve.getPompeUser().getIdPompeUser()).orElseThrow(() -> new EntityNotFoundException("pompe_user_not_found"));
-       if (LocalDateTime.now().isBefore(pompeUser.getDateDebut()) || LocalDateTime.now().isAfter(pompeUser.getDateFin())){
-           throw new ApiRequestException("date_not_in_range");
-       }
-        Releve r = ReleveMapper.toEntity(releve);
-        r.setDate_releve(LocalDateTime.now());
-        r.setPompeUser(pompeUser);
-        r.setType_releve(typeReleve);
-        releveRepository.save(r);
-        return ReleveMapper.fromEntity(releveRepository.findById(r.getId_releve()).orElseThrow(()-> new ApiRequestException("releve_not_added")));
+        Releve releve1 = releveRepository.getReleveByPompeId(pompeUser.getPompe().getId_pompe()).orElse(null);
+        if (LocalDateTime.now().isBefore(pompeUser.getDateDebut()) || LocalDateTime.now().isAfter(pompeUser.getDateFin())){
+            throw new ApiRequestException("date_not_in_range");
+        }
+        if (null != releve1 && releve1.isEntree()) {
+            Releve releve3 = ReleveMapper.toEntity(releve);
+            releve3.setType_releve(TypeReleve.RELEVE_SORTIE);
+            releve3.setPompeUser(releve1.getPompeUser());
+            releve3.setDateReleve(LocalDateTime.now());
+            releveRepository.save(releve3);
+        }
+            Releve releve2 = ReleveMapper.toEntity(releve);
+            releve2.setType_releve(TypeReleve.RELEVE_ENTREE);
+            releve2.setDateReleve(LocalDateTime.now());
+            releve2.setPompeUser(pompeUser);
+            releveRepository.save(releve2);
+            return ReleveMapper.fromEntity(releveRepository.findById(releve2.getId_releve()).orElseThrow(()-> new ApiRequestException("releve_not_added")));
     }
 
     @Override
-    public ReleveDto update(ReleveDto releve) {
-        Releve re = releveRepository.findById(releve.getId_releve()).orElseThrow(() -> new EntityNotFoundException("releve_not_found"));
+    public ReleveDto update(ReleveDto releve, Long id) {
+        Releve re = releveRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("releve_not_found"));
         Releve r = ReleveMapper.toEntity(releve);
         releveRepository.save(r);
         return ReleveMapper.fromEntity(releveRepository.findById(releve.getId_releve()).orElseThrow(()-> new ApiRequestException("releve_not_updated")));
@@ -106,16 +111,18 @@ public class ReleveServiceImpl implements EServices<ReleveDto,ReleveDto> {
         }
     }
 
-/*    public List<ReleveDto> getReleveByPompe(Long id) {
-        Pompe pompe = pompeRepository.findById(id).orElse(null);
-        if (pompe == null) {
-           throw new ApiRequestException("pompe_does_not_exist");
+    public Double calculatePrice(Long idPompeUser){
+        PompeUser p = pompeUserRepository.findById(idPompeUser).orElseThrow(() -> new EntityNotFoundException("pompe_user_not_found"));
+        List<Releve> r = releveRepository.findAllByPompeUserIdPompeUserOrderByDateReleveAsc(idPompeUser);
+        if (r.isEmpty() || r.size() < 2){
+            return 0.0;
         }
-        List<ReleveDto> list = ReleveMapper.fromEntityList(releveRepository.findAllByPompe(id));
-        if (list.isEmpty()){
-            throw new ApiRequestException("no_releves_found");
-        }
+        double price = 0.0;
+        CiternePompe cp = citernePompeRepository.findByIdPompe(p.getPompe().getId_pompe());
+        Double prix_vente = cp.getCiterne().getId_produit().getPrix_vente();
+        price = abs(r.get(0).getCompteur() - r.get(1).getCompteur()) * prix_vente;
+        return price;
+    }
 
-        return list;
-    }*/
+
 }

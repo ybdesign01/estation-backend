@@ -33,9 +33,10 @@ public class CiterneController {
         return ResponseEntity.ok().body(citerneService.get(id));
     }
 
-    @PostMapping(value = "/setPompes/{id}", produces = "application/json")
-    public ResponseEntity<?> setPompes(@RequestBody List<Long> pompeDtos, @PathVariable Long id){
-        return ResponseEntity.ok().body(Map.of("citerne",citerneService.setPompes(pompeDtos,id)));
+
+    @PutMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<?> updateCiterne(@Validated @RequestBody CiterneDto citerneDto, @PathVariable Long id){
+        return ResponseEntity.ok().body(Map.of("msg","citerne_updated", "citerne",citerneService.update(citerneDto,id)));
     }
 
 }

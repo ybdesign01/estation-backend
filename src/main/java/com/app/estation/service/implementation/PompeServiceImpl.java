@@ -1,4 +1,5 @@
 package com.app.estation.service.implementation;
+
 import com.app.estation.advice.exceptions.ApiRequestException;
 import com.app.estation.advice.exceptions.EntityNotFoundException;
 import com.app.estation.dto.PompeDto;
@@ -19,6 +20,7 @@ public class PompeServiceImpl implements EServices<PompeDto, PompeDto> {
     @Autowired
     private PompeRepository pompeRepository;
 
+
     @Override
     public PompeDto add(PompeDto dto) {
         Pompe pompe = PompeMapper.toEntity(dto);
@@ -27,14 +29,17 @@ public class PompeServiceImpl implements EServices<PompeDto, PompeDto> {
     }
 
     @Override
-    public PompeDto update(PompeDto dto) {
-        Pompe pompe = PompeMapper.toEntity(dto);
+    public PompeDto update(PompeDto dto, Long id) {
+        Pompe pompe = pompeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("pompe_not_found"));
+        pompe.setNom_pompe(dto.getNom_pompe());
+        pompe.setId_pompe(dto.getId_pompe());
         pompeRepository.save(pompe);
         return PompeMapper.fromEntity(pompeRepository.findById(dto.getId_pompe()).orElseThrow(() -> new ApiRequestException("pompe_not_updated")));
     }
 
     @Override
     public boolean delete(Long id) {
+        pompeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("pompe_not_found"));
         pompeRepository.deleteById(id);
         return pompeRepository.existsById(id);
     }

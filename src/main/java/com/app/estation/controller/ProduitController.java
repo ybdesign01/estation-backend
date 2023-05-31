@@ -47,5 +47,10 @@ public class ProduitController {
         return ResponseEntity.ok().body(produitService.get(id));
     }
 
+    @PutMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<?> updateProduit(@Validated @RequestBody ProduitDto produitDto, @PathVariable final Long id){
+        return ResponseEntity.ok().body(Map.of("produit",produitService.update(produitDto,id), "msg", "produit_updated"));
+    }
+
 
 }

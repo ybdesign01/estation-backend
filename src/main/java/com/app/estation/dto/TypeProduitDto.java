@@ -2,8 +2,6 @@ package com.app.estation.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotEmpty;
-
-import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class TypeProduitDto {
@@ -13,7 +11,11 @@ public class TypeProduitDto {
     @NotEmpty(message = "nom_type_mandatory")
     private String nom_type;
 
-    public TypeProduitDto(Long id_type, String nom_type) {
+    @NotEmpty(message = "unite_mandatory")
+    private String unite;
+
+    public TypeProduitDto(Long id_type, String nom_type, String unite) {
+        this.unite = unite;
         this.id_type = id_type;
         this.nom_type = nom_type;
     }
@@ -21,16 +23,12 @@ public class TypeProduitDto {
     public TypeProduitDto() {
     }
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TypeProduitDto that)) return false;
-        return Objects.equals(id_type, that.id_type) && Objects.equals(nom_type, that.nom_type);
+    public String getUnite() {
+        return this.unite;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id_type, nom_type);
+    public void setUnite(final String unite) {
+        this.unite = unite;
     }
 
     public Long getId_type() {

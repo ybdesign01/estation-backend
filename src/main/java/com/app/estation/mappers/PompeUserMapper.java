@@ -45,9 +45,16 @@ public class PompeUserMapper {
         return dto;
     }
 
-
-
-
+    public static PompeUserDto fromEntityWithUser(PompeUser entity){
+        if (entity == null){
+            return null;
+        }
+        PompeUserDto dto = new PompeUserDto();
+        dto.setDateDebut(entity.getDateDebut());
+        dto.setDateFin(entity.getDateFin());
+        dto.setUser(UserMapper.fromEntityWithoutSubclasses(entity.getUser()));
+        return dto;
+    }
 
     public static List<PompeUser> toEntityList(List<PompeUserDto> dtoList) {
         if (dtoList == null) {
@@ -61,6 +68,13 @@ public class PompeUserMapper {
             return null;
         }
         return entityList.stream().map(PompeUserMapper::fromEntity).collect(Collectors.toList());
+    }
+
+    public static List<PompeUserDto> fromEntityListWithUser(List<PompeUser> entityList) {
+        if (entityList == null) {
+            return null;
+        }
+        return entityList.stream().map(PompeUserMapper::fromEntityWithUser).collect(Collectors.toList());
     }
 
 

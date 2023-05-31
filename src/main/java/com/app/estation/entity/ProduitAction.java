@@ -2,6 +2,8 @@ package com.app.estation.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 
 @Entity
 
@@ -12,13 +14,13 @@ public class ProduitAction {
     private Long id_action;
     @ManyToOne
     private Produit produit;
-    private String date_action;
+    private LocalDateTime date_action;
     private String quantite;
     @Enumerated(EnumType.STRING)
     private TypeAction action;
     private String fournisseur;
 
-public ProduitAction(Long id_action, Produit produit, String date_action, String quantite, TypeAction action, String fournisseur) {
+public ProduitAction(Long id_action, Produit produit, LocalDateTime date_action, String quantite, TypeAction action, String fournisseur) {
         this.id_action = id_action;
         this.produit = produit;
         this.date_action = date_action;
@@ -46,11 +48,11 @@ public ProduitAction(Long id_action, Produit produit, String date_action, String
         this.produit = produit;
     }
 
-    public String getDate_action() {
-        return date_action;
+    public LocalDateTime getDate_action() {
+        return this.date_action;
     }
 
-    public void setDate_action(String date_action) {
+    public void setDate_action(final LocalDateTime date_action) {
         this.date_action = date_action;
     }
 

@@ -15,14 +15,14 @@ public class Releve {
     private TypeReleve type_releve;
     private Long compteur;
 
-    private LocalDateTime date_releve;
+    private LocalDateTime dateReleve;
     @ManyToOne
     private PompeUser pompeUser;
 
 
 
-    public Releve(Long id_releve, TypeReleve type_releve, Long compteur, PompeUser pompeUser, LocalDateTime date_releve) {
-        this.date_releve = date_releve;
+    public Releve(Long id_releve, TypeReleve type_releve, Long compteur, PompeUser pompeUser, LocalDateTime dateReleve) {
+        this.dateReleve = dateReleve;
         this.id_releve = id_releve;
         this.type_releve = type_releve;
         this.compteur = compteur;
@@ -48,12 +48,12 @@ public class Releve {
         this.pompeUser = pompeUser;
     }
 
-    public LocalDateTime getDate_releve() {
-        return this.date_releve;
+    public LocalDateTime getDateReleve() {
+        return this.dateReleve;
     }
 
-    public void setDate_releve(final LocalDateTime date_releve) {
-        this.date_releve = date_releve;
+    public void setDateReleve(final LocalDateTime dateReleve) {
+        this.dateReleve = dateReleve;
     }
 
     public Long getId_releve() {

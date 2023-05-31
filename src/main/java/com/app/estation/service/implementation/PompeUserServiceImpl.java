@@ -2,14 +2,17 @@ package com.app.estation.service.implementation;
 
 import com.app.estation.advice.exceptions.ApiRequestException;
 import com.app.estation.advice.exceptions.EntityNotFoundException;
+import com.app.estation.dto.AffectationMontantDto;
 import com.app.estation.dto.PompeUserRequest;
 import com.app.estation.dto.User.PompeUserDto;
 import com.app.estation.entity.Pompe;
 import com.app.estation.entity.PompeUser;
+import com.app.estation.entity.Transaction;
 import com.app.estation.entity.User;
 import com.app.estation.mappers.PompeUserMapper;
 import com.app.estation.repository.PompeRepository;
 import com.app.estation.repository.PompeUserRepository;
+import com.app.estation.repository.TransactionRepository;
 import com.app.estation.repository.UserRepository;
 import com.app.estation.service.EServices;
 import jakarta.transaction.Transactional;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -37,43 +41,36 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
     @Autowired
     private ReleveServiceImpl releveService;
 
+    @Autowired
+    private TransactionRepository transactionRepository;
+
 
 
 
 
     @Override
     public PompeUserDto add(PompeUserDto dto) {
-        PompeUser get = pompeUserRepository.findById(dto.getIdPompeUser()).orElse(null);
-        System.out.println(get);
-        if (null != get){
-            throw new ApiRequestException("pompe_already_used");
-        }
-
-        PompeUser pompeUser = new PompeUser();
-        pompeUser.setIdPompeUser(dto.getIdPompeUser());
-        User user = userRepository.findById(dto.getUser().getId_user()).orElse(null);
-        if (user == null) {
-            throw new ApiRequestException("user_does_not_exist");
-        }
-        pompeUser.setUser(user);
-        Pompe pompe = pompeRepository.findById(dto.getPompe().getId_pompe()).orElse(null);
-        if (pompe == null) {
-            throw new ApiRequestException("pompe_does_not_exist");
-        }
-        pompeUser.setPompe(pompe);
-        pompeUser.setDateDebut(LocalDateTime.now());
-        pompeUserRepository.save(pompeUser);
-        return PompeUserMapper.fromEntity(pompeUserRepository.findById(pompeUser.getIdPompeUser()).orElse(null));
-    }
-
-    @Override
-    public PompeUserDto update(PompeUserDto dto) {
         return null;
     }
 
     @Override
+    public PompeUserDto update(PompeUserDto dto, Long id) {
+        PompeUser pompeUser = pompeUserRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("pompe_user_not_found"));
+        final Pompe pompe = pompeRepository.findById(dto.getPompe().getId_pompe()).orElseThrow(() -> new EntityNotFoundException("pompe_not_found"));
+        pompeUser.setPompe(pompe);
+        final User user = userRepository.findById(dto.getUser().getId_user()).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
+        pompeUser.setUser(user);
+        pompeUser.setDateDebut(dto.getDateDebut());
+        pompeUser.setDateFin(dto.getDateFin());
+        pompeUserRepository.save(pompeUser);
+        return PompeUserMapper.fromEntity(pompeUserRepository.findById(pompeUser.getIdPompeUser()).orElseThrow(() -> new ApiRequestException("pompe_user_not_updated")));
+    }
+
+    @Override
     public boolean delete(Long id) {
-        return false;
+        PompeUser pompeUser = pompeUserRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("pompe_user_not_found"));
+        pompeUserRepository.delete(pompeUser);
+        return pompeUserRepository.existsById(id);
     }
 
     @Override
@@ -139,5 +136,31 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
             throw new EntityNotFoundException("no_pompes_assigned_to_user");
         }
         return PompeUserMapper.fromEntityList(pompeUsers);
+    }
+
+    public List<AffectationMontantDto> getAffectationsMontant(final Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
+        List<PompeUser> pompeUsers = pompeUserRepository.countPompesAssignedToUserToday(userId, LocalDateTime.now());
+        List<Long> ids = new ArrayList<>();
+        if (pompeUsers.isEmpty()) {
+            throw new EntityNotFoundException("no_pompes_assigned_to_user");
+        }
+        pompeUsers.forEach(pompeUser -> {
+            ids.add(pompeUser.getIdPompeUser());
+        });
+        List<Transaction> count = transactionRepository.findTransactionsByExcludedPompeUserIds(ids);
+        if (!count.isEmpty()) {
+            throw new EntityNotFoundException("transactions_already_submitted");
+        }
+        List<AffectationMontantDto> affectationMontantDtos = new ArrayList<>();
+        pompeUsers.forEach(pompeUser -> {
+            AffectationMontantDto affectationMontantDto = new AffectationMontantDto();
+            affectationMontantDto.setPompeUser(PompeUserMapper.fromEntity(pompeUser));
+            Double montant = releveService.calculatePrice(pompeUser.getIdPompeUser());
+            affectationMontantDto.setMontant(montant);
+            affectationMontantDtos.add(affectationMontantDto);
+        });
+        affectationMontantDtos.removeIf(affectationMontantDto -> affectationMontantDto.getMontant().equals(0.0));
+        return affectationMontantDtos;
     }
 }

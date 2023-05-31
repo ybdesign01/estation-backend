@@ -15,7 +15,7 @@ public class ReleveMapper {
         ReleveDto dto = new ReleveDto();
         dto.setId_releve(entity.getId_releve());
         dto.setCompteur(entity.getCompteur());
-        dto.setDate_releve(entity.getDate_releve());
+        dto.setDate_releve(entity.getDateReleve());
         dto.setPompeUser(PompeUserMapper.fromEntity(entity.getPompeUser()));
         return dto;
     }
@@ -27,7 +27,7 @@ public class ReleveMapper {
         Releve entity = new Releve();
         entity.setId_releve(dto.getId_releve());
         entity.setCompteur(dto.getCompteur());
-        entity.setDate_releve(dto.getDate_releve());
+        entity.setDateReleve(dto.getDate_releve());
         entity.setPompeUser(PompeUserMapper.toEntity(dto.getPompeUser()));
         return entity;
     }

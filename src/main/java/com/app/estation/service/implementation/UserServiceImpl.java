@@ -62,7 +62,7 @@ public class UserServiceImpl implements EServices<UserDto,UserPassDto> {
         Profile profile = profileRepository.findProfileByNom(userDto.getProfile().getNom());
         User user = userRepository.findByEmail(userDto.getEmail()).orElse(null);
         if (null != user){
-            throw new ApiRequestException("user_already_exist");
+            throw new ApiRequestException("email_already_used");
         }
          user = new User( userDto.getNom(),
                 userDto.getPrenom(),
@@ -75,15 +75,12 @@ public class UserServiceImpl implements EServices<UserDto,UserPassDto> {
     }
 
     @Override
-    public UserDto update(UserPassDto userDto) {
+    public UserDto update(UserPassDto userDto, Long id) {
         Profile profile = profileRepository.findProfileByNom(userDto.getProfile().getNom());
         if(null == profile){
             throw new EntityNotFoundException("profile_not_found");
         }
-        User user = userRepository.findById(userDto.getId_user()).orElse(null);
-        if (null == user){
-            throw new EntityNotFoundException("user_not_found");
-        }
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
         user.setNom(userDto.getNom());
         user.setPrenom(userDto.getPrenom());
         user.setEmail(userDto.getEmail());

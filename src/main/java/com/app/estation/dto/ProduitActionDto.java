@@ -1,17 +1,16 @@
 package com.app.estation.dto;
 
-import com.app.estation.entity.Produit;
 import com.app.estation.entity.TypeAction;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProduitActionDto {
 
     private Long id_action;
     private ProduitDto produit;
-    private String date_action;
+    private LocalDateTime date_action;
     private String quantite;
     private TypeAction action;
     private String fournisseur;
@@ -21,7 +20,7 @@ public class ProduitActionDto {
 
     }
 
-    public ProduitActionDto(Long id_action, ProduitDto produit, String date_action, String quantite, TypeAction action, String fournisseur) {
+    public ProduitActionDto(Long id_action, ProduitDto produit, LocalDateTime date_action, String quantite, TypeAction action, String fournisseur) {
         this.id_action = id_action;
         this.produit = produit;
         this.date_action = date_action;
@@ -58,11 +57,11 @@ public class ProduitActionDto {
         this.produit = produit;
     }
 
-    public String getDate_action() {
+    public LocalDateTime getDate_action() {
         return this.date_action;
     }
 
-    public void setDate_action(final String date_action) {
+    public void setDate_action(final LocalDateTime date_action) {
         this.date_action = date_action;
     }
 

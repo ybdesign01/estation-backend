@@ -30,8 +30,8 @@ public class AppExceptionHandler {
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public final ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex) {
-        return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
+    public final ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex) {
+        return new ResponseEntity<>((Map.of("msg","access_denied")), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(value = TokenRefreshException.class)
@@ -51,12 +51,12 @@ public class AppExceptionHandler {
             return new ResponseEntity<>(Map.of("msg",ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = IllegalArgumentException.class)
+   /* @ExceptionHandler(value = IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException ex) {
         System.out.println("IllegalArgumentException: " + ex.getMessage());
         return new ResponseEntity<>(Map.of("msg","invalid_body"), HttpStatus.BAD_REQUEST);
-    }
+    }*/
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

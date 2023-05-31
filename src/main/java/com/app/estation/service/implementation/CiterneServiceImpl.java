@@ -4,7 +4,6 @@ import com.app.estation.advice.exceptions.ApiRequestException;
 import com.app.estation.advice.exceptions.EntityNotFoundException;
 import com.app.estation.dto.CiterneDto;
 import com.app.estation.entity.Citerne;
-import com.app.estation.entity.Pompe;
 import com.app.estation.entity.Produit;
 import com.app.estation.entity.Station;
 import com.app.estation.mappers.CiterneMapper;
@@ -17,7 +16,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -54,14 +52,7 @@ public class CiterneServiceImpl implements EServices<CiterneDto, CiterneDto> {
     }
 
 
-    @Override
-    public CiterneDto update(CiterneDto dto) {
-        Citerne citerne = CiterneMapper.toEntity(dto);
-        citerneRepository.save(citerne);
-        return CiterneMapper.fromEntity(citerneRepository.findById(citerne.getId_citerne()).orElse(null));
-    }
-
-    @Transactional
+/*    @Transactional
     public CiterneDto setPompes(List<Long> pompeDtos, Long id){
         List<Pompe> pompes = new ArrayList<>();
         Pompe pompe = null;
@@ -80,12 +71,9 @@ public class CiterneServiceImpl implements EServices<CiterneDto, CiterneDto> {
             throw new EntityNotFoundException("citerne_not_found");
         }
         citerne.setPompes(pompes);
-        System.out.println("citerne pompes" + citerne.getPompes());
-
         citerneRepository.save(citerne);
-        System.out.println("citerne pompes" + citerneRepository.findById(id));
         return CiterneMapper.fromEntity(citerneRepository.findById(id).orElseThrow(() -> new ApiRequestException("pompes_not_set")));
-    }
+    }*/
 
     @Override
     public boolean delete(Long id) {
@@ -95,6 +83,19 @@ public class CiterneServiceImpl implements EServices<CiterneDto, CiterneDto> {
     @Override
     public CiterneDto get(Long id) {
         return CiterneMapper.fromEntity(citerneRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("citerne_not_found")));
+    }
+
+    @Override
+    public CiterneDto update(CiterneDto request, Long id) {
+        Citerne citerne = citerneRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("citerne_not_found"));
+        Produit produit = produitRepository.findById(request.getProduit().getId_produit()).orElseThrow(() -> new EntityNotFoundException("produit_not_found"));
+        Station st = stationRepository.findById(request.getStation().getId()).orElseThrow(() -> new EntityNotFoundException("station_not_found"));
+        citerne.setStation(st);
+        citerne.setCapacite(request.getCapacite());
+        citerne.setId_produit(produit);
+        citerne.setNom_citerne(request.getNom_citerne());
+        citerneRepository.save(citerne);
+        return CiterneMapper.fromEntity(citerneRepository.findById(citerne.getId_citerne()).orElse(null));
     }
 
     @Override

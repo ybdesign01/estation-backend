@@ -16,7 +16,7 @@ public class PompeMapper {
         entity.setId_pompe(dto.getId_pompe());
         entity.setNom_pompe(dto.getNom_pompe());
         entity.setUsers(PompeUserMapper.toEntityList(dto.getUsers()));
-        entity.setCiternes(CiterneMapper.toEntityList(dto.getCiternes()));
+        entity.setCiternes(CiternePompeMapper.toEntityList(dto.getCiternes()));
         return entity;
     }
 
@@ -27,7 +27,7 @@ public class PompeMapper {
         Pompe entity = new Pompe();
         entity.setId_pompe(dto.getId_pompe());
         entity.setNom_pompe(dto.getNom_pompe());
-        entity.setCiternes(CiterneMapper.toEntityList(dto.getCiternes()));
+        entity.setCiternes(CiternePompeMapper.toEntityList(dto.getCiternes()));
         return entity;
     }
 
@@ -38,8 +38,8 @@ public class PompeMapper {
         PompeDto dto = new PompeDto();
         dto.setId_pompe(entity.getId_pompe());
         dto.setNom_pompe(entity.getNom_pompe());
-        dto.setCiternes(CiterneMapper.fromEntityList(entity.getCiternes()));
-        dto.setUsers(PompeUserMapper.fromEntityList(entity.getUsers()));
+        dto.setCiternes(CiternePompeMapper.fromEntityListWithoutPompe(entity.getCiternes()));
+        dto.setUsers(PompeUserMapper.fromEntityListWithUser(entity.getUsers()));
         return dto;
     }
 

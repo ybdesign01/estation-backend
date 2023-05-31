@@ -1,10 +1,6 @@
 package com.app.estation.dto;
 
-import com.app.estation.entity.Pompe;
-import com.app.estation.entity.Produit;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -18,14 +14,14 @@ public class CiterneDto {
     @NotBlank(message = "nom_citerne_mandatory")
     private String nom_citerne;
     @NotBlank(message = "capacite_mandatory")
-    private String capacite;
+    private Double capacite;
     @NotNull(message = "produit_mandatory")
     private ProduitDto produit;
-    private List<PompeDto> pompes;
+    private List<CiternePompeDto> pompes;
     @NotNull(message = "station_mandatory")
     private StationDto station;
 
-    public CiterneDto(Long id_citerne, String nom_citerne, String capacite, ProduitDto produit, List<PompeDto> pompes, StationDto station) {
+    public CiterneDto(Long id_citerne, String nom_citerne, Double capacite, ProduitDto produit, List<CiternePompeDto> pompes, StationDto station) {
         this.station = station;
         this.id_citerne = id_citerne;
         this.nom_citerne = nom_citerne;
@@ -73,11 +69,11 @@ public class CiterneDto {
         this.nom_citerne = nom_citerne;
     }
 
-    public String getCapacite() {
+    public Double getCapacite() {
         return this.capacite;
     }
 
-    public void setCapacite(final String capacite) {
+    public void setCapacite(final Double capacite) {
         this.capacite = capacite;
     }
 
@@ -89,11 +85,11 @@ public class CiterneDto {
         this.produit = id_produit;
     }
 
-    public List<PompeDto> getPompes() {
+    public List<CiternePompeDto> getPompes() {
         return this.pompes;
     }
 
-    public void setPompes(final List<PompeDto> pompes) {
+    public void setPompes(final List<CiternePompeDto> pompes) {
         this.pompes = pompes;
     }
 }
