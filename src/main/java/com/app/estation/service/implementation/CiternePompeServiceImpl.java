@@ -1,5 +1,6 @@
 package com.app.estation.service.implementation;
 
+import com.app.estation.advice.exceptions.ApiRequestException;
 import com.app.estation.advice.exceptions.EntityNotFoundException;
 import com.app.estation.dto.CiternePompeDto;
 import com.app.estation.dto.CiternePompeRequest;
@@ -48,7 +49,7 @@ public class CiternePompeServiceImpl implements EServices<CiternePompeDto,Citern
             citernePompe1.setDateFin(null);
 
         citernePompeRepository.save(citernePompe1);
-        return CiternePompeMapper.fromEntity(citernePompeRepository.findById(citernePompe1.getIdCiternePompe()).orElseThrow(() -> new EntityNotFoundException("citerne_pompe_not_added")));
+        return CiternePompeMapper.fromEntity(citernePompeRepository.findById(citernePompe1.getIdCiternePompe()).orElseThrow(() -> new ApiRequestException("citerne_pompe_not_added")));
     }
 
     @Override

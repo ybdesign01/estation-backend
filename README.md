@@ -79,6 +79,7 @@ GET:     /api/user  | Status: 404 - msg: no_users_found, 200
          /api/user/{id} | Status: 404 - msg: user_not_found, 200
          /api/user/getUser (By token) | Status: 404 - msg: user_not_found, 200
          /api/user/getCurrentStation/{id} | Status: 404 - msg: user_not_found, no_station_assigned_to_user, 200
+         /api/user/getAffectationsMontant/{id} | Status: 404 - msg: user_not_found, 404: no_pompes_assigned_to_user, 200 transactions_already_submitted
          
 GET:     /api/user/getPompes/{id} | Status: 404 - msg: user_not_found, no_pompes_assigned_to_user, 200
 ***** This route gets the pompes of a user to which he's set to today
@@ -105,6 +106,35 @@ Response:
         "dateFin": "2023-05-24T08:30:00"
     }
 }
+
+
+Response of /api/user/getAffectationsMontant/{id}:
+[
+    {
+        "pompeUser": {
+            "idPompeUser": 1,
+            "pompe": {
+                "id_pompe": 1,
+                "nom_pompe": "POMPE1"
+            },
+            "user": {
+                "id_user": 1,
+                "nom": "Oussama",
+                "prenom": "Berhili",
+                "email": "oussama@gmail.com",
+                "matricule": "D47559",
+                "profile": {
+                    "id_profile": 1,
+                    "nom": "USER",
+                    "description": "User profile"
+                }
+            },
+            "dateDebut": "2023-05-31T21:35:03",
+            "dateFin": "2023-05-31T23:59:00"
+        },
+        "montant": 22154.5
+    }
+]
 ```
 ```
 POST:    /api/user/  | Status: 404 - msg: user_exists, 200
@@ -126,12 +156,11 @@ Body:
 POST:     /api/user/setStation | Status: 400 - msg: station_user_exists / 404: station_not_found, user_not_found / 201 msg: station_user_created
 Body:
 {
-    "stationUserKey":{
-        "id_station": 1,
-        "id_user": 1    
-    },
-    "date_debut": "Fri May 05 19:33:44 WEST 2023" ---- *Optional default is current date
-    "date_fin": "Fri May 05 19:33:44 WEST 2023" ----- *Optional
+ 
+    "idStation": 1,
+    "idUser":1
+    "date_debut": "2023-05-23T18:30:00" ---- *Optional default is current date
+    "date_fin": "2023-05-23T18:30:00" ----- *Optional
 }
 
 Response:
@@ -321,6 +350,7 @@ An example of station body:
 GET:     /api/pompe (Get all pompes) | Status: 200, 404 - msg: no_pompes_found
          /api/pompe/{id} (Get pompe by id) | Status: 200, 404 - msg: pompe_not_found
 POST:    /api/pompe/ | Status: 400 - msg: pompe_not_added, 201 - msg: pompe_added
+         /api/pompe/setCiterne | Status: 404 - msg: pompe_not_found, citerne_not_found / 400: citerne_pompe_not_added / 200 - msg: citerne_added
 PUT:     /api/pompe/{id} (TO DO)
 DELETE:  /api/pompe/{id} (TO DO)
 
@@ -359,13 +389,20 @@ Response:
             }
         ]
     }
+    
+    
+-- Set citerne to pompe /api/pompe/setCiterne   
+Body:
+{
+    "idCiterne": 1,
+    "idPompe": 1
+}
 ```
 ## Citerne
 ```
 GET:     /api/citerne (Get all citernes) | Status: 200, 404 - msg: no_citernes_found
          /api/citerne/{id} (Get citerne by id) | Status: 200, 400 - msg: citerne_not_found
 POST:    /api/citerne/ | Status: 400 - msg: produit_does_not_exist, 201 - msg: citerne_added
-         /api/citerne/setPompes/{id} | Status: 400 - msg: citerne_not_found, 200
 PUT:     /api/citerne/{id} (TO DO)
 DELETE:  /api/citerne/{id} (TO DO)
 
@@ -390,6 +427,7 @@ POST:    /api/produit/addType (Requires admin role) | Status: 400 - msg: type_no
 An example of typeProduit body: (POST)
 {
     "nom_type": "Type 1",
+    "unite": "Litre"
 }
 ```
 
