@@ -70,7 +70,7 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://estation-api.herokuapp.com/"));
+        configuration.setAllowedOrigins(Arrays.asList("https://estation-api.herokuapp.com"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
