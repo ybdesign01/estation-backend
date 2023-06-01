@@ -32,7 +32,7 @@ public class PompeServiceImpl implements EServices<PompeDto, PompeDto> {
     public PompeDto update(PompeDto dto, Long id) {
         Pompe pompe = pompeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("pompe_not_found"));
         pompe.setNom_pompe(dto.getNom_pompe());
-        pompe.setId_pompe(dto.getId_pompe());
+        pompe.setId_pompe(id);
         pompeRepository.save(pompe);
         return PompeMapper.fromEntity(pompeRepository.findById(dto.getId_pompe()).orElseThrow(() -> new ApiRequestException("pompe_not_updated")));
     }

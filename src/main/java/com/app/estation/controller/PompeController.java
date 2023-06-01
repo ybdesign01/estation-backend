@@ -42,4 +42,17 @@ public class PompeController {
         return ResponseEntity.ok().body(Map.of("msg","citerne_set", "citerne_pompe",citernePompeService.setCiterne(request)));
     }
 
+    @PutMapping(value = "/{id}", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<?> updatePompe(@Validated @RequestBody PompeDto pompeDto, @PathVariable Long id){
+        return ResponseEntity.ok().body(Map.of("msg","pompe_updated", "pompe",pompeService.update(pompeDto, id)));
+    }
+
+    @DeleteMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<?> deletePompe(@PathVariable Long id){
+       if (pompeService.delete(id))
+           return ResponseEntity.ok().body(Map.of("msg","pompe_deleted"));
+       else
+           return ResponseEntity.badRequest().body(Map.of("msg","pompe_not_deleted"));
+    }
+
 }
