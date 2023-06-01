@@ -49,7 +49,7 @@ public class ReleveController {
     @GetMapping(value = "/getByPompeUser/{id}", produces = "application/json")
     public ResponseEntity<?> getReleveByPompe(@PathVariable Long id){
         boolean releveResponse = releveService.getStatusByPompeUser(id);
-            return ResponseEntity.ok().body(releveResponse);
+            return ResponseEntity.ok().body(Map.of("msg","releve", "releve", releveResponse));
 
     }
 

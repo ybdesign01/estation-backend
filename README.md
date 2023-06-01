@@ -442,8 +442,7 @@ An example of releve body: (POST, PUT) ***** ! IMPORTANT ! --- It will only be s
 
 An example of GET: /api/releve/getByPompeUser/{id} response:
 {
-"releve_entree": true,
-"releve_sortie": false
+"releve": true
 }
 
 ```
