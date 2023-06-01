@@ -39,6 +39,13 @@ public class UserController {
             return ResponseEntity.ok().body(userService.getAll());
     }
 
+    @GetMapping(value = "/getAllByStation/{id}", produces = "application/json")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    public ResponseEntity<?> getAllByStation(@PathVariable Long id){
+            return ResponseEntity.ok().body(stationUserService.getAllByStation(id));
+    }
+
+
     @GetMapping(value = "/{id}", produces = "application/json")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> getById(@PathVariable Long id){

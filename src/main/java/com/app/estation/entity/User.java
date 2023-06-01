@@ -1,13 +1,15 @@
 package com.app.estation.entity;
 
 import jakarta.persistence.*;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -41,6 +43,11 @@ public class User implements UserDetails {
 
 
     public List<StationUser> getStations() {
+        stations.sort(Comparator.comparing(StationUser::getDate_debut).reversed());
+        if (stations.size() > 1) {
+            System.out.println(stations.get(0));
+            stations.subList(1, stations.size()).clear();
+        }
         return this.stations;
     }
 
@@ -49,6 +56,18 @@ public class User implements UserDetails {
     }
 
     public List<PompeUser> getPompes() {
+        pompes.sort(Comparator.comparing(PompeUser::getDateDebut).reversed());
+        if (pompes.size() > 1) {
+            final LocalDate today = LocalDate.now();
+            final List<PompeUser> pompesToday = new ArrayList<>();
+            for (final PompeUser pompeUser : pompes) {
+                final LocalDate dateDebut = pompeUser.getDateDebut().toLocalDate();
+                if (dateDebut.equals(today)) {
+                    pompesToday.add(pompeUser);
+                }
+            }
+            return pompesToday;
+        }
         return this.pompes;
     }
 
@@ -122,6 +141,8 @@ public class User implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
+
 
     @Override
     public boolean isEnabled() {

@@ -5,6 +5,7 @@ import com.app.estation.advice.exceptions.EntityNotFoundException;
 import com.app.estation.dto.StationDto;
 import com.app.estation.dto.StationUserRequest;
 import com.app.estation.dto.User.StationUserDto;
+import com.app.estation.dto.User.UserDto;
 import com.app.estation.entity.Station;
 import com.app.estation.entity.StationUser;
 import com.app.estation.entity.User;
@@ -118,4 +119,15 @@ public class StationUserServiceImpl implements EServices<StationUserDto, Station
         List<StationUser> stationUsers = stationUserRepository.findAllByStation(station);
         return StationUserMapper.fromEntityList(stationUsers);
     }
+
+    public List<UserDto> getAllByStation(Long id) {
+        final Station station =  stationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("station_not_found"));
+        final List<User> stationUsers = userRepository.findUsersByStation(station);
+        if (null == stationUsers || stationUsers.isEmpty() ){
+            throw new EntityNotFoundException("no_users_found");
+        }
+        System.out.println(stationUsers);
+        return UserMapper.fromEntityList(stationUsers);
+    }
+
 }
