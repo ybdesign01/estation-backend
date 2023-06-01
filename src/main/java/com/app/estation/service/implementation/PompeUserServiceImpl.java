@@ -128,13 +128,15 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
         final LocalDateTime startOfDay = currentDate.atStartOfDay();
         final LocalDateTime endOfDay = startOfDay.plusHours(23).plusMinutes(59).plusSeconds(59);
         final List<PompeUser> pompeUsers = pompeUserRepository.getPompesAssignedToUserForDay(userId, LocalDateTime.now());
+        System.out.println(pompeUsers);
+        if (pompeUsers.isEmpty()) {
+            throw new EntityNotFoundException("no_pompes_assigned_to_user");
+        }
         List<PompeUserDto> pompeUserDtos = PompeUserMapper.fromEntityList(pompeUsers);
         pompeUserDtos.forEach(pompeUserDto -> {
             pompeUserDto.setReleve(releveService.getStatusByPompeUser(pompeUserDto.getIdPompeUser()));
         });
-        if (pompeUsers.isEmpty()) {
-            throw new EntityNotFoundException("no_pompes_assigned_to_user");
-        }
+
         return pompeUserDtos;
     }
 
