@@ -13,7 +13,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -23,6 +23,16 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
+
+    private static final String[] WHITELISTED_URLS = {
+            "/api/user/**",
+            "/api/services/**",
+            "/api/station/**",
+            "/api/citerne/**",
+            "/api/pompe/**",
+            "/api/releve/**",
+            "/api/produit/**",
+    };
 //    private final LogoutHandler logoutHandler;
 
     public SecurityConfiguration(JwtAuthenticationFilter jwtAuthFilter, AuthenticationProvider authenticationProvider) {
@@ -34,21 +44,12 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().configurationSource(corsConfigurationSource()).and()
                 .csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/user/**").authenticated()
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/services/**").authenticated()
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/station/**").authenticated()
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/citerne/**").authenticated()
-                .and()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**").permitAll()
-                .and()
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers(WHITELISTED_URLS).authenticated()
+                )
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/api/auth/**").permitAll()
+                )
                 .authorizeHttpRequests()
                 .anyRequest().authenticated()
                 .and()
@@ -66,13 +67,15 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        final CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://estation-api.herokuapp.com"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("https://e-station-frontend-host.vercel.app"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Access-Control-Allow-Origin", "Content-Type",
+                "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
+        configuration.setAllowCredentials(false); // we're using jwt
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
