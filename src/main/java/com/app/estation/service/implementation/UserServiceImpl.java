@@ -41,7 +41,7 @@ public class UserServiceImpl implements EServices<UserDto,UserPassDto> {
         if (users.isEmpty()){
             throw new EntityNotFoundException("no_users_found");
         }
-        users.removeIf(userDto -> userDto.getProfile().equals("ADMIN"));
+        users.removeIf(userDto -> userDto.getProfile().getNom().equals("ADMIN"));
         return UserMapper.fromEntityList(users);
     }
 
