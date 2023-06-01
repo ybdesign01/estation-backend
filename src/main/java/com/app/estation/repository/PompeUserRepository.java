@@ -8,9 +8,13 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface PompeUserRepository extends JpaRepository<PompeUser, Long> {
     List<PompeUser> findAllByUser(User user);
+
+    @Query("SELECT pu FROM PompeUser pu WHERE pu.user.id_user = :userId order by pu.dateDebut desc")
+    Optional<List<PompeUser>> findAllOrderedByDateDebutDesc();
 
     @Query("SELECT COUNT(pu) FROM PompeUser pu WHERE pu.user.id_user = :userId AND DATE(pu.dateDebut) = DATE(:dateTime)")
     int countPompesAssignedToUserOnDate(@Param("userId") Long userId, @Param("dateTime") LocalDateTime dateTime);

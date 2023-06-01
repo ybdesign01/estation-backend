@@ -64,11 +64,11 @@ public class UserController {
 
     @DeleteMapping (value = "/{id}", produces = "application/json")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id){
-        if(!userService.delete(id)){
+    public ResponseEntity<?> deleteUser(@PathVariable Long id, @RequestHeader(name = HttpHeaders.AUTHORIZATION) final String token){
+        if(userService.delete(id,token)){
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("msg","user_deleted"));
         }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","user_not_found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","user_not_deleted"));
         }
     }
 

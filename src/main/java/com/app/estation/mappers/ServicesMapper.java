@@ -18,7 +18,6 @@ public class ServicesMapper {
         servicesDto.setDescription(services.getDescription());
         if (services.getStations() != null){
             Set<StationDto> stationDtos = services.getStations().stream().map(StationMapper::fromEntityWithoutServices).collect(Collectors.toSet());
-            System.out.println(stationDtos);
             servicesDto.setStations(stationDtos);
         }
         return servicesDto;

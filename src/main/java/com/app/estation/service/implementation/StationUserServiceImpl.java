@@ -52,6 +52,11 @@ public class StationUserServiceImpl implements EServices<StationUserDto, Station
     }
 
     public StationUserDto setStationtoUser(StationUserRequest request){
+        final StationUser last = stationUserRepository.findLatestStationUserByUserId(request.getIdUser()).orElse(null);
+        if (last != null){
+            last.setDate_fin(LocalDateTime.now());
+            stationUserRepository.save(last);
+        }
         final StationUser stationUser = new StationUser();
         final Station station = stationRepository.findById(request.getIdStation()).orElseThrow(() -> new EntityNotFoundException("station_not_found"));
         stationUser.setStation(station);

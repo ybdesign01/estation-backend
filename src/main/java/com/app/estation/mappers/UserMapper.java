@@ -1,8 +1,6 @@
 package com.app.estation.mappers;
 
 import com.app.estation.dto.User.UserDto;
-import com.app.estation.dto.User.UserPassDto;
-import com.app.estation.entity.PompeUser;
 import com.app.estation.entity.User;
 
 import java.util.List;
@@ -23,7 +21,6 @@ public class UserMapper {
         }
         if (user.getPompes() != null){
             userDto.setPompes(user.getPompes().stream().map(PompeUserMapper::fromEntityWithPompe).collect(Collectors.toList()));
-            System.out.println(userDto.getPompes());
         }
         return userDto;
     }
@@ -83,44 +80,6 @@ public class UserMapper {
         user.setProfile(ProfileMapper.toEntity(userDto.getProfile()));
         /*user.setPompes(PompeUserMapper.toEntityList(userDto.getPompes()));*/
         return user;
-    }
-
-    public static UserPassDto fromEntityPass(User user) {
-        if (user == null) return null;
-        final UserPassDto userDto = new UserPassDto();
-        userDto.setId_user(user.getId_user());
-        userDto.setNom(user.getNom());
-        userDto.setPrenom(user.getPrenom());
-        userDto.setEmail(user.getEmail());
-        userDto.setMatricule(user.getMatricule());
-        userDto.setProfile(ProfileMapper.fromEntity(user.getProfile()));
-        userDto.setPassword(user.getPassword());
-        return userDto;
-    }
-
-    public static User toEntityPass(UserPassDto userDto) {
-        if (userDto == null) return null;
-        final User user = new User();
-        user.setId_user(userDto.getId_user());
-        user.setNom(userDto.getNom());
-        user.setPrenom(userDto.getPrenom());
-        user.setEmail(userDto.getEmail());
-        user.setMatricule(userDto.getMatricule());
-        user.setProfile(ProfileMapper.toEntity(userDto.getProfile()));
-        user.setPassword(userDto.getPassword());
-        return user;
-    }
-
-    public static UserDto fromUserPassDto(UserPassDto userPassDto) {
-        if (userPassDto == null) return null;
-        final UserDto userDto = new UserDto();
-        userDto.setId_user(userPassDto.getId_user());
-        userDto.setNom(userPassDto.getNom());
-        userDto.setPrenom(userPassDto.getPrenom());
-        userDto.setEmail(userPassDto.getEmail());
-        userDto.setMatricule(userPassDto.getMatricule());
-        userDto.setProfile(userPassDto.getProfile());
-        return userDto;
     }
 
 

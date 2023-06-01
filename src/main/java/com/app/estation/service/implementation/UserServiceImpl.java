@@ -37,11 +37,12 @@ public class UserServiceImpl implements EServices<UserDto,UserPassDto> {
 
     @Override
     public List<UserDto> getAll(){
-        List<UserDto> users = UserMapper.fromEntityList(userRepository.findAll());
+        final List<User> users = userRepository.findAll();
         if (users.isEmpty()){
             throw new EntityNotFoundException("no_users_found");
         }
-        return users;
+        users.removeIf(userDto -> "ADMIN".equals(userDto.getProfile()));
+        return UserMapper.fromEntityList(users);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class UserServiceImpl implements EServices<UserDto,UserPassDto> {
 
     @Override
     public UserDto add(UserPassDto userDto){
-        Profile profile = profileRepository.findProfileByNom(userDto.getProfile().getNom());
+        Profile profile = profileRepository.findProfileByNom(userDto.getProfile().toUpperCase());
         User user = userRepository.findByEmail(userDto.getEmail()).orElse(null);
         if (null != user){
             throw new ApiRequestException("email_already_used");
@@ -76,7 +77,7 @@ public class UserServiceImpl implements EServices<UserDto,UserPassDto> {
 
     @Override
     public UserDto update(UserPassDto userDto, Long id) {
-        Profile profile = profileRepository.findProfileByNom(userDto.getProfile().getNom());
+        Profile profile = profileRepository.findProfileByNom(userDto.getProfile().toUpperCase());
         if(null == profile){
             throw new EntityNotFoundException("profile_not_found");
         }
@@ -100,5 +101,18 @@ public class UserServiceImpl implements EServices<UserDto,UserPassDto> {
         }else{
             return false;
         }
+    }
+
+    public boolean delete(Long id, String token) {
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
+        if (user.getEmail().equals(getUserByToken(token).getEmail())){
+            throw new ApiRequestException("user_cannot_delete_himself");
+        }
+            if (userRepository.existsById(id)){
+                userRepository.deleteById(id);
+                return true;
+            }else{
+                return false;
+            }
     }
 }

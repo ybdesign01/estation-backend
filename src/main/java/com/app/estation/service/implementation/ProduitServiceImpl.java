@@ -8,6 +8,7 @@ import com.app.estation.entity.Produit;
 import com.app.estation.mappers.ProduitMapper;
 import com.app.estation.repository.HistoriquePrixRepository;
 import com.app.estation.repository.ProduitRepository;
+import com.app.estation.repository.ServiceRepository;
 import com.app.estation.repository.TypeProduitRepository;
 import com.app.estation.service.EServices;
 import jakarta.transaction.Transactional;
@@ -32,13 +33,18 @@ public class ProduitServiceImpl implements EServices<ProduitDto, ProduitDto> {
     @Autowired
     private HistoriquePrixServiceImpl historiquePrixServiceImpl;
 
+    @Autowired
+    private ServiceRepository serviceRepository;
+
 
     @Override
     public ProduitDto add(ProduitDto dto) {
         if (!typeProduitRepository.existsById(dto.getType().getId_type())){
             throw new ApiRequestException("type_does_not_exist");
         }
-        System.out.println(dto.getService());
+        if (!serviceRepository.existsById(dto.getService().getId())){
+            throw new ApiRequestException("service_does_not_exist");
+        }
         Produit produit = ProduitMapper.toEntity(dto);
         produitRepository.save(produit);
 

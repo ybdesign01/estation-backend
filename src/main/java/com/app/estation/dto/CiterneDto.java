@@ -13,7 +13,7 @@ public class CiterneDto {
     private Long id_citerne;
     @NotBlank(message = "nom_citerne_mandatory")
     private String nom_citerne;
-    @NotBlank(message = "capacite_mandatory")
+    @NotNull(message = "capacite_mandatory")
     private Double capacite;
     @NotNull(message = "produit_mandatory")
     private ProduitDto produit;

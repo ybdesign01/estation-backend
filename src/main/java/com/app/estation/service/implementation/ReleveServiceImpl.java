@@ -3,7 +3,6 @@ package com.app.estation.service.implementation;
 import com.app.estation.advice.exceptions.ApiRequestException;
 import com.app.estation.advice.exceptions.EntityNotFoundException;
 import com.app.estation.dto.ReleveDto;
-import com.app.estation.dto.ReleveResponse;
 import com.app.estation.entity.CiternePompe;
 import com.app.estation.entity.PompeUser;
 import com.app.estation.entity.Releve;
@@ -50,23 +49,13 @@ public class ReleveServiceImpl implements EServices<ReleveDto,ReleveDto> {
     }
 
 
-    public ReleveResponse getStatusByPompeUser(Long idPompeUser){
+    public boolean getStatusByPompeUser(Long idPompeUser){
         pompeUserRepository.findById(idPompeUser).orElseThrow(() -> new EntityNotFoundException("pompe_user_not_found"));
         List<Releve> r = releveRepository.findAllByPompeUserIdPompeUser(idPompeUser);
         if (r.isEmpty()){
-            return new ReleveResponse(false,false);
+            return false;
         }
-        boolean sortie = false;
-        boolean entree = false;
-        for (Releve releve : r) {
-            if (releve.isSortie()){
-                sortie = true;
-            }
-            if (releve.isEntree()){
-                entree = true;
-            }
-        }
-        return new ReleveResponse(entree,sortie);
+        return true;
     }
 
 

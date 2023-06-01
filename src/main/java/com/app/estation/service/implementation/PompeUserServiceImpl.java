@@ -81,7 +81,7 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
 
     @Override
     public List<PompeUserDto> getAll() {
-        return PompeUserMapper.fromEntityList(pompeUserRepository.findAll());
+        return PompeUserMapper.fromEntityList(pompeUserRepository.findAllOrderedByDateDebutDesc().orElseThrow(() -> new EntityNotFoundException("no_affectations_found")));
     }
 
     public List<PompeUserDto> getAllPompesByUser(Long id) {
@@ -92,6 +92,15 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
         return PompeUserMapper.fromEntityList(pompeUserRepository.findAllByUser(user));
     }
     public PompeUserDto setPompeToUser(PompeUserRequest request) {
+        User user = userRepository.findById(request.getIdUser()).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
+        if (user.getAuthorities().stream()
+                .anyMatch(r -> "ADMIN".equals(r.getAuthority()))) {
+            throw new ApiRequestException("admin_cannot_have_pompe");
+        }
+        if (user.getAuthorities().stream()
+                .anyMatch(r -> "MANAGER".equals(r.getAuthority()))) {
+            throw new ApiRequestException("manager_cannot_have_pompe");
+        }
 
         if (request.getDateDebut().isAfter(request.getDateFin()) || request.getDateDebut().isEqual(request.getDateFin())) {
             throw new ApiRequestException("invalid_date");
@@ -105,7 +114,7 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
         if (countPumpsAssignedToOtherUserDuringTimeRange > 0) {
             throw new ApiRequestException("pompe_unavailable_during_time_range");
         }
-        User user = userRepository.findById(request.getIdUser()).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
+
         Pompe pompe = pompeRepository.findById(request.getIdPompe()).orElseThrow(() -> new EntityNotFoundException("pompe_not_found"));
         PompeUser pompeUser = new PompeUser(pompe, user, request.getDateDebut(), request.getDateFin());
         pompeUserRepository.save(pompeUser);
@@ -119,7 +128,6 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
         final LocalDateTime startOfDay = currentDate.atStartOfDay();
         final LocalDateTime endOfDay = startOfDay.plusHours(23).plusMinutes(59).plusSeconds(59);
         final List<PompeUser> pompeUsers = pompeUserRepository.getPompesAssignedToUserForDay(userId, LocalDateTime.now());
-        System.out.println(pompeUsers);
         List<PompeUserDto> pompeUserDtos = PompeUserMapper.fromEntityList(pompeUsers);
         pompeUserDtos.forEach(pompeUserDto -> {
             pompeUserDto.setReleve(releveService.getStatusByPompeUser(pompeUserDto.getIdPompeUser()));

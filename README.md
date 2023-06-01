@@ -84,28 +84,32 @@ GET:     /api/user  | Status: 404 - msg: no_users_found, 200
 GET:     /api/user/getPompes/{id} | Status: 404 - msg: user_not_found, no_pompes_assigned_to_user, 200
 ***** This route gets the pompes of a user to which he's set to today
 Response:
-{
-        "idPompeUser": 3,
+[
+    {
+        "idPompeUser": 2,
         "pompe": {
             "id_pompe": 1,
-            "nom_pompe": "POMPE1"
+            "nom_pompe": "pompe test"
         },
         "user": {
-            "id_user": 1,
-            "nom": "Oussama",
-            "prenom": "Berhili",
-            "email": "oussama@gmail.com",
-            "matricule": "D47559",
+            "id_user": 7,
+            "nom": "tesnom",
+            "prenom": "testprenom",
+            "email": "testemail@gmail.com",
+            "matricule": "bfvfkvf",
             "profile": {
                 "id_profile": 1,
                 "nom": "USER",
                 "description": "User profile"
             }
         },
-        "dateDebut": "2023-05-23T18:30:00",
-        "dateFin": "2023-05-24T08:30:00"
+        "dateDebut": "2023-06-01T03:02:00",
+        "dateFin": "2023-06-03T03:02:00",
+        "releve": true
     }
-}
+]
+```
+```
 
 
 Response of /api/user/getAffectationsMontant/{id}:
@@ -145,18 +149,13 @@ Body:
     "email": "admin@gmail.com",
     "matricule": "dd88",
     "password": "Yasser123+",
-    "profile": {
-            "id_profile": 1,
-            "nom": "USER",
-            "description": "User profile"
-        }
+    "profile": "USER"
 }
 ```
 ```
 POST:     /api/user/setStation | Status: 400 - msg: station_user_exists / 404: station_not_found, user_not_found / 201 msg: station_user_created
 Body:
 {
- 
     "idStation": 1,
     "idUser":1
     "date_debut": "2023-05-23T18:30:00" ---- *Optional default is current date
@@ -167,51 +166,30 @@ Response:
 {
     "msg": "station_user_created",
     "stationUser": {
-        "stationUserKey": {
-            "id_station": 1,
-            "id_user": 1
-        },
+        "idStationUser": 1,
         "station": {
             "id": 1,
             "nom_station": "Station 1",
             "adresse": "Description 1"
         },
         "user": {
-            "id_user": 1,
-            "nom": "Oussama",
-            "prenom": "Berhili",
-            "email": "oussama@gmail.com",
-            "matricule": "D47559",
+            "id_user": 17,
+            "nom": "Yasser",
+            "prenom": "yass",
+            "email": "adminededdddd@gmail.com",
+            "matricule": "dd88",
             "profile": {
                 "id_profile": 1,
                 "nom": "USER",
                 "description": "User profile"
-            },
-            "pompes": [
-                {
-                    "pompe": {
-                        "id_pompe": 1,
-                        "nom_pompe": "POMPE1"
-                    },
-                    "dateDebut": "2023-05-23T18:30:00",
-                    "dateFin": "2023-05-24T08:30:00"
-                },
-                {
-                    "pompe": {
-                        "id_pompe": 1,
-                        "nom_pompe": "POMPE1"
-                    },
-                    "dateDebut": "2023-05-31T18:30:00",
-                    "dateFin": "2023-05-31T20:30:00"
-                },
-            ]
+            }
         },
-        "date_debut": "Tue May 23 23:23:08 WEST 2023"
+        "date_debut": "2023-06-01T13:33:23.1884593"
     }
 }
 ```
 ```
-POST:     /api/user/setPompe | Status: 404 - msg: user_not_found, pompe_not_found / 400 - msg: pompe_unavailable_during_time_range, pompe_user_exists, user_already_has_pompes, invalid_date / 201 msg: pompe_user_created
+POST:     /api/user/setPompe | Status: 404 - msg: user_not_found, pompe_not_found / 400 - msg: pompe_unavailable_during_time_range, pompe_user_exists, user_already_has_pompes, invalid_date, manager_cannot_have_pompe, admin_cannot_have_pompe / 201 msg: pompe_user_created
 Body:
 {
 "idPompe": 2,
@@ -220,42 +198,15 @@ Body:
 "dateFin": "2023-05-24T08:30:00" ** Date follows the ISO 8601 format
 }
 
-[
-    {
-        "idPompeUser": 1,
-        "pompe": {
-            "id_pompe": 1,
-            "nom_pompe": "POMPE1"
-        },
-        "user": {
-            "id_user": 1,
-            "nom": "Oussama",
-            "prenom": "Berhili",
-            "email": "oussama@gmail.com",
-            "matricule": "D47559",
-            "profile": {
-                "id_profile": 1,
-                "nom": "USER",
-                "description": "User profile"
-            }
-        },
-        "dateDebut": "2023-05-24T18:30:00",
-        "dateFin": "2023-05-25T08:30:00",
-        "releve": {
-            "releve_entree": true,
-            "releve_sortie": false
-        }
-    }
-]
+
 
 Response: 
 {
-    "msg": "pompe_user_created",
     "pompeUser": {
-        "idPompeUser": 7,
+        "idPompeUser": 4,
         "pompe": {
             "id_pompe": 1,
-            "nom_pompe": "POMPE1"
+            "nom_pompe": "pompe test"
         },
         "user": {
             "id_user": 1,
@@ -269,26 +220,49 @@ Response:
                 "description": "User profile"
             }
         },
-        "dateDebut": "2023-05-25T18:30:00", ** Date follows the ISO 8601 format
-        "dateFin": "2023-05-26T08:30:00", ** Date follows the ISO 8601 format
-         "releve": {
-            "releve_entree": true,
-            "releve_sortie": false
-        }
-    }
+        "dateDebut": "2023-06-10T23:59:00",
+        "dateFin": "2023-06-20T15:30:00",
+        "releve": false
+    },
+    "msg": "pompe_user_created"
 }
 ```
 ```
 POST:    /api/user/updateStation (Requires admin or manager role) | Status: 400 - msg: station_user_not_found, 200
 Body:
 {
-    "stationUserKey":{
-        "id_station": 1,
-        "id_user": 1    
-    },
-    "date_debut": "Fri May 05 19:33:44 WEST 2023" ---- *Optional default is current date
-    "date_fin": "Fri May 05 19:33:44 WEST 2023" ----- *Optional
+    "idStation": 1,
+    "idUser": 1    
+    "date_debut": "2023-05-31T10:30:00" ---- *Optional default is current date
+    "date_fin": "2023-05-31T10:30:00" ----- *Optional
 }
+Response:
+{
+    "msg": "station_user_created",
+    "stationUser": {
+        "idStationUser": 1,
+        "station": {
+            "id": 1,
+            "nom_station": "Station 1",
+            "adresse": "Description 1"
+        },
+        "user": {
+            "id_user": 17,
+            "nom": "Yasser",
+            "prenom": "yass",
+            "email": "adminededdddd@gmail.com",
+            "matricule": "dd88",
+            "profile": {
+                "id_profile": 1,
+                "nom": "USER",
+                "description": "User profile"
+            }
+        },
+        "date_debut": "2023-06-01T13:33:23.1884593"
+    }
+}
+
+When a user is set to another station the old one's date_fin is set to current date.
 ```
 ```
 PUT:     /api/user/{id} | Status: 400 - msg: user_not_updated/ user_not_found / profile_not_found, 200
@@ -296,14 +270,10 @@ Body:
 {
     "nom": "Yasser",
     "prenom": "yass",
-    "email": "mail@mail.cpm",
+    "email": "adminededdddd@gmail.com",
     "matricule": "dd88",
     "password": "Yasser123+",
-    "profile": {
-            "id_profile": 1,
-            "nom": "USER",
-            "description": "User profile"
-        }
+    "profile": "USER"
 }
 ```
 ```
@@ -335,7 +305,7 @@ DELETE:  /api/station/{id} (Requires admin role) | Status: 400 - msg: station_no
 
 An example of station body:
 {
-    "nom_station": "Service 1",
+    "nom_station": "Station 1",
     "adresse": "Description 1",
     "services":[
     {
@@ -408,8 +378,8 @@ DELETE:  /api/citerne/{id} (TO DO)
 
 An example of citerne body: (POST, PUT)
 {
-    "nom_citerne": "CITERNE2",
-    "capacite": "1000L",
+    "nom_citerne": "CITERNE X",
+    "capacite": 1000.0,
     "produit": {
         "id_produit": 1
     },

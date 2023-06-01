@@ -1,7 +1,6 @@
 package com.app.estation.controller;
 
 import com.app.estation.dto.ReleveDto;
-import com.app.estation.dto.ReleveResponse;
 import com.app.estation.service.implementation.ReleveServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,7 +48,7 @@ public class ReleveController {
 
     @GetMapping(value = "/getByPompeUser/{id}", produces = "application/json")
     public ResponseEntity<?> getReleveByPompe(@PathVariable Long id){
-        ReleveResponse releveResponse = releveService.getStatusByPompeUser(id);
+        boolean releveResponse = releveService.getStatusByPompeUser(id);
             return ResponseEntity.ok().body(releveResponse);
 
     }
