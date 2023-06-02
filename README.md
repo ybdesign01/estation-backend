@@ -111,9 +111,12 @@ Response:
 ]
 ```
 ```
+Body of /api/user/getAffectationsMontant:
+{
+    "email": "email@gmail.com"
+}
 
-
-Response of /api/user/getAffectationsMontant/{id}:
+Response of /api/user/getAffectationsMontant:
 [
     {
         "pompeUser": {

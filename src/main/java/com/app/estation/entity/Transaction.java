@@ -16,6 +16,8 @@ public class Transaction {
     private TypePaiement typePaiement;
     private Double montant;
     private LocalDateTime dateTransaction;
+
+    private String note;
     @ManyToOne
     private PompeUser idPompeUser;
     @ManyToOne
