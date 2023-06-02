@@ -78,7 +78,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshToken findByUser(Long userId) {
-        return refreshTokenRepository.findByUser(userRepository.findById(userId).get());
+        return refreshTokenRepository.findByUser(userRepository.findById(userId).orElseThrow(() -> new TokenRefreshException("no_refresh_token_found")));
     }
 
     @Override

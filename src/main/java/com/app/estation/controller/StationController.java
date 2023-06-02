@@ -67,5 +67,12 @@ public class StationController {
         }
     }
 
+    @GetMapping(value = "/getInfo/{id}", produces = "application/json")
+    public ResponseEntity<?> getStationInfo(@PathVariable Long id){
+        return ResponseEntity.ok().body(stationService.getStationInformation(id));
+    }
+
+
+
 
 }

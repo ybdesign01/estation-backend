@@ -49,7 +49,7 @@ public class PompeController {
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<?> deletePompe(@PathVariable Long id){
-       if (pompeService.delete(id))
+       if (!pompeService.delete(id))
            return ResponseEntity.ok().body(Map.of("msg","pompe_deleted"));
        else
            return ResponseEntity.badRequest().body(Map.of("msg","pompe_not_deleted"));

@@ -154,7 +154,7 @@ Body:
 }
 ```
 ```
-POST:     /api/user/setStation | Status: 400 - msg: station_user_exists / 404: station_not_found, user_not_found / 201 msg: station_user_created
+POST:     /api/user/setStation | Status: 404: station_not_found, user_not_found / 201 msg: station_user_created
 Body:
 {
     "idStation": 1,
@@ -285,11 +285,23 @@ DELETE:  /api/user/{id} (Requires admin role) | Status: 404 - msg: user_not_foun
 ```
 GET:     /api/services (Get all services) | Status: 200, 404 - msg: no_services_found
          /api/services/{id} (Get service by id) | Status: 200, 404 - msg: service_not_found
-POST:    /api/services/ | Status: 400 - msg: service_not_added, 201 - msg: service_added
+         /api/services/getByStation/{id} (Get services by station id) | Status: 200, 404 - msg: no_service_found
+POST:    /api/services/ | Status: 400 - msg: service_not_added, service_already_exists, 201 - msg: service_added
+         /api/services/addToStation/{id} (Requires admin role) | Status: 400 - msg: service_not_added, 201 - msg: service_added
 PUT:     /api/services/{id} | Status: 400 - msg: service_not_updated, 200 - msg: service_updated
 DELETE:  /api/services/{id} (Requires admin role) | Status: 400 - msg: service_not_deleted, 200 - msg: service_deleted
 
 An example of Service body: (POST, PUT)
+{
+    "nom_service": "Service 1",
+    "description": "Description 1"
+    "station": {  ************Optional could also be null and set later on or use addToStation endpoint
+        "id": "1",
+    }
+}
+
+POST: /api/services/addToStation/{id}
+
 {
     "nom_service": "Service 1",
     "description": "Description 1"
@@ -308,10 +320,43 @@ An example of station body:
 {
     "nom_station": "Station 1",
     "adresse": "Description 1",
-    "services":[
+    "services":[  ***Optional if the service is not yet created
     {
     "id": "1",
     }
+    ]
+}
+
+Response of getInfo:
+{
+    "carburant": [
+        {
+            "nomCarburant": "GASOIL 50",
+            "prixCarburant": 13.45,
+            "percentChange": "14.47%",
+            "increase": true
+        },
+        {
+            "nomCarburant": "ESSENCE 100",
+            "prixCarburant": 12.15,
+            "percentChange": "-16.38%",
+            "increase": false
+        }
+    ],
+    "chiffreToday": 0.0,
+    "citerneJaugage": [
+        {
+            "nomCiterne": "CITERNE 1",
+            "jaugage": 10000.0,
+            "percentageLevel": "100.0",
+            "nomProduit": "GASOIL 50"
+        },
+        {
+            "nomCiterne": "CITERNE 2",
+            "jaugage": 10000.0,
+            "percentageLevel": "100.0",
+            "nomProduit": "ESSENCE 100"
+        }
     ]
 }
 
@@ -322,8 +367,8 @@ GET:     /api/pompe (Get all pompes) | Status: 200, 404 - msg: no_pompes_found
          /api/pompe/{id} (Get pompe by id) | Status: 200, 404 - msg: pompe_not_found
 POST:    /api/pompe/ | Status: 400 - msg: pompe_not_added, 201 - msg: pompe_added
          /api/pompe/setCiterne | Status: 404 - msg: pompe_not_found, citerne_not_found / 400: citerne_pompe_not_added / 200 - msg: citerne_added
-PUT:     /api/pompe/{id} (TO DO)
-DELETE:  /api/pompe/{id} (TO DO)
+PUT:     /api/pompe/{id} | Status: 400 - msg: pompe_not_updated / 404: pompe_not_found / 200 - msg: pompe_updated
+DELETE:  /api/pompe/{id} | Status: 400 - msg: pompe_not_deleted, 200 - msg: pompe_deleted
 
 An example of pompe body: (POST, PUT)
 {
@@ -373,16 +418,17 @@ Body:
 ```
 GET:     /api/citerne (Get all citernes) | Status: 200, 404 - msg: no_citernes_found
          /api/citerne/{id} (Get citerne by id) | Status: 200, 400 - msg: citerne_not_found
-POST:    /api/citerne/ | Status: 400 - msg: produit_does_not_exist, 201 - msg: citerne_added
-PUT:     /api/citerne/{id} (TO DO)
-DELETE:  /api/citerne/{id} (TO DO)
+POST:    /api/citerne/ | Status: 400 - msg: produit_does_not_exist, produit_not_in_station, 201 - msg: citerne_added
+PUT:     /api/citerne/{id} | Status: 400 - msg: citerne_not_updated, 200 - msg: citerne_updated
+DELETE:  /api/citerne/{id} | Status: 400 - msg: citerne_not_deleted, 200 - msg: citerne_deleted
 
 An example of citerne body: (POST, PUT)
 {
-    "nom_citerne": "CITERNE X",
-    "capacite": 1000.0,
+    "nom_citerne": "CITERNE 2",
+    "capaciteMaximale": 10000,
+    "capaciteActuelle": 1000, ***Optional default is capaciteMaximale (Use it only if you want to set a specific value on update)
     "produit": {
-        "id_produit": 1
+        "id_produit": 1 *** Product should belong to a service that belongs to a station
     },
     "station":{
         "id": 1
@@ -407,8 +453,8 @@ An example of typeProduit body: (POST)
 GET:     /api/produit (Get all produits) | Status: 200, 404 - msg: no_produits_found
          /api/produit/{id} (Get produit by id) | Status: 200, 404 - msg: produit_not_found
 POST:    /api/produit/ | Status: 400 - msg: produit_not_added, 201 - msg: produit_added
-PUT:     /api/produit/{id} (TO DO)
-DELETE:  /api/produit/{id} (TO DO)
+PUT:     /api/produit/{id} | Status: 400 - msg: produit_not_updated, 200 - msg: produit_updated
+DELETE:  /api/produit/{id} | Status: 400 - msg: produit_not_deleted, 200 - msg: produit_deleted
 
 An example of produit body: (POST, PUT)
 {
@@ -429,6 +475,7 @@ An example of produit body: (POST, PUT)
 GET:     /api/releve (Get all releves) | Status: 200, 404 - msg: no_releves_found
          /api/releve/{id} (Get releve by id) | Status: 200, 404 - msg: releve_not_found
          /api/releve/getByPompeUser/{id} (Get releve by pompeUser id) | Status: 200, 404 - msg: pompe_user_not_found
+         /api/releve/getByUser/{id} (Get releve by user id) | Status: 200, 404 - msg: user_not_found, no_releves_found
 POST:    /api/releve/ | Status: 400 - msg: releve_not_added, pompe_already_in, pompe_already_out / 201 - msg: releve_added
 PUT:     /api/releve/{id} (TO DO)
 DELETE:  /api/releve/{id} (TO DO)
@@ -456,15 +503,73 @@ Example of error response:
     "msg": "user_not_found"
 }
 
-The possible status codes are:
+Messages are:
 
-200: OK - The request has succeeded
-201: Created - The request has been fulfilled and resulted in a new resource being created
-400: Bad Request - The server cannot or will not process the request due to an apparent client error
-401: Unauthorized - The request has not been applied because it lacks valid authentication credentials for the target resource
-403: Forbidden - The request was a legal request, but the server is refusing to respond to it
-404: Not Found - The requested resource could not be found but may be available in the future
-405: Method Not Allowed - A request method is not supported for the requested resource
-500: Internal Server Error - The server encountered an unexpected condition that prevented it from fulfilling the request
+user_not_found
+password_not_match
+authentication_success
+no_users_found
+no_station_assigned_to_user
+no_pompes_assigned_to_user
+pompe_not_found
+pompe_not_updated
+pompe_not_added
+citerne_not_found
+citerne_not_added
+citerne_not_deleted
+citerne_deleted
+citerne_pompe_not_added
+pompe_user_not_updated
+admin_cannot_have_pompe
+manager_cannot_have_pompe
+invalid_date
+invalid_body
+expired_token
+refreshtoken_expired
+user_already_has_pompes
+pompe_unavailable_during_time_range
+station_user_not_updated
+station_user_not_added
+station_user_created
+station_user_not_found
+station_not_found
+no_citerne_found
+no_pompe_found
+no_users_found
+no_station_found
+no_service_found
+service_already_exists
+service_not_added
+service_not_found
+service_not_updated
+service_does_not_exist
+produit_not_added
+produit_deleted
+produit_not_deleted
+produit_not_found
+produit_not_updated
+no_produit_found
+no_releves_found
+releve_not_found
+pompe_user_not_found
+date_not_in_range (date de releve)
+releve_not_added
+releve_not_updated
+no_releves_found
+refresh_token_expired
+no_refresh_token_found
+station_user_created
+email_already_used
+user_not_added
+profile_not_found
+user_not_updated
+user_cannot_delete_himself
+type_not_added
+type_not_found
+type_not_updated
+type_does_not_exist
+no_type_found
+transactions_already_submitted
+
 
 ```

@@ -1,6 +1,7 @@
 package com.app.estation.repository;
 
 import com.app.estation.entity.Releve;
+import com.app.estation.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -10,6 +11,8 @@ import java.util.Optional;
 public interface ReleveRepository extends JpaRepository<Releve, Long> {
 
     List<Releve> findAllByPompeUserIdPompeUser(Long idPompeUser);
+
+    Optional<List<Releve>> findAllByPompeUserUser(User user);
     List<Releve> findAllByPompeUserIdPompeUserOrderByDateReleveAsc(Long idPompeUser);
     List<Releve> getReleveByPompeUserIdPompeUser(Long idPompeUser);
 

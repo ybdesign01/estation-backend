@@ -85,7 +85,9 @@ public class UserServiceImpl implements EServices<UserDto,UserPassDto> {
         user.setNom(userDto.getNom());
         user.setPrenom(userDto.getPrenom());
         user.setEmail(userDto.getEmail());
-        user.setPassword(passEncode.encode(userDto.getPassword()));
+        if (null != userDto.getPassword()){
+            user.setPassword(passEncode.encode(userDto.getPassword()));
+        }
         user.setMatricule(userDto.getMatricule());
         user.setProfile(profile);
         userRepository.save(user);

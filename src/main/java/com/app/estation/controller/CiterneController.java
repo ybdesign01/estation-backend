@@ -39,4 +39,17 @@ public class CiterneController {
         return ResponseEntity.ok().body(Map.of("msg","citerne_updated", "citerne",citerneService.update(citerneDto,id)));
     }
 
+    @GetMapping(value ="/getByStation/{id}", produces = "application/json")
+    public ResponseEntity<?> getCiternesByStation(@PathVariable Long id){
+        return ResponseEntity.ok().body(citerneService.getAllByStation(id));
+    }
+
+    @DeleteMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<?> deleteCiterne(@PathVariable Long id) {
+        if (!citerneService.delete(id)) {
+            return ResponseEntity.ok().body(Map.of("msg", "citerne_deleted"));
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("msg", "citerne_not_deleted"));
+        }
+    }
 }

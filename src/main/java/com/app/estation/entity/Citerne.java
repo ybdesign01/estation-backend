@@ -12,7 +12,8 @@ public class Citerne {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_citerne;
     private String nom_citerne;
-    private Double capacite;
+    private Double capaciteMaximale;
+    private Double capaciteActuelle;
     @ManyToOne
     private Produit id_produit;
 
@@ -24,10 +25,11 @@ public class Citerne {
 
 
 
-    public Citerne(Long id_citerne, String nom_citerne, Double capacite, Produit id_produit, List<CiternePompe> pompes, Station station) {
+    public Citerne(Long id_citerne, String nom_citerne, Double capaciteMaximale, Double capaciteActuelle, Produit id_produit, List<CiternePompe> pompes, Station station) {
         this.id_citerne = id_citerne;
         this.nom_citerne = nom_citerne;
-        this.capacite = capacite;
+        this.capaciteMaximale = capaciteMaximale;
+        this.capaciteActuelle = capaciteActuelle;
         this.id_produit = id_produit;
         this.pompes = pompes;
         this.station = station;
@@ -60,12 +62,20 @@ public class Citerne {
         this.nom_citerne = nom_citerne;
     }
 
-    public Double getCapacite() {
-        return capacite;
+    public Double getCapaciteMaximale() {
+        return this.capaciteMaximale;
     }
 
-    public void setCapacite(Double capacite) {
-        this.capacite = capacite;
+    public void setCapaciteMaximale(final Double capaciteMaximale) {
+        this.capaciteMaximale = capaciteMaximale;
+    }
+
+    public Double getCapaciteActuelle() {
+        return this.capaciteActuelle;
+    }
+
+    public void setCapaciteActuelle(final Double capaciteActuelle) {
+        this.capaciteActuelle = capaciteActuelle;
     }
 
     public Produit getId_produit() {
@@ -89,7 +99,8 @@ public class Citerne {
         return "Citerne{" +
                 "id_citerne=" + id_citerne +
                 ", nom_citerne='" + nom_citerne + '\'' +
-                ", capacite='" + capacite + '\'' +
+                ", capacite='" + capaciteMaximale + '\'' +
+                ", capaciteActuelle='" + capaciteActuelle + '\'' +
                 ", id_produit=" + id_produit.getPrix_vente() +
                 ", pompes=" + pompes +
                 ", station=" + station.getNom_station() +

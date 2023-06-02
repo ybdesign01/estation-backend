@@ -3,10 +3,7 @@ package com.app.estation.service.implementation;
 import com.app.estation.advice.exceptions.ApiRequestException;
 import com.app.estation.advice.exceptions.EntityNotFoundException;
 import com.app.estation.dto.ReleveDto;
-import com.app.estation.entity.CiternePompe;
-import com.app.estation.entity.PompeUser;
-import com.app.estation.entity.Releve;
-import com.app.estation.entity.TypeReleve;
+import com.app.estation.entity.*;
 import com.app.estation.mappers.ReleveMapper;
 import com.app.estation.repository.CiternePompeRepository;
 import com.app.estation.repository.PompeUserRepository;
@@ -15,6 +12,7 @@ import com.app.estation.service.EServices;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.app.estation.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,6 +32,9 @@ public class ReleveServiceImpl implements EServices<ReleveDto,ReleveDto> {
     @Autowired
     CiternePompeRepository citernePompeRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public List<ReleveDto> getAll() {
         List<ReleveDto> list = ReleveMapper.fromEntityList(releveRepository.findAll());
@@ -46,6 +47,11 @@ public class ReleveServiceImpl implements EServices<ReleveDto,ReleveDto> {
     @Override
     public ReleveDto get(Long id) {
         return ReleveMapper.fromEntity(releveRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("releve_not_found")));
+    }
+
+    public List<ReleveDto> getByUser(Long idUser) {
+        User user = userRepository.findById(idUser).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
+        return ReleveMapper.fromEntityList(releveRepository.findAllByPompeUserUser(user).orElseThrow(() -> new EntityNotFoundException("no_releves_found")));
     }
 
 

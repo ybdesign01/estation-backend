@@ -17,12 +17,7 @@ public class Station {
     private Long id;
     private String nom_station;
     private String adresse;
-    @ManyToMany(targetEntity = Services.class,  cascade =
-            CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "station_service",
-            joinColumns = @JoinColumn(name = "id_station"),
-            inverseJoinColumns = @JoinColumn(name = "id_service"))
+    @OneToMany(mappedBy = "station")
     private Set<Services> services;
 
     @OneToMany(mappedBy = "station")

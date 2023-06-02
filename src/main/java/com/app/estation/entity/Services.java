@@ -1,29 +1,37 @@
 package com.app.estation.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
-import java.util.Set;
+import java.util.List;
 
 
 @Entity
-@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Table(name = "services")
 public class Services {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nom_service;
+    private String nomService;
     private String description;
 
-    @ManyToMany(mappedBy = "services", fetch = FetchType.LAZY,  cascade = CascadeType.MERGE)
-    private Set<Station> stations;
+    @ManyToOne
+    private Station station;
+
+    @OneToMany(mappedBy = "id_service")
+    private List<Produit> produits;
+
+    public List<Produit> getProduits() {
+        return this.produits;
+    }
+
+    public void setProduits(final List<Produit> produits) {
+        this.produits = produits;
+    }
 
     public Services(Long id_service, String nom_service, String description) {
         this.id = id_service;
-        this.nom_service = nom_service;
+        this.nomService = nom_service;
         this.description = description;
     }
 
@@ -31,15 +39,16 @@ public class Services {
     }
 
     public Services(String nom_service, String description) {
-        this.nom_service = nom_service;
+        this.nomService = nom_service;
         this.description = description;
     }
 
-    public Set<Station> getStations() {
-        return stations;
+    public Station getStation() {
+        return this.station;
     }
-    public void setStations(Set<Station> stations) {
-        this.stations = stations;
+
+    public void setStation(final Station station) {
+        this.station = station;
     }
 
     public Long getId() {
@@ -50,12 +59,13 @@ public class Services {
         this.id = id;
     }
 
-    public String getNom_service() {
-        return nom_service;
+
+    public String getNomService() {
+        return this.nomService;
     }
 
-    public void setNom_service(String nom_service) {
-        this.nom_service = nom_service;
+    public void setNomService(final String nomService) {
+        this.nomService = nomService;
     }
 
     public String getDescription() {
@@ -70,8 +80,9 @@ public class Services {
     public String toString() {
         return "Services{" +
                 "id=" + id +
-                ", nom_service='" + nom_service + '\'' +
+                ", nom_service='" + nomService + '\'' +
                 ", description='" + description + '\'' +
+                ", station=" + station.getId() +
                 '}';
     }
 }

@@ -14,7 +14,8 @@ public class CiterneMapper {
         CiterneDto dto = new CiterneDto();
         dto.setId_citerne(entity.getId_citerne());
         dto.setNom_citerne(entity.getNom_citerne());
-        dto.setCapacite(entity.getCapacite());
+        dto.setCapaciteMaximale(entity.getCapaciteMaximale());
+        dto.setCapaciteActuelle(entity.getCapaciteActuelle());
         dto.setStation(StationMapper.fromEntityWithoutServices(entity.getStation()));
         dto.setPompes(CiternePompeMapper.fromEntityListWithoutCiterne(entity.getPompes()));
         dto.setProduit(ProduitMapper.fromEntityWithoutSubclasses(entity.getId_produit()));
@@ -29,7 +30,8 @@ public class CiterneMapper {
         entity.setId_citerne(dto.getId_citerne());
         entity.setNom_citerne(dto.getNom_citerne());
         entity.setStation(StationMapper.toEntityWithoutSubclasses(dto.getStation()));
-        entity.setCapacite(dto.getCapacite());
+        entity.setCapaciteMaximale(dto.getCapaciteMaximale());
+        entity.setCapaciteActuelle(dto.getCapaciteActuelle());
         entity.setPompes(CiternePompeMapper.toEntityList(dto.getPompes()));
         entity.setId_produit(ProduitMapper.toEntity(dto.getProduit()));
         return entity;
@@ -43,7 +45,8 @@ public class CiterneMapper {
         entity.setId_citerne(dto.getId_citerne());
         entity.setNom_citerne(dto.getNom_citerne());
         entity.setStation(StationMapper.toEntityWithoutSubclasses(dto.getStation()));
-        entity.setCapacite(dto.getCapacite());
+        entity.setCapaciteMaximale(dto.getCapaciteMaximale());
+        entity.setCapaciteActuelle(dto.getCapaciteActuelle());
         entity.setId_produit(ProduitMapper.toEntity(dto.getProduit()));
         return entity;
     }
@@ -56,7 +59,8 @@ public class CiterneMapper {
         dto.setId_citerne(entity.getId_citerne());
         dto.setNom_citerne(entity.getNom_citerne());
         dto.setStation(StationMapper.fromEntityWithoutServices(entity.getStation()));
-        dto.setCapacite(entity.getCapacite());
+        dto.setCapaciteMaximale(entity.getCapaciteMaximale());
+        dto.setCapaciteActuelle(entity.getCapaciteActuelle());
         dto.setProduit(ProduitMapper.fromEntityWithoutSubclasses(entity.getId_produit()));
         return dto;
     }

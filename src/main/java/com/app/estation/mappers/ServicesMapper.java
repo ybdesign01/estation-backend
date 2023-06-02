@@ -1,7 +1,6 @@
 package com.app.estation.mappers;
 
 import com.app.estation.dto.ServicesDto;
-import com.app.estation.dto.StationDto;
 import com.app.estation.entity.Services;
 
 import java.util.List;
@@ -14,12 +13,9 @@ public class ServicesMapper {
         if (services == null) return null;
         ServicesDto servicesDto = new ServicesDto();
         servicesDto.setId(services.getId());
-        servicesDto.setNom_service(services.getNom_service());
+        servicesDto.setNom_service(services.getNomService());
         servicesDto.setDescription(services.getDescription());
-        if (services.getStations() != null){
-            Set<StationDto> stationDtos = services.getStations().stream().map(StationMapper::fromEntityWithoutServices).collect(Collectors.toSet());
-            servicesDto.setStations(stationDtos);
-        }
+        servicesDto.setStation(StationMapper.fromEntityWithoutServices(services.getStation()));
         return servicesDto;
     }
 
@@ -27,15 +23,16 @@ public class ServicesMapper {
         if (service == null) return null;
         Services services = new Services();
         services.setId(service.getId());
-        services.setNom_service(service.getNom_service());
+        services.setNomService((service.getNom_service() == null ? "" : service.getNom_service().toUpperCase()));
         services.setDescription(service.getDescription());
+        services.setStation(StationMapper.toEntityWithoutServices(service.getStation()));
         return services;
     }
 
     public static ServicesDto fromEntityWithoutStations(Services services){
         ServicesDto servicesDto = new ServicesDto();
         servicesDto.setId(services.getId());
-        servicesDto.setNom_service(services.getNom_service());
+        servicesDto.setNom_service(services.getNomService());
         servicesDto.setDescription(services.getDescription());
         return servicesDto;
     }

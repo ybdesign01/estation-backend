@@ -36,6 +36,11 @@ public class ServiceController {
         return ResponseEntity.ok().body(Map.of("msg","service_added", "service", servicesService.add(service)));
     }
 
+    @PostMapping(value = "/addToStation/{id}", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<?> addServiceToStation(@Validated @RequestBody final ServicesDto service, @PathVariable Long id){
+        return ResponseEntity.ok().body(Map.of("msg","service_added", "service", servicesService.addToStation(service,id)));
+    }
+
     @PutMapping(value = "/{id}" , consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> updateService(@Validated @RequestBody ServicesDto service, @PathVariable Long id){
         return ResponseEntity.ok().body(Map.of("msg","service_updated", "service", servicesService.update(service,id)));
@@ -50,6 +55,11 @@ public class ServiceController {
         }else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("msg","service_not_deleted"));
         }
+    }
+
+    @GetMapping(value = "/getByStation/{id}", produces = "application/json")
+    public ResponseEntity<?> getServiceByStation(@PathVariable Long id){
+        return ResponseEntity.ok().body(servicesService.findServicesByStationId(id));
     }
 
 

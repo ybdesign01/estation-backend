@@ -28,14 +28,23 @@ public class Produit {
     private List<ProduitAction> actions;
 
 
-    public Produit(Long id_produit, String nom_produit, Double prix_achat, Double prix_vente, Services id_service, TypeProduit type, List<ProduitAction> actions) {
+    public Produit(Long id_produit, String nom_produit, Double prix_achat, Double prix_vente, Services id_service, TypeProduit type, List<HistoriquePrix> historiquePrix, List<ProduitAction> actions) {
         this.id_produit = id_produit;
+        this.historiquePrix = historiquePrix;
         this.actions = actions;
         this.nom_produit = nom_produit;
         this.prix_achat = prix_achat;
         this.prix_vente = prix_vente;
         this.id_service = id_service;
         this.type = type;
+    }
+
+    public List<HistoriquePrix> getHistoriquePrix() {
+        return this.historiquePrix;
+    }
+
+    public void setHistoriquePrix(final List<HistoriquePrix> historiquePrix) {
+        this.historiquePrix = historiquePrix;
     }
 
     public Produit() {
@@ -116,7 +125,7 @@ public class Produit {
                 ", nom_produit='" + nom_produit + '\'' +
                 ", prix_achat=" + prix_achat +
                 ", prix_vente=" + prix_vente +
-                ", id_service=" + id_service +
+                ", id_service=" + id_service.getNomService() +
                 ", type=" + type +
                 ", actions=" + actions +
                 '}';

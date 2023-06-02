@@ -76,7 +76,7 @@ public class ProduitServiceImpl implements EServices<ProduitDto, ProduitDto> {
     public boolean delete(Long id) {
         Produit produit = produitRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("produit_not_found"));
         produitRepository.deleteById(id);
-        return true;
+        return produitRepository.existsById(id);
     }
 
     @Override
@@ -88,6 +88,14 @@ public class ProduitServiceImpl implements EServices<ProduitDto, ProduitDto> {
     @Override
     public List<ProduitDto> getAll() {
         List<Produit> list = produitRepository.findAll();
+        if (list.isEmpty()){
+            throw new EntityNotFoundException("no_produit_found");
+        }
+        return ProduitMapper.fromEntityList(list);
+    }
+
+    public List<ProduitDto> getByStation(Long id) {
+        List<Produit> list = produitRepository.findByStation(id);
         if (list.isEmpty()){
             throw new EntityNotFoundException("no_produit_found");
         }

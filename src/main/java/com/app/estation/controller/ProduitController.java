@@ -52,5 +52,19 @@ public class ProduitController {
         return ResponseEntity.ok().body(Map.of("produit",produitService.update(produitDto,id), "msg", "produit_updated"));
     }
 
+    @DeleteMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<?> deleteProduit(@PathVariable final Long id){
+        if (!produitService.delete(id)){
+            return ResponseEntity.ok().body(Map.of("msg", "produit_deleted"));
+        }else {
+            return ResponseEntity.badRequest().body(Map.of("msg", "produit_not_deleted"));
+        }
+    }
+
+    @GetMapping(value = "/getByStation/{id}", produces = "application/json")
+    public ResponseEntity<?> getProduitByStation(@PathVariable final Long id){
+        return ResponseEntity.ok().body(produitService.getByStation(id));
+    }
+
 
 }

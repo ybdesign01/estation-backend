@@ -1,11 +1,9 @@
 package com.app.estation.mappers;
 
-import com.app.estation.dto.ServicesDto;
 import com.app.estation.dto.StationDto;
 import com.app.estation.entity.Station;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StationMapper {
@@ -16,11 +14,12 @@ public class StationMapper {
         stationDto.setId(station.getId());
         stationDto.setNom_station(station.getNom_station());
         stationDto.setAdresse(station.getAdresse());
-        final Set<ServicesDto> servicesDtos = station.getServices().stream().map(ServicesMapper::fromEntityWithoutStations).collect(Collectors.toSet());
         if (station.getUsers() != null){
             stationDto.setUsers(station.getUsers().stream().map(StationUserMapper::fromEntityWithoutStation).toList());
         }
-        stationDto.setServices(servicesDtos);
+        if (station.getServices() != null){
+            stationDto.setServices(station.getServices().stream().map(ServicesMapper::fromEntityWithoutStations).collect(Collectors.toSet()));
+        }
         return stationDto;
     }
 
@@ -60,6 +59,16 @@ public class StationMapper {
         station1.setId(station.getId());
         station1.setNom_station(station.getNom_station());
         station1.setAdresse(station.getAdresse());
+        return station1;
+    }
+
+    public static Station toEntityWithoutServices(StationDto station) {
+        if (station == null) return null;
+        Station station1 = new Station();
+        station1.setId(station.getId());
+        station1.setNom_station(station.getNom_station());
+        station1.setAdresse(station.getAdresse());
+        station1.setUsers(StationUserMapper.toEntityList(station.getUsers()));
         return station1;
     }
 }

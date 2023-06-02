@@ -20,8 +20,11 @@ public class Transaction {
     private PompeUser idPompeUser;
     @ManyToOne
     private ProduitAction idProduitAction;
+    @ManyToOne
+    @JoinColumn(name = "idStation")
+    private Station station;
 
-    public Transaction(Long idTransaction, TypeTransaction typeTransaction, TypePaiement typePaiement, Double montant, LocalDateTime dateTransaction, PompeUser idPompeUser, ProduitAction idProduitAction) {
+    public Transaction(Long idTransaction, TypeTransaction typeTransaction, TypePaiement typePaiement, Double montant, LocalDateTime dateTransaction, PompeUser idPompeUser, ProduitAction idProduitAction, Station station) {
         this.idTransaction = idTransaction;
         this.typeTransaction = typeTransaction;
         this.typePaiement = typePaiement;
@@ -29,7 +32,9 @@ public class Transaction {
         this.dateTransaction = dateTransaction;
         this.idPompeUser = idPompeUser;
         this.idProduitAction = idProduitAction;
+        this.station = station;
     }
+
 
     public Transaction() {
     }
@@ -88,5 +93,13 @@ public class Transaction {
 
     public void setIdProduitAction(final ProduitAction idProduitAction) {
         this.idProduitAction = idProduitAction;
+    }
+
+    public Station getStation() {
+        return this.station;
+    }
+
+    public void setStation(final Station station) {
+        this.station = station;
     }
 }

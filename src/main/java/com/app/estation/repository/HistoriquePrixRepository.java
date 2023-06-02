@@ -4,6 +4,7 @@ import com.app.estation.entity.HistoriquePrix;
 import com.app.estation.entity.Produit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,4 +16,9 @@ public interface HistoriquePrixRepository extends JpaRepository<HistoriquePrix, 
 
     @Query("select h from HistoriquePrix h where h.idProduit = ?1 and h.dateDebut = (select max(h1.dateDebut) from HistoriquePrix h1 where h1.idProduit = ?1)")
     Optional<HistoriquePrix> findByMaxDateDebut(Produit produit);
+
+    @Query("SELECT h.prixVente FROM HistoriquePrix h WHERE h.idProduit.id_produit = :idProduit AND h.dateFin IS NOT NULL ORDER BY h.dateFin DESC LIMIT 1")
+    List<Double> findPreviousPrixVente(@Param("idProduit") Long idProduit);
+
+
 }

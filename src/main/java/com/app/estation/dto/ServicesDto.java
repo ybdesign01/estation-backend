@@ -1,14 +1,7 @@
 package com.app.estation.dto;
 
-import com.app.estation.entity.Services;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
-
-
-import java.util.Set;
-import java.util.stream.Collectors;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 public class ServicesDto {
@@ -18,16 +11,16 @@ public class ServicesDto {
     @NotBlank(message = "Description obligatoire!")
     private String description;
 
-    private Set<StationDto> stations;
+    private StationDto station;
 
      public ServicesDto() {
     }
 
-    public ServicesDto(Long id, String nom_service, String description, Set<StationDto> stations) {
+    public ServicesDto(Long id, String nom_service, String description, StationDto stations) {
         this.id = id;
         this.nom_service = nom_service;
         this.description = description;
-        this.stations = stations;
+        this.station = stations;
     }
 
 
@@ -56,12 +49,12 @@ public class ServicesDto {
         this.description = description;
     }
 
-    public Set<StationDto> getStations() {
-        return stations;
+    public StationDto getStation() {
+        return this.station;
     }
 
-    public void setStations(Set<StationDto> stations) {
-        this.stations = stations;
+    public void setStation(final StationDto stations) {
+        this.station = stations;
     }
 
     @Override
@@ -70,6 +63,7 @@ public class ServicesDto {
                 "id=" + id +
                 ", nom_service='" + nom_service + '\'' +
                 ", description='" + description + '\'' +
+                ", stations=" + station.getId() +
                 '}';
     }
 }
