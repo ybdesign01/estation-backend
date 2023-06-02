@@ -149,12 +149,12 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
         return PompeUserMapper.fromEntityList(pompeUsers);
     }
 
-    public List<AffectationMontantDto> getAffectationsMontant(final Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
-        List<PompeUser> pompeUsers = pompeUserRepository.countPompesAssignedToUserToday(userId, LocalDateTime.now());
+    public List<AffectationMontantDto> getAffectationsMontant(final String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
+        List<PompeUser> pompeUsers = pompeUserRepository.countPompesAssignedToUserToday(user.getId_user(), LocalDateTime.now());
         List<Long> ids = new ArrayList<>();
         if (pompeUsers.isEmpty()) {
-            throw new EntityNotFoundException("no_pompes_assigned_to_user");
+            throw new EntityNotFoundException("no_pompes_assigned_to_user_today");
         }
         pompeUsers.forEach(pompeUser -> {
             ids.add(pompeUser.getIdPompeUser());

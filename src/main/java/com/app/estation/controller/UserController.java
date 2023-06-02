@@ -126,10 +126,10 @@ public class UserController {
         return ResponseEntity.ok().body(stationUserService.getAll());
     }
 
-    @GetMapping(value = "/getAffectationsMontant/{id}", produces = "application/json")
+    @GetMapping(value = "/getAffectationsMontant", produces = "application/json")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
-    public ResponseEntity<?> getAffectationsMontant(@PathVariable final Long id){
-        return ResponseEntity.ok().body(pompeUserService.getAffectationsMontant(id));
+    public ResponseEntity<?> getAffectationsMontant(@RequestBody final String email){
+        return ResponseEntity.ok().body(pompeUserService.getAffectationsMontant(email));
     }
 
 

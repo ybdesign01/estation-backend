@@ -14,4 +14,7 @@ public interface ProduitRepository extends JpaRepository<Produit, Long> {
 
     @Query("select p from Produit p where p.id_service.station.id = ?1")
     List<Produit> findByStation(Long id);
+
+    @Query("select p from Produit p where p.id_service.station.id = ?1 and p.id_produit = ?2")
+    boolean existsByStationAndId(Long id_station, Long id_produit);
 }
