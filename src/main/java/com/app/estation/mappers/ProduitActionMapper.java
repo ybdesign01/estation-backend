@@ -14,7 +14,7 @@ public class ProduitActionMapper {
         dto.setId_action(entity.getId_action());
         dto.setAction(entity.getAction());
         dto.setDate_action(entity.getDate_action());
-        dto.setProduit(ProduitMapper.fromEntity(entity.getProduit()));
+        dto.setProduit(ProduitMapper.fromEntityWithoutSubclasses(entity.getProduit()));
         dto.setFournisseur(entity.getFournisseur());
         dto.setQuantite(entity.getQuantite());
         return dto;
@@ -33,6 +33,8 @@ public class ProduitActionMapper {
         entity.setDate_action(dto.getDate_action());
         return entity;
     }
+
+
 
 
     public static List<ProduitActionDto> fromEntityList(List<ProduitAction> actions) {
