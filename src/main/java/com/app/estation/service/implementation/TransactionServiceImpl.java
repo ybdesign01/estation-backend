@@ -71,6 +71,10 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
 
     public boolean addEncaissementPompeUser(EncaissementRequest encaissementRequest){
         PompeUser pompeUser = pompeUserRepository.findById(encaissementRequest.getIdPompeUser()).orElseThrow(()-> new ApiRequestException("pompe_user_not_found"));
+        Long count1 = transactionRepository.findTransactionsByIdPompeUsers(List.of(encaissementRequest.getIdPompeUser()));
+        if (count1 > 0){
+            throw new ApiRequestException("pompe_user_already_encaissed");
+        }
         Long compteur = releveService.getCompteurByIdPompeUser(encaissementRequest.getIdPompeUser());
         ProduitAction produitAction = new ProduitAction();
         Citerne citerne = pompeUserService.getCiterneByPompeUser(encaissementRequest.getIdPompeUser());
@@ -130,11 +134,7 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
             transactionRepository.save(transaction);
         }
         Long count = transactionRepository.findTransactionsByIdProduits(List.of(encaissementRequest.getIdProduit()));
-        if (count == encaissementRequest.getEncaissements().size()){
-            return true;
-        }else {
-           return false;
-        }
+        return true;
     }
 
     public boolean debitTransaction(DebitRequest debitRequest){
