@@ -2,7 +2,7 @@ package com.app.estation.dto;
 
 public class UserEmailRequest {
 
-    String email;
+    private String email;
 
     public UserEmailRequest() {
     }
@@ -18,5 +18,4 @@ public class UserEmailRequest {
     public void setEmail(final String email) {
         this.email = email;
     }
-
 }

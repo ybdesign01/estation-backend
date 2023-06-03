@@ -1,11 +1,11 @@
 package com.app.estation.service.implementation;
 
 import com.app.estation.advice.exceptions.ApiRequestException;
-import com.app.estation.advice.exceptions.ApiRequestOkException;
 import com.app.estation.advice.exceptions.EntityNotFoundException;
 import com.app.estation.dto.AffectationMontantDto;
 import com.app.estation.dto.PompeUserRequest;
 import com.app.estation.dto.User.PompeUserDto;
+import com.app.estation.dto.UserEmailRequest;
 import com.app.estation.entity.*;
 import com.app.estation.mappers.PompeUserMapper;
 import com.app.estation.repository.*;
@@ -164,9 +164,10 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
         return null;
     }
 
-    public List<AffectationMontantDto> getAffectationsMontant(final String email) {
-        User user = userRepository.getByEmail(email).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
+    public List<AffectationMontantDto> getAffectationsMontant(final UserEmailRequest request) {
+        User user = userRepository.getByEmail(request.getEmail()).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
         List<PompeUser> pompeUsers = pompeUserRepository.countPompesAssignedToUserToday(user.getId_user(), LocalDateTime.now());
+
         List<Long> ids = new ArrayList<>();
         if (pompeUsers.isEmpty()) {
             throw new EntityNotFoundException("no_pompes_assigned_to_user_today");
@@ -174,10 +175,10 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
         pompeUsers.forEach(pompeUser -> {
             ids.add(pompeUser.getIdPompeUser());
         });
-        List<Transaction> count = transactionRepository.findTransactionsByExcludedPompeUserIds(ids);
-        if (!count.isEmpty()) {
-            throw new ApiRequestOkException("transactions_already_submitted");
-        }
+        /*List<Transaction> count = transactionRepository.findTransactionsByExcludedPompeUserIds(ids);
+        if (§count.isEmpty()) {
+            return new ArrayList<>();
+        }*/
         List<AffectationMontantDto> affectationMontantDtos = new ArrayList<>();
         pompeUsers.forEach(pompeUser -> {
             AffectationMontantDto affectationMontantDto = new AffectationMontantDto();

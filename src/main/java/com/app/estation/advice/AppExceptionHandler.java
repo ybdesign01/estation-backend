@@ -29,6 +29,14 @@ public class AppExceptionHandler {
         return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
     }
 
+  /*  @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(Exception ex) {
+        System.out.println("Exception: " + ex.getMessage());
+        return new ResponseEntity<>(Map.of("msg","exceptionn"), HttpStatus.BAD_REQUEST);
+    }*/
+
+
     @ExceptionHandler(AccessDeniedException.class)
     public final ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex) {
         return new ResponseEntity<>((Map.of("msg","access_denied")), HttpStatus.FORBIDDEN);
