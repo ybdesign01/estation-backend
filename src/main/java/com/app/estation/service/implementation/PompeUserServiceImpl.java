@@ -6,15 +6,9 @@ import com.app.estation.advice.exceptions.EntityNotFoundException;
 import com.app.estation.dto.AffectationMontantDto;
 import com.app.estation.dto.PompeUserRequest;
 import com.app.estation.dto.User.PompeUserDto;
-import com.app.estation.entity.Pompe;
-import com.app.estation.entity.PompeUser;
-import com.app.estation.entity.Transaction;
-import com.app.estation.entity.User;
+import com.app.estation.entity.*;
 import com.app.estation.mappers.PompeUserMapper;
-import com.app.estation.repository.PompeRepository;
-import com.app.estation.repository.PompeUserRepository;
-import com.app.estation.repository.TransactionRepository;
-import com.app.estation.repository.UserRepository;
+import com.app.estation.repository.*;
 import com.app.estation.service.EServices;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +38,9 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
 
     @Autowired
     private TransactionRepository transactionRepository;
+
+    @Autowired
+    private CiternePompeRepository citernePompeRepository;
 
 
 
@@ -149,8 +146,26 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
         return PompeUserMapper.fromEntityList(pompeUsers);
     }
 
+    public Produit getProduitByPompeUser(final Long idPompeUser) {
+        PompeUser pompeUser = pompeUserRepository.findById(idPompeUser).orElseThrow(() -> new EntityNotFoundException("pompe_user_not_found"));
+        CiternePompe citernePompe = citernePompeRepository.findByIdPompe(pompeUser.getPompe().getId_pompe());
+        if (citernePompe != null) {
+            return citernePompe.getCiterne().getId_produit();
+        }
+        return null;
+    }
+
+    public Citerne getCiterneByPompeUser(final Long idPompeUser) {
+        PompeUser pompeUser = pompeUserRepository.findById(idPompeUser).orElseThrow(() -> new EntityNotFoundException("pompe_user_not_found"));
+        CiternePompe citernePompe = citernePompeRepository.findByIdPompe(pompeUser.getPompe().getId_pompe());
+        if (citernePompe != null) {
+            return citernePompe.getCiterne();
+        }
+        return null;
+    }
+
     public List<AffectationMontantDto> getAffectationsMontant(final String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
+        User user = userRepository.getByEmail(email).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
         List<PompeUser> pompeUsers = pompeUserRepository.countPompesAssignedToUserToday(user.getId_user(), LocalDateTime.now());
         List<Long> ids = new ArrayList<>();
         if (pompeUsers.isEmpty()) {

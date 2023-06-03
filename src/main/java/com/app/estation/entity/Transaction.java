@@ -26,7 +26,7 @@ public class Transaction {
     @JoinColumn(name = "idStation")
     private Station station;
 
-    public Transaction(Long idTransaction, TypeTransaction typeTransaction, TypePaiement typePaiement, Double montant, LocalDateTime dateTransaction, PompeUser idPompeUser, ProduitAction idProduitAction, Station station) {
+    public Transaction(final Long idTransaction, final TypeTransaction typeTransaction, final TypePaiement typePaiement, final Double montant, final LocalDateTime dateTransaction, final PompeUser idPompeUser, final ProduitAction idProduitAction, final Station station) {
         this.idTransaction = idTransaction;
         this.typeTransaction = typeTransaction;
         this.typePaiement = typePaiement;
@@ -39,6 +39,14 @@ public class Transaction {
 
 
     public Transaction() {
+    }
+
+    public String getNote() {
+        return this.note;
+    }
+
+    public void setNote(final String note) {
+        this.note = note;
     }
 
     public Long getIdTransaction() {

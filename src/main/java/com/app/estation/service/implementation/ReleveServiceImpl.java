@@ -106,6 +106,15 @@ public class ReleveServiceImpl implements EServices<ReleveDto,ReleveDto> {
         }
     }
 
+    public Long getCompteurByIdPompeUser(Long id){
+        PompeUser p = pompeUserRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("pompe_user_not_found"));
+        List<Releve> r = releveRepository.findAllByPompeUserIdPompeUserOrderByDateReleveAsc(id);
+        if (r.isEmpty() || r.size() < 2){
+            return 0L;
+        }
+        return abs(r.get(0).getCompteur() - r.get(1).getCompteur());
+    }
+
     public Double calculatePrice(Long idPompeUser){
         PompeUser p = pompeUserRepository.findById(idPompeUser).orElseThrow(() -> new EntityNotFoundException("pompe_user_not_found"));
         List<Releve> r = releveRepository.findAllByPompeUserIdPompeUserOrderByDateReleveAsc(idPompeUser);
@@ -116,7 +125,7 @@ public class ReleveServiceImpl implements EServices<ReleveDto,ReleveDto> {
         CiternePompe cp = citernePompeRepository.findByIdPompe(p.getPompe().getId_pompe());
         Double prix_vente = cp.getCiterne().getId_produit().getPrix_vente();
         price = abs(r.get(0).getCompteur() - r.get(1).getCompteur()) * prix_vente;
-        return price;
+        return Math.round(price * 100.0) / 100.0;
     }
 
 

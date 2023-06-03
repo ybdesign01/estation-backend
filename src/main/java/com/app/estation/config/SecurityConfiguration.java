@@ -32,6 +32,7 @@ public class SecurityConfiguration {
             "/api/pompe/**",
             "/api/releve/**",
             "/api/produit/**",
+            "/api/transaction/**",
     };
 //    private final LogoutHandler logoutHandler;
 

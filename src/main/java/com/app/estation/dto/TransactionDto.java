@@ -12,17 +12,19 @@ public class TransactionDto {
     private TypePaiement typePaiement;
     private Double montant;
     private LocalDateTime dateTransaction;
+    private String note;
     private PompeUserDto idPompeUser;
     private ProduitActionDto idProduitAction;
 
     private StationDto station;
 
-    public TransactionDto(Long idTransaction, TypeTransaction typeTransaction, TypePaiement typePaiement, Double montant, LocalDateTime dateTransaction, PompeUserDto idPompeUser, ProduitActionDto idProduitAction, StationDto station) {
+    public TransactionDto(final Long idTransaction, final TypeTransaction typeTransaction, final TypePaiement typePaiement, final Double montant, final LocalDateTime dateTransaction, final String note, final PompeUserDto idPompeUser, final ProduitActionDto idProduitAction, final StationDto station) {
         this.idTransaction = idTransaction;
         this.typeTransaction = typeTransaction;
         this.typePaiement = typePaiement;
         this.montant = montant;
         this.dateTransaction = dateTransaction;
+        this.note = note;
         this.idPompeUser = idPompeUser;
         this.idProduitAction = idProduitAction;
         this.station = station;
@@ -30,6 +32,14 @@ public class TransactionDto {
 
     public StationDto getStation() {
         return this.station;
+    }
+
+    public String getNote() {
+        return this.note;
+    }
+
+    public void setNote(final String note) {
+        this.note = note;
     }
 
     public void setStation(final StationDto station) {

@@ -15,6 +15,8 @@ public class TransactionMapper {
         transaction.setTypePaiement(transactionDto.getTypePaiement());
         transaction.setTypeTransaction(transactionDto.getTypeTransaction());
         transaction.setIdPompeUser(PompeUserMapper.toEntity(transactionDto.getIdPompeUser()));
+        transaction.setStation(StationMapper.toEntity(transactionDto.getStation()));
+        transaction.setNote(transactionDto.getNote());
         transaction.setIdProduitAction(ProduitActionMapper.toEntity(transactionDto.getIdProduitAction()));
         transaction.setIdTransaction(transactionDto.getIdTransaction());
         return transaction;
@@ -29,6 +31,7 @@ public class TransactionMapper {
         transactionDto.setTypeTransaction(transaction.getTypeTransaction());
         transactionDto.setIdPompeUser(PompeUserMapper.fromEntity(transaction.getIdPompeUser()));
         transactionDto.setStation(StationMapper.fromEntity(transaction.getStation()));
+        transactionDto.setNote(transaction.getNote());
         transactionDto.setIdProduitAction(ProduitActionMapper.fromEntity(transaction.getIdProduitAction()));
 
         return transactionDto;

@@ -5,6 +5,7 @@ import com.app.estation.dto.PompeUserRequest;
 import com.app.estation.dto.StationUserRequest;
 import com.app.estation.dto.User.StationUserDto;
 import com.app.estation.dto.User.UserPassDto;
+import com.app.estation.dto.UserEmailRequest;
 import com.app.estation.service.implementation.PompeUserServiceImpl;
 import com.app.estation.service.implementation.StationUserServiceImpl;
 import com.app.estation.service.implementation.UserServiceImpl;
@@ -80,7 +81,7 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = "/getStation/{id}", produces = "application/json")
+    @GetMapping(value = "/getCurrentStation/{id}", produces = "application/json")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getStation(@PathVariable final Long id){
         return ResponseEntity.ok().body(stationUserService.getCurrentStation(id));
@@ -128,9 +129,11 @@ public class UserController {
 
     @GetMapping(value = "/getAffectationsMontant", produces = "application/json")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
-    public ResponseEntity<?> getAffectationsMontant(@RequestBody final String email){
-        return ResponseEntity.ok().body(pompeUserService.getAffectationsMontant(email));
+    public ResponseEntity<?> getAffectationsMontant(@RequestBody final UserEmailRequest request){
+        return ResponseEntity.ok().body(pompeUserService.getAffectationsMontant(request.getEmail()));
     }
+
+
 
 
 

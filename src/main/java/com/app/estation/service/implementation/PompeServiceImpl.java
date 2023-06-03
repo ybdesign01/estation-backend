@@ -5,6 +5,7 @@ import com.app.estation.advice.exceptions.EntityNotFoundException;
 import com.app.estation.dto.PompeDto;
 import com.app.estation.entity.Pompe;
 import com.app.estation.mappers.PompeMapper;
+import com.app.estation.repository.CiternePompeRepository;
 import com.app.estation.repository.PompeRepository;
 import com.app.estation.service.EServices;
 import jakarta.transaction.Transactional;
@@ -19,6 +20,9 @@ public class PompeServiceImpl implements EServices<PompeDto, PompeDto> {
 
     @Autowired
     private PompeRepository pompeRepository;
+
+    @Autowired
+    private CiternePompeRepository citernePompeRepository;
 
 
     @Override
@@ -57,4 +61,5 @@ public class PompeServiceImpl implements EServices<PompeDto, PompeDto> {
     public PompeDto get(Long id) {
         return PompeMapper.fromEntity(pompeRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("pompe_not_found")));
     }
+
 }
