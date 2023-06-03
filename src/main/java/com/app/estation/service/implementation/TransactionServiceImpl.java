@@ -1,10 +1,12 @@
 package com.app.estation.service.implementation;
 
 import com.app.estation.advice.exceptions.ApiRequestException;
+import com.app.estation.advice.exceptions.EntityNotFoundException;
 import com.app.estation.dto.*;
 import com.app.estation.entity.*;
 import com.app.estation.mappers.CiterneMapper;
 import com.app.estation.mappers.StationMapper;
+import com.app.estation.mappers.TransactionMapper;
 import com.app.estation.repository.PompeUserRepository;
 import com.app.estation.repository.ProduitActionRepository;
 import com.app.estation.repository.ProduitRepository;
@@ -66,7 +68,11 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
 
     @Override
     public List<TransactionDto> getAll() {
-        return null;
+        List<Transaction> transactions = transactionRepository.findAll();
+        if (transactions.isEmpty()){
+            throw new EntityNotFoundException("no_transactions_found");
+        }
+        return TransactionMapper.fromEntityList(transactions);
     }
 
     public boolean addEncaissementPompeUser(EncaissementRequest encaissementRequest){
