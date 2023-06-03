@@ -172,9 +172,9 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
         if (pompeUsers.isEmpty()) {
             throw new EntityNotFoundException("no_pompes_assigned_to_user_today");
         }
-        pompeUsers.forEach(pompeUser -> {
+        /*pompeUsers.forEach(pompeUser -> {
             ids.add(pompeUser.getIdPompeUser());
-        });
+        });*/
         /*List<Transaction> count = transactionRepository.findTransactionsByExcludedPompeUserIds(ids);
         if (§count.isEmpty()) {
             return new ArrayList<>();
