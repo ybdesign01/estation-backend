@@ -42,10 +42,11 @@ public class StationServiceImpl implements EServices<StationDto, StationDto> {
     private ProduitRepository produitRepository;
 
     @Autowired
-    private TransactionRepository transactionRepository;
+    private TransactionGroupRepository transactionGroupRepository;
 
     @Autowired
     private CiterneRepository citerneRepository;
+
 
 
     @Override
@@ -123,7 +124,7 @@ public class StationServiceImpl implements EServices<StationDto, StationDto> {
     }
     StationInformationDto stationInformationDto = new StationInformationDto();
     stationInformationDto.setCarburant(carburants);
-    Double chiffre = transactionRepository.calculateTotalMontantByTypeAndDate(LocalDate.now(),station.getId());
+    Double chiffre = transactionGroupRepository.calculateTotalMontantByTypeAndDate(LocalDate.now(),station.getId());
     if (chiffre == null){
         chiffre = 0.0;
     }

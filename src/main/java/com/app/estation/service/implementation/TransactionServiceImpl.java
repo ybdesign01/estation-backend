@@ -6,17 +6,18 @@ import com.app.estation.dto.*;
 import com.app.estation.entity.*;
 import com.app.estation.mappers.CiterneMapper;
 import com.app.estation.mappers.StationMapper;
+import com.app.estation.mappers.TransactionGroupMapper;
 import com.app.estation.mappers.TransactionMapper;
-import com.app.estation.repository.PompeUserRepository;
-import com.app.estation.repository.ProduitActionRepository;
-import com.app.estation.repository.ProduitRepository;
-import com.app.estation.repository.TransactionRepository;
+import com.app.estation.repository.*;
 import com.app.estation.service.EServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static java.lang.Math.abs;
 
 @Service
 
@@ -35,6 +36,9 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
     private TransactionRepository transactionRepository;
 
     @Autowired
+    private TransactionGroupRepository transactionGroupRepository;
+
+    @Autowired
     private ReleveServiceImpl releveService;
 
     @Autowired
@@ -45,6 +49,9 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
 
     @Autowired
     private CiterneServiceImpl citerneService;
+
+    @Autowired
+    private TypePaiementRepository typePaiementRepository;
 
     @Override
     public TransactionDto add(TransactionDto request) {
@@ -75,47 +82,72 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
         return TransactionMapper.fromEntityList(transactions);
     }
 
+    public List<TransactionGroupDto> getAllGroups() {
+        List<TransactionGroup> transactions = transactionGroupRepository.findAll();
+        if (transactions.isEmpty()){
+            throw new EntityNotFoundException("no_transactions_found");
+        }
+        return TransactionGroupMapper.fromEntityList(transactions);
+    }
+
     public boolean addEncaissementPompeUser(EncaissementRequest encaissementRequest){
         PompeUser pompeUser = pompeUserRepository.findById(encaissementRequest.getIdPompeUser()).orElseThrow(()-> new ApiRequestException("pompe_user_not_found"));
-        Long count1 = transactionRepository.findTransactionsByIdPompeUsers(List.of(encaissementRequest.getIdPompeUser()));
+        System.out.println("id is " + pompeUser.getIdPompeUser());
+        Long count1 = transactionGroupRepository.findTransactionsByIdPompeUsers(List.of(encaissementRequest.getIdPompeUser()));
         if (count1 > 0){
             throw new ApiRequestException("pompe_user_already_encaissed");
         }
-        Long compteur = releveService.getCompteurByIdPompeUser(encaissementRequest.getIdPompeUser());
+        double compteur = releveService.getCompteurByIdPompeUser(encaissementRequest.getIdPompeUser()).doubleValue();
+
         ProduitAction produitAction = new ProduitAction();
         Citerne citerne = pompeUserService.getCiterneByPompeUser(encaissementRequest.getIdPompeUser());
-        citerne.setCapaciteActuelle(citerne.getCapaciteActuelle() - compteur);
+        citerne.setCapaciteActuelle(citerne.getCapaciteActuelle() - (compteur/1000));
         citerneService.update(CiterneMapper.fromEntity(citerne),citerne.getId_citerne());
         Produit p = pompeUserService.getProduitByPompeUser(encaissementRequest.getIdPompeUser());
         produitAction.setProduit(p);
         produitAction.setAction(TypeAction.ACTION_SORTIE);
         produitAction.setDate_action(LocalDateTime.now());
-        produitAction.setQuantite(compteur.toString() +" "+ p.getType().getUnite());
+        produitAction.setQuantite((compteur/1000) +" "+ p.getType().getUnite());
+        System.out.println((compteur/1000) +" "+ p.getType().getUnite());
         produitAction.setFournisseur(null);
         produitActionRepository.save(produitAction);
+
+        TransactionGroup transactionGroup = new TransactionGroup();
+        transactionGroup.setTypeTransaction(TypeTransaction.ENCAISSEMENT);
+        transactionGroup.setStation(p.getId_service().getStation());
+        transactionGroup.setNote(encaissementRequest.getNote());
+        transactionGroup.setDateTransaction(LocalDateTime.now());
+        transactionGroup.setIdPompeUser(pompeUser);
+        Double montantTotal = releveService.calculatePrice(pompeUser.getIdPompeUser());
+        transactionGroup.setMontantTotal(montantTotal);
+        AtomicReference<Double> montant = new AtomicReference<>(0.0);
+        encaissementRequest.getEncaissements().forEach(encaissementDto -> {
+            montant.updateAndGet(v -> v + encaissementDto.getMontant());
+        });
+        Double montantT = transactionGroupRepository.sumMontantPayeByUser(pompeUser.getUser().getId_user());
+        if (null == montantT){
+            montantT = 0.0;
+        }
+        transactionGroup.setMontantPaye(montant.get());
+        if (montant.get() > montantTotal){
+            montantT = montantT + abs(montantTotal - montant.get());
+            transactionGroup.setMontantRestant(montantT);
+        }else{
+            montantT = montantT + (montantTotal - montant.get());
+            transactionGroup.setMontantRestant(-montantT);
+        }
+        transactionGroup.setIdProduitAction(produitAction);
+        transactionGroupRepository.save(transactionGroup);
+
         for (EncaissementDto dto: encaissementRequest.getEncaissements()) {
             Transaction transaction = new Transaction();
-            if (!pompeUser.getUser().getStations().isEmpty()){
-                transaction.setStation(pompeUser.getUser().getStations().get(0).getStation());
-            }else {
-                transaction.setStation(null);
-            }
-            transaction.setNote(encaissementRequest.getNote());
-            transaction.setTypeTransaction(TypeTransaction.ENCAISSEMENT);
             transaction.setDateTransaction(LocalDateTime.now());
             transaction.setMontant(dto.getMontant());
-            transaction.setIdProduitAction(produitAction);
-            transaction.setTypePaiement(dto.getTypePaiement());
-            transaction.setIdPompeUser(pompeUser);
+            transaction.setTypePaiement(typePaiementRepository.findById(dto.getTypePaiement().getIdTypePaiement()).orElseThrow(()-> new EntityNotFoundException("type_paiement_not_found")));
+            transaction.setIdTransactionGroup(transactionGroup);
             transactionRepository.save(transaction);
         }
-        Long count = transactionRepository.findTransactionsByIdPompeUsers(List.of(encaissementRequest.getIdPompeUser()));
-        System.out.println("count is " + count);
-        if (count == encaissementRequest.getEncaissements().size()){
-            return true;
-        }else {
-            return false;
-        }
+        return transactionGroupRepository.existsById(transactionGroup.getIdTransactionGroup());
     }
 
     public boolean addEncaissementProduit(EncaissementProduitRequest encaissementRequest){
@@ -127,33 +159,55 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
         produitAction.setQuantite(encaissementRequest.getQuantite() +" "+ produit.getType().getUnite());
         produitAction.setFournisseur(null);
         produitActionRepository.save(produitAction);
+
+        TransactionGroup transactionGroup = new TransactionGroup();
+        transactionGroup.setTypeTransaction(TypeTransaction.ENCAISSEMENT);
+        transactionGroup.setStation(produit.getId_service().getStation());
+        transactionGroup.setNote(encaissementRequest.getNote());
+        transactionGroup.setDateTransaction(LocalDateTime.now());
+        transactionGroup.setIdProduitAction(produitAction);
+        transactionGroup.setMontantTotal(produit.getPrix_vente() * encaissementRequest.getQuantite());
+        AtomicReference<Double> montant = new AtomicReference<>(0.0);
+        encaissementRequest.getEncaissements().forEach(encaissementDto -> {
+            montant.updateAndGet(v -> v + encaissementDto.getMontant());
+        });
+        transactionGroup.setMontantPaye(montant.get());
+        transactionGroup.setMontantRestant(abs(transactionGroup.getMontantTotal() - montant.get()));
+        transactionGroup.setIdPompeUser(null);
+
+        transactionGroupRepository.save(transactionGroup);
         for (EncaissementDto dto: encaissementRequest.getEncaissements()) {
             Transaction transaction = new Transaction();
-            transaction.setStation(null);
-            transaction.setNote(encaissementRequest.getNote());
-            transaction.setTypeTransaction(TypeTransaction.ENCAISSEMENT);
             transaction.setDateTransaction(LocalDateTime.now());
             transaction.setMontant(dto.getMontant());
-            transaction.setIdProduitAction(produitAction);
-            transaction.setTypePaiement(dto.getTypePaiement());
-            transaction.setIdPompeUser(null);
+            transaction.setTypePaiement(typePaiementRepository.findById(dto.getTypePaiement().getIdTypePaiement()).orElseThrow(()-> new EntityNotFoundException("type_paiement_not_found")));
+            transaction.setIdTransactionGroup(transactionGroup);
             transactionRepository.save(transaction);
         }
-        Long count = transactionRepository.findTransactionsByIdProduits(List.of(encaissementRequest.getIdProduit()));
+
+        Long count = transactionGroupRepository.findTransactionsByIdProduits(List.of(encaissementRequest.getIdProduit()));
+        System.out.println("count is " + count);
         return true;
     }
 
     public boolean debitTransaction(DebitRequest debitRequest){
         Station station = StationMapper.toEntity(stationService.get(debitRequest.getStationId()));
+        TransactionGroup transactionGroup = new TransactionGroup();
+        transactionGroup.setTypeTransaction(TypeTransaction.DEBIT);
+        transactionGroup.setStation(station);
+        transactionGroup.setNote(debitRequest.getNote());
+        transactionGroup.setDateTransaction(LocalDateTime.now());
+        transactionGroup.setIdProduitAction(null);
+        transactionGroup.setMontantTotal(debitRequest.getMontant());
+        transactionGroup.setMontantPaye(0.0);
+        transactionGroup.setMontantRestant(0.0);
+        transactionGroup.setIdPompeUser(null);
+        transactionGroupRepository.save(transactionGroup);
         Transaction transaction = new Transaction();
-        transaction.setStation(station);
-        transaction.setNote(debitRequest.getNote());
-        transaction.setTypeTransaction(TypeTransaction.DEBIT);
+        transaction.setIdTransactionGroup(transactionGroup);
         transaction.setDateTransaction(LocalDateTime.now());
         transaction.setMontant(debitRequest.getMontant());
-        transaction.setIdProduitAction(null);
         transaction.setTypePaiement(null);
-        transaction.setIdPompeUser(null);
         transactionRepository.save(transaction);
         return transactionRepository.existsById(transaction.getIdTransaction());
     }

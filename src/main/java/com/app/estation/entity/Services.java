@@ -12,6 +12,7 @@ public class Services {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "nom_service")
     private String nomService;
     private String description;
 

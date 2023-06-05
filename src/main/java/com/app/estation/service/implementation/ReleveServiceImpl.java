@@ -112,7 +112,11 @@ public class ReleveServiceImpl implements EServices<ReleveDto,ReleveDto> {
         if (r.isEmpty() || r.size() < 2){
             return 0L;
         }
-        return abs(r.get(0).getCompteur() - r.get(1).getCompteur());
+        if (p.getPompe().getCompteurInitial() != 0){
+            return abs((r.get(1).getCompteur() - r.get(0).getCompteur()) - p.getPompe().getCompteurInitial());
+        }else{
+            return abs(r.get(1).getCompteur() - r.get(0).getCompteur());
+        }
     }
 
     public Double calculatePrice(Long idPompeUser){

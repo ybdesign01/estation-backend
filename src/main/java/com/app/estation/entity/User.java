@@ -43,6 +43,9 @@ public class User implements UserDetails {
 
 
     public List<StationUser> getStations() {
+        if (stations == null) {
+            return stations;
+        }
         stations.sort(Comparator.comparing(StationUser::getDate_debut).reversed());
         if (stations.size() > 1) {
             System.out.println(stations.get(0));
@@ -56,6 +59,9 @@ public class User implements UserDetails {
     }
 
     public List<PompeUser> getPompes() {
+        if (pompes == null) {
+            return pompes;
+        }
         pompes.sort(Comparator.comparing(PompeUser::getDateDebut).reversed());
         if (pompes.size() > 1) {
             final LocalDate today = LocalDate.now();

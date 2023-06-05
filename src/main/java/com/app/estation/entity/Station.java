@@ -35,7 +35,13 @@ public class Station {
         this.services = services;
     }
 
+    public List<Citerne> getCiternes() {
+        return this.citernes;
+    }
 
+    public void setCiternes(final List<Citerne> citernes) {
+        this.citernes = citernes;
+    }
 
     public Station() {
     }

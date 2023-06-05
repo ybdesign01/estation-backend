@@ -13,17 +13,27 @@ public class Pompe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_pompe;
     private String nom_pompe;
+    private Long compteurInitial;
     @OneToMany(mappedBy = "pompe")
     private List<PompeUser> users;
 
     @OneToMany(mappedBy = "pompe")
     private List<CiternePompe> citernes;
 
-    public Pompe(Long id_pompe, String nom_pompe, List<CiternePompe> citernes, List<PompeUser> users) {
-        this.users = users;
+    public Pompe(final Long id_pompe, final String nom_pompe, final Long compteurInitiale, final List<PompeUser> users, final List<CiternePompe> citernes) {
         this.id_pompe = id_pompe;
         this.nom_pompe = nom_pompe;
+        this.compteurInitial = compteurInitiale;
+        this.users = users;
         this.citernes = citernes;
+    }
+
+    public Long getCompteurInitial() {
+        return this.compteurInitial;
+    }
+
+    public void setCompteurInitial(final Long compteurInitiale) {
+        this.compteurInitial = compteurInitiale;
     }
 
     public Pompe() {

@@ -3,6 +3,7 @@ package com.app.estation.dto;
 import com.app.estation.dto.User.PompeUserDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -12,6 +13,11 @@ public class PompeDto {
     private Long id_pompe;
     @NotBlank(message = "nom_pompe_mandatory")
     private String nom_pompe;
+
+    @NotNull(message = "compteurInitial_mandatory")
+    private Long compteurInitial;
+
+
     private List<CiternePompeDto> citernes;
     private List<PompeUserDto> users;
 
@@ -19,11 +25,20 @@ public class PompeDto {
     public PompeDto() {
     }
 
-    public PompeDto(final Long id_pompe, final String nom_pompe, final List<CiternePompeDto> citernes, final List<PompeUserDto> users) {
+    public PompeDto(final Long id_pompe, final String nom_pompe, final Long compteurInitial, final List<CiternePompeDto> citernes, final List<PompeUserDto> users) {
         this.id_pompe = id_pompe;
         this.nom_pompe = nom_pompe;
+        this.compteurInitial = compteurInitial;
         this.citernes = citernes;
         this.users = users;
+    }
+
+    public Long getCompteurInitial() {
+        return this.compteurInitial;
+    }
+
+    public void setCompteurInitial(final Long compteurInitial) {
+        this.compteurInitial = compteurInitial;
     }
 
     public Long getId_pompe() {

@@ -27,8 +27,8 @@ public interface PompeUserRepository extends JpaRepository<PompeUser, Long> {
     int countPompesAssignedDuringTimeRange(Long pompeId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
 
-    @Query("SELECT pu FROM PompeUser pu WHERE pu.user.id_user = :userId AND (DATE(pu.dateDebut) = DATE(:dateTime) OR DATE(pu.dateFin) = DATE(:dateTime))")
-    List<PompeUser> countPompesAssignedToUserToday(@Param("userId") Long userId, @Param("dateTime") LocalDateTime dateTime);
+    @Query("SELECT pu FROM PompeUser pu WHERE pu.user.id_user = :userId AND pu.idPompeUser not in (select t.idPompeUser.idPompeUser from TransactionGroup t order by t.dateTransaction desc)")
+    List<PompeUser> countPompeUsers(@Param("userId") Long userId);
 
 
 

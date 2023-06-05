@@ -37,7 +37,7 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
     private ReleveServiceImpl releveService;
 
     @Autowired
-    private TransactionRepository transactionRepository;
+    private TransactionGroupRepository transactionGroupRepository;
 
     @Autowired
     private CiternePompeRepository citernePompeRepository;
@@ -165,29 +165,25 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
     }
 
     public List<AffectationMontantDto> getAffectationsMontant(final UserEmailRequest request) {
-        User user = userRepository.getByEmail(request.getEmail()).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
-        List<PompeUser> pompeUsers = pompeUserRepository.countPompesAssignedToUserToday(user.getId_user(), LocalDateTime.now());
-
-        List<Long> ids = new ArrayList<>();
+        final User user = userRepository.getByEmail(request.getEmail()).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
+        final List<PompeUser> pompeUsers = pompeUserRepository.countPompeUsers(user.getId_user());
         if (pompeUsers.isEmpty()) {
-            throw new EntityNotFoundException("no_pompes_assigned_to_user_today");
-        }
-        /*pompeUsers.forEach(pompeUser -> {
-            ids.add(pompeUser.getIdPompeUser());
-        });*/
-        /*List<Transaction> count = transactionRepository.findTransactionsByExcludedPompeUserIds(ids);
-        if (§count.isEmpty()) {
             return new ArrayList<>();
-        }*/
-        List<AffectationMontantDto> affectationMontantDtos = new ArrayList<>();
+        }
+        final List<Long> ids = new ArrayList<>();
         pompeUsers.forEach(pompeUser -> {
-            AffectationMontantDto affectationMontantDto = new AffectationMontantDto();
-            affectationMontantDto.setPompeUser(PompeUserMapper.fromEntity(pompeUser));
-            Double montant = releveService.calculatePrice(pompeUser.getIdPompeUser());
-            affectationMontantDto.setMontant(montant);
-            affectationMontantDtos.add(affectationMontantDto);
+            ids.add(pompeUser.getIdPompeUser());
         });
-        affectationMontantDtos.removeIf(affectationMontantDto -> affectationMontantDto.getMontant().equals(0.0));
+        final List<AffectationMontantDto> affectationMontantDtos = new ArrayList<>();
+        pompeUsers.forEach(pompeUser -> {
+            final Double montant = releveService.calculatePrice(pompeUser.getIdPompeUser());
+            if (0.0 != montant){
+                final AffectationMontantDto affectationMontantDto = new AffectationMontantDto();
+                affectationMontantDto.setPompeUser(PompeUserMapper.fromEntity(pompeUser));
+                affectationMontantDto.setMontant(montant);
+                affectationMontantDtos.add(affectationMontantDto);
+            }
+        });
         return affectationMontantDtos;
     }
 }

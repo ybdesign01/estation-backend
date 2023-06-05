@@ -1,23 +1,15 @@
-package com.app.estation.entity;
+package com.app.estation.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+public class TypePaiementDto {
 
-@Entity
-public class TypePaiement {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTypePaiement;
 
     private String libelle;
 
-    public TypePaiement() {
+    public TypePaiementDto() {
     }
 
-    public TypePaiement(final Long idTypePaiement, final String libelle) {
+    public TypePaiementDto(final Long idTypePaiement, final String libelle) {
         this.idTypePaiement = idTypePaiement;
         this.libelle = libelle;
     }
@@ -37,4 +29,6 @@ public class TypePaiement {
     public void setLibelle(final String libelle) {
         this.libelle = libelle;
     }
+
+
 }

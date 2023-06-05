@@ -21,7 +21,7 @@ public class TransactionController {
 
     @GetMapping
     public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(transactionService.getAll());
+        return ResponseEntity.ok(transactionService.getAllGroups());
     }
 
     @PostMapping(value = "/encaissementPompeUser", consumes = "application/json", produces = "application/json")
