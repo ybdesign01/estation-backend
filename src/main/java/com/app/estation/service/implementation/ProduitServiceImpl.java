@@ -96,6 +96,7 @@ public class ProduitServiceImpl implements EServices<ProduitDto, ProduitDto> {
 
     public List<ProduitDto> getByStation(Long id) {
         List<Produit> list = produitRepository.findByStation(id);
+        System.out.println(list);
         if (list.isEmpty()){
             throw new EntityNotFoundException("no_produit_found");
         }

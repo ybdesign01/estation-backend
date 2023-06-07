@@ -14,7 +14,7 @@ public class ProduitMapper {
         ProduitDto dto = new ProduitDto();
         dto.setId_produit(entity.getId_produit());
         dto.setNom_produit(entity.getNom_produit());
-        dto.setActions(ProduitActionMapper.fromEntityList(entity.getActions()));
+        dto.setActions(ProduitActionMapper.fromEntityListWithoutSubclasses(entity.getActions()));
         dto.setType(TypeProduitMapper.fromEntity(entity.getType()));
         dto.setService(ServicesMapper.fromEntityWithoutStations(entity.getId_service()));
         dto.setPrix_achat(entity.getPrix_achat());

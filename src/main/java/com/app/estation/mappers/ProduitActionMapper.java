@@ -19,6 +19,19 @@ public class ProduitActionMapper {
         dto.setQuantite(entity.getQuantite());
         return dto;
     }
+    public static ProduitActionDto fromEntityWithoutSubclasses(ProduitAction entity){
+        if (null == entity){
+            return null;
+        }
+        ProduitActionDto dto = new ProduitActionDto();
+        dto.setId_action(entity.getId_action());
+        dto.setAction(entity.getAction());
+        dto.setDate_action(entity.getDate_action());
+        dto.setFournisseur(entity.getFournisseur());
+        dto.setQuantite(entity.getQuantite());
+        return dto;
+    }
+
 
     public static ProduitAction toEntity(ProduitActionDto dto){
         if (null == dto){
@@ -34,6 +47,12 @@ public class ProduitActionMapper {
         return entity;
     }
 
+    public static List<ProduitActionDto> fromEntityListWithoutSubclasses(List<ProduitAction> actions) {
+        if (actions == null){
+            return null;
+        }
+        return actions.stream().map(ProduitActionMapper::fromEntityWithoutSubclasses).collect(java.util.stream.Collectors.toList());
+    }
 
 
 
