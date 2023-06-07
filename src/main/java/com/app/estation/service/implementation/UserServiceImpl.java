@@ -12,26 +12,21 @@ import com.app.estation.repository.ProfileRepository;
 import com.app.estation.repository.UserRepository;
 import com.app.estation.service.EServices;
 import com.app.estation.util.PassEncode;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Transactional
 @Service
 public class UserServiceImpl implements EServices<UserDto,UserPassDto> {
 
     @Autowired
     PassEncode passEncode;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private ProfileRepository profileRepository;
-
     @Autowired
     private JwtService jwtService;
 

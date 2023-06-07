@@ -1,5 +1,4 @@
 package com.app.estation.util;
-
 import java.text.DecimalFormat;
 
 public class PriceCalculator {

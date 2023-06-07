@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -33,31 +32,12 @@ public class UserController {
     @Autowired
     private PompeUserServiceImpl pompeUserService;
 
-
     @GetMapping
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public ResponseEntity<?> getAll(){
             return ResponseEntity.ok().body(userService.getAll());
     }
 
-    @GetMapping(value = "/getAllByStation/{id}", produces = "application/json")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
-    public ResponseEntity<?> getAllByStation(@PathVariable Long id){
-            return ResponseEntity.ok().body(stationUserService.getAllByStation(id));
-    }
-
-
-    @GetMapping(value = "/{id}", produces = "application/json")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<?> getById(@PathVariable Long id){
-            return ResponseEntity.ok().body(userService.get(id));
-    }
-
-    @GetMapping(value = "/getUser", produces = "application/json")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<?> getByToken(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
-            return ResponseEntity.ok().body(userService.getUserByToken(token));
-    }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
@@ -79,6 +59,25 @@ public class UserController {
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("msg","user_not_deleted"));
         }
+    }
+
+    @GetMapping(value = "/getAllByStation/{id}", produces = "application/json")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
+    public ResponseEntity<?> getAllByStation(@PathVariable Long id){
+        return ResponseEntity.ok().body(stationUserService.getAllByStation(id));
+    }
+
+
+    @GetMapping(value = "/{id}", produces = "application/json")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> getById(@PathVariable Long id){
+        return ResponseEntity.ok().body(userService.get(id));
+    }
+
+    @GetMapping(value = "/getUser", produces = "application/json")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getByToken(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
+        return ResponseEntity.ok().body(userService.getUserByToken(token));
     }
 
     @GetMapping(value = "/getCurrentStation/{id}", produces = "application/json")

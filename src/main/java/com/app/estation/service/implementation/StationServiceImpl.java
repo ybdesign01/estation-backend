@@ -69,15 +69,17 @@ public class StationServiceImpl implements EServices<StationDto, StationDto> {
             Station station1 = StationMapper.toEntity(station);
             Set<Services> servicesSet = new HashSet<>();
             Set<Services> servs = station1.getServices();
-            if (servs != null){
-                for (Services serv : servs) {
-                    Services s = serviceRepository.findById(serv.getId()).orElseThrow(() -> new EntityNotFoundException("service_not_found"));
-                    s.setStation(station1);
-                    servicesSet.add(s);
-                }
-                station1.setServices(servicesSet);
-            }
             stationRepository.save(station1);
+            if (servs != null){
+            for (Services serv : servs) {
+                serv.setId(null);
+                serv.setStation(station1);
+                Services s = serviceRepository.save(serv);
+                s.setStation(station1);
+                servicesSet.add(s);
+            }
+            station1.setServices(servicesSet);
+        }
             return StationMapper.fromEntity(stationRepository.findById(station1.getId()).orElseThrow(() -> new EntityNotFoundException("station_not_found")));
     }
 

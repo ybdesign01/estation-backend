@@ -1,9 +1,7 @@
 package com.app.estation.mappers;
 
 import com.app.estation.dto.User.StationUserDto;
-import com.app.estation.dto.User.StationUserKeyDto;
 import com.app.estation.entity.StationUser;
-import com.app.estation.entity.keys.StationUserKey;
 
 import java.util.List;
 
@@ -25,21 +23,6 @@ public class StationUserMapper {
         return dto;
     }
 
-    public static StationUserKeyDto fromEntityKey(StationUserKey entity) {
-        if (entity == null) {
-            return null;
-        }
-        StationUserKeyDto dto = new StationUserKeyDto(entity.getId_user(), entity.getId_station());
-        return dto;
-    }
-
-    public static StationUserKey toEntityKey(StationUserKeyDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        StationUserKey entity = new StationUserKey(dto.getId_user(), dto.getId_station());
-        return entity;
-    }
 
     public static StationUser toEntity(StationUserDto dto) {
         if (dto == null) {

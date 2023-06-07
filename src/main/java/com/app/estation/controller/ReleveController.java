@@ -53,5 +53,11 @@ public class ReleveController {
 
     }
 
+    @GetMapping(value = "/getByUser/{id}", produces = "application/json")
+    public ResponseEntity<?> getReleveByUser(@PathVariable Long id){
+            return ResponseEntity.ok().body(Map.of("msg","releve", "releve", releveService.getByUser(id)));
+
+    }
+
 
 }

@@ -213,5 +213,9 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
     }
 
 
-
+    public List<TransactionGroupDto> getTransactionsByStation(Long id) {
+        StationDto station = stationService.get(id);
+        List<TransactionGroup> transactionGroups = transactionGroupRepository.findTransactionGroupsByStation(id);
+        return TransactionGroupMapper.fromEntityList(transactionGroups);
+    }
 }

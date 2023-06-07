@@ -55,4 +55,9 @@ public class PompeController {
            return ResponseEntity.badRequest().body(Map.of("msg","pompe_not_deleted"));
     }
 
+    @GetMapping(value = "/getPompesByStation/{id}", produces = "application/json")
+    public ResponseEntity<?> getPompesByStation(@PathVariable Long id){
+        return ResponseEntity.ok().body(pompeService.getPompesByStation(id));
+    }
+
 }

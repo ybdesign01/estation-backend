@@ -30,4 +30,7 @@ public interface TransactionGroupRepository extends JpaRepository<TransactionGro
 
     @Query("select count (t) from TransactionGroup t where t.idProduitAction.produit.id_produit IN :idProduit")
     Long findTransactionsByIdProduits(List<Long> idProduit);
+
+    @Query("select count (t) from TransactionGroup t where t.station.id = ?1")
+    List<TransactionGroup> findTransactionGroupsByStation(Long id);
 }

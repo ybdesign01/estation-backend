@@ -20,4 +20,7 @@ public interface CiterneRepository extends JpaRepository<Citerne, Long> {
     List<Citerne> findAllWithLatestPompesByStation(@Param("station") Station station);
 
     List<Citerne> findAllByStation(Station station);
+
+
+
 }

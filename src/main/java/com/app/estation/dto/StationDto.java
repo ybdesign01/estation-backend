@@ -17,6 +17,7 @@ public class StationDto {
     @NotBlank(message = "adresse_manatory")
     private String adresse;
 
+    @NotBlank(message = "services_mandatory")
     private Set<ServicesDto> services;
     private List<StationUserDto> users;
 

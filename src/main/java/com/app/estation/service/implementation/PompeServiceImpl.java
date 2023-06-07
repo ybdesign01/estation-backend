@@ -4,9 +4,11 @@ import com.app.estation.advice.exceptions.ApiRequestException;
 import com.app.estation.advice.exceptions.EntityNotFoundException;
 import com.app.estation.dto.PompeDto;
 import com.app.estation.entity.Pompe;
+import com.app.estation.entity.Station;
 import com.app.estation.mappers.PompeMapper;
 import com.app.estation.repository.CiternePompeRepository;
 import com.app.estation.repository.PompeRepository;
+import com.app.estation.repository.StationRepository;
 import com.app.estation.service.EServices;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class PompeServiceImpl implements EServices<PompeDto, PompeDto> {
 
     @Autowired
     private CiternePompeRepository citernePompeRepository;
+
+    @Autowired
+    StationRepository stationRepository;
 
 
     @Override
@@ -62,4 +67,8 @@ public class PompeServiceImpl implements EServices<PompeDto, PompeDto> {
         return PompeMapper.fromEntity(pompeRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("pompe_not_found")));
     }
 
+    public List<PompeDto> getPompesByStation(Long id) {
+        Station station = stationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("station_not_found"));
+        return PompeMapper.fromEntityList(pompeRepository.findAllPompesByStation(station).orElseThrow(() -> new EntityNotFoundException("no_pompe_found")));
+    }
 }
