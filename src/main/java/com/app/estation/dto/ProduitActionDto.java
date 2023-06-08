@@ -2,6 +2,7 @@ package com.app.estation.dto;
 
 import com.app.estation.entity.TypeAction;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -9,10 +10,14 @@ import java.util.Objects;
 public class ProduitActionDto {
 
     private Long id_action;
+    @NotNull(message = "produit_mandatory")
     private ProduitDto produit;
     private LocalDateTime date_action;
+    @NotNull(message = "quantite_mandatory")
     private String quantite;
+    @NotNull(message = "action_mandatory")
     private TypeAction action;
+
     private String fournisseur;
 
 

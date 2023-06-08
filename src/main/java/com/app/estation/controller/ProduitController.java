@@ -1,5 +1,6 @@
 package com.app.estation.controller;
 
+import com.app.estation.dto.ProduitActionDto;
 import com.app.estation.dto.ProduitDto;
 import com.app.estation.dto.TypeProduitDto;
 import com.app.estation.service.implementation.ProduitServiceImpl;
@@ -58,6 +59,20 @@ public class ProduitController {
             return ResponseEntity.ok().body(Map.of("msg", "produit_deleted"));
         }else {
             return ResponseEntity.badRequest().body(Map.of("msg", "produit_not_deleted"));
+        }
+    }
+
+    @GetMapping(value = "/getActions/{id}", produces = "application/json")
+    public ResponseEntity<?> getActions(@PathVariable final Long id){
+        return ResponseEntity.ok().body(produitService.getActions(id));
+    }
+
+    @PostMapping(value = "/addAction", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<?> addAction(@Validated @RequestBody final ProduitActionDto produitDto){
+        if (produitService.addAction(produitDto)){
+            return ResponseEntity.ok().body(Map.of( "msg", "action_added"));
+        }else {
+            return ResponseEntity.badRequest().body(Map.of( "msg", "action_not_added"));
         }
     }
 

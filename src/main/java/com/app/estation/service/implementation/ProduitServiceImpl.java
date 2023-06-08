@@ -2,14 +2,14 @@ package com.app.estation.service.implementation;
 
 import com.app.estation.advice.exceptions.ApiRequestException;
 import com.app.estation.advice.exceptions.EntityNotFoundException;
+import com.app.estation.dto.ProduitActionDto;
 import com.app.estation.dto.ProduitDto;
 import com.app.estation.entity.HistoriquePrix;
 import com.app.estation.entity.Produit;
+import com.app.estation.entity.ProduitAction;
+import com.app.estation.mappers.ProduitActionMapper;
 import com.app.estation.mappers.ProduitMapper;
-import com.app.estation.repository.HistoriquePrixRepository;
-import com.app.estation.repository.ProduitRepository;
-import com.app.estation.repository.ServiceRepository;
-import com.app.estation.repository.TypeProduitRepository;
+import com.app.estation.repository.*;
 import com.app.estation.service.EServices;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,9 @@ public class ProduitServiceImpl implements EServices<ProduitDto, ProduitDto> {
 
     @Autowired
     private ServiceRepository serviceRepository;
+
+    @Autowired
+    private ProduitActionRepository produitActionRepository;
 
 
     @Override
@@ -101,5 +104,20 @@ public class ProduitServiceImpl implements EServices<ProduitDto, ProduitDto> {
             throw new EntityNotFoundException("no_produit_found");
         }
         return ProduitMapper.fromEntityList(list);
+    }
+
+    public List<ProduitActionDto> getActions(Long id) {
+        return ProduitActionMapper.fromEntityListWithoutSubclasses(produitActionRepository.getByProduitId(id));
+    }
+
+    public Boolean addAction(ProduitActionDto produitDto) {
+        Produit produit = produitRepository.findById(produitDto.getProduit().getId_produit()).orElseThrow(()-> new EntityNotFoundException("produit_not_found"));
+        ProduitAction produitAction = ProduitActionMapper.toEntity(produitDto);
+        produitAction.setId_action(null);
+        produitAction.setProduit(produit);
+        produitAction.setDate_action(LocalDateTime.now());
+        produitActionRepository.save(produitAction);
+
+        return produitActionRepository.existsById(produitAction.getId_action());
     }
 }

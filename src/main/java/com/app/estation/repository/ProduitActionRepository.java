@@ -11,4 +11,6 @@ public interface ProduitActionRepository extends JpaRepository<ProduitAction, Lo
     @Query("select p from ProduitAction p where p.produit.id_service.station.id = ?1 order by p.date_action desc limit 6")
     public List<ProduitAction> findAllOrderByDate(Long id);
 
+    @Query("select p from ProduitAction p where p.produit.id_produit = ?1 order by p.date_action desc")
+    List<ProduitAction> getByProduitId(Long id);
 }
