@@ -193,7 +193,13 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
             montant.updateAndGet(v -> v + encaissementDto.getMontant());
         });
         transactionGroup.setMontantPaye(montant.get());
-        transactionGroup.setMontantRestant(abs(transactionGroup.getMontantTotal() - montant.get()));
+        transactionGroup.setMontantPaye(montant.get());
+        if (montant.get() > produit.getPrix_vente() * encaissementRequest.getQuantite()){
+            transactionGroup.setMontantRestant(montant.get() - produit.getPrix_vente() * encaissementRequest.getQuantite());
+        }else{
+
+            transactionGroup.setMontantRestant(-(montant.get() - produit.getPrix_vente() * encaissementRequest.getQuantite()));
+        }
         transactionGroup.setIdPompeUser(null);
 
         transactionGroupRepository.save(transactionGroup);
