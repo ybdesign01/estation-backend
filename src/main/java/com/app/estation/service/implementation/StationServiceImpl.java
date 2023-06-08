@@ -223,10 +223,12 @@ public class StationServiceImpl implements EServices<StationDto, StationDto> {
             ActionDateDto actionDateDto = new ActionDateDto();
             actionDateDto.setMontant(transactionGroup.getMontantPaye());
             actionDateDto.setDate(transactionGroup.getDateTransaction());
-            if (TypeAction.ACTION_SORTIE == transactionGroup.getIdProduitAction().getAction()){
-                sorties.add(actionDateDto);
-            }else {
-                entrees.add(actionDateDto);
+            if (transactionGroup.getIdProduitAction() != null){
+                if (TypeAction.ACTION_SORTIE == transactionGroup.getIdProduitAction().getAction()){
+                    sorties.add(actionDateDto);
+                }else {
+                    entrees.add(actionDateDto);
+                }
             }
         });
 
