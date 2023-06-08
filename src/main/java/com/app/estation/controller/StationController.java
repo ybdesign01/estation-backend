@@ -78,6 +78,11 @@ public class StationController {
         return ResponseEntity.ok().body(stationService.getDashboardInfo(id, request));
     }
 
+    @PostMapping(value = "/getCarburantsChart/{id}", produces = "application/json",consumes = "application/json")
+    public ResponseEntity<?> getStationCarburantsChart(@PathVariable Long id, @RequestBody DashboardRequest request){
+        return ResponseEntity.ok().body(stationService.getCarburantChart(id, request));
+    }
+
 
 
 

@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Transactional
 @Service
@@ -238,6 +235,31 @@ public class StationServiceImpl implements EServices<StationDto, StationDto> {
         dashboardInfoDto.setEntree(PriceCalculator.calculateTotal(entrees));
         dashboardInfoDto.setSortie(PriceCalculator.calculateTotal(sorties));
         return dashboardInfoDto;
+    }
+
+
+
+    public List<CarburantChartDto> getCarburantChart(Long id, DashboardRequest dashboardRequestDto){
+        Station station = stationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("station_not_found"));
+        Services services = serviceRepository.findByNom("CARBURANTS",station.getId()).orElseThrow(() -> new EntityNotFoundException("service_not_found"));
+        List<Produit> produits = produitRepository.findAllByStationAndType(services.getId()).orElseThrow(() -> new EntityNotFoundException("no_carburants_found"));
+        List<CarburantChartDto> carburants = new ArrayList<>();
+        for (Produit produit : produits) {
+            CarburantChartDto carburantDto = new CarburantChartDto();
+            List<HistoriquePrix> historiquePrix = historiquePrixRepository.findAllByIdProduitAndDateDebut(produit, dashboardRequestDto.getDateDebut(),dashboardRequestDto.getDateFin());
+            carburantDto.setNomCarburant(produit.getNom_produit());
+            Map<LocalDateTime, Double> prices = new HashMap<>();
+            if (!historiquePrix.isEmpty()) {
+                historiquePrix.forEach(historiquePrix1 -> {
+                    if (null != historiquePrix1.getPrixVente()) {
+                        prices.put(historiquePrix1.getDateDebut(), historiquePrix1.getPrixVente());
+                    }
+                });
+            }
+            carburantDto.setPrixCarburant(prices);
+            carburants.add(carburantDto);
+        }
+        return carburants;
     }
 
 
