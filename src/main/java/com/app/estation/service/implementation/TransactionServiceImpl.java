@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.lang.Math.abs;
@@ -88,6 +89,16 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
             throw new EntityNotFoundException("no_transactions_found");
         }
         return TransactionGroupMapper.fromEntityList(transactions);
+    }
+
+    public Map<String, List<TransactionGroupDto>> getAllTransactions(){
+        final List<TransactionGroup> encaissements = transactionGroupRepository.findTransactionGroupsByTypeTransaction(TypeTransaction.ENCAISSEMENT);
+        final List<TransactionGroup> debits = transactionGroupRepository.findTransactionGroupsByTypeTransaction(TypeTransaction.DEBIT);
+        final Map<String, List<TransactionGroupDto>> map = Map.of("encaissements", TransactionGroupMapper.fromEntityList(encaissements), "debits", TransactionGroupMapper.fromEntityList(debits));
+        if (encaissements.isEmpty() && debits.isEmpty()){
+            throw new EntityNotFoundException("no_transactions_found");
+        }
+        return map;
     }
 
     public boolean addEncaissementPompeUser(EncaissementRequest encaissementRequest){
@@ -225,11 +236,11 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
         return TransactionGroupMapper.fromEntityList(transactionGroups);
     }
 
-    public List<TransactionGroupDto> getEncaissements(Long id) {
-        return TransactionGroupMapper.fromEntityList(transactionGroupRepository.findTransactionGroupsByStationAndTypeTransaction( TypeTransaction.ENCAISSEMENT));
+    public List<TransactionGroupDto> getEncaissements() {
+        return TransactionGroupMapper.fromEntityList(transactionGroupRepository.findTransactionGroupsByTypeTransaction( TypeTransaction.ENCAISSEMENT));
     }
 
-    public List<TransactionGroupDto> getDebits(Long id) {
-        return TransactionGroupMapper.fromEntityList(transactionGroupRepository.findTransactionGroupsByStationAndTypeTransaction(TypeTransaction.DEBIT));
+    public List<TransactionGroupDto> getDebits() {
+        return TransactionGroupMapper.fromEntityList(transactionGroupRepository.findTransactionGroupsByTypeTransaction(TypeTransaction.DEBIT));
     }
 }

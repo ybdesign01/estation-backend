@@ -21,7 +21,7 @@ public class TransactionController {
 
     @GetMapping
     public ResponseEntity<?> getAll() {
-        return ResponseEntity.ok(transactionService.getAllGroups());
+        return ResponseEntity.ok(transactionService.getAllTransactions());
     }
 
     @PostMapping(value = "/encaissementPompeUser", consumes = "application/json", produces = "application/json")
@@ -56,14 +56,6 @@ public class TransactionController {
         return ResponseEntity.ok().body(transactionService.getTransactionsByStation(id));
     }
 
-    @GetMapping(value = "/getEncaissements/{id}", produces = "application/json")
-    public ResponseEntity<?> getEncaissements(@PathVariable Long id){
-        return ResponseEntity.ok().body(transactionService.getEncaissements(id));
-    }
 
-    @GetMapping(value = "/getDebits/{id}", produces = "application/json")
-    public ResponseEntity<?> getDebits(@PathVariable Long id){
-        return ResponseEntity.ok().body(transactionService.getDebits(id));
-    }
 
 }
