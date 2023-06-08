@@ -151,10 +151,10 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
         }
         transactionGroup.setMontantPaye(montant.get());
         if (montant.get() > montantTotal){
-            montantT = montantT + abs(montantTotal - montant.get());
+            montantT = Math.round((montantT + abs(montantTotal - montant.get())) * 100.0) / 100.0;
             transactionGroup.setMontantRestant(montantT);
         }else{
-            montantT = montantT + (montantTotal - montant.get());
+            montantT = Math.round((montantT + montantTotal - montant.get()) * 100.0) / 100.0;
             transactionGroup.setMontantRestant(-montantT);
         }
         transactionGroup.setIdProduitAction(produitAction);
@@ -195,10 +195,9 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
         transactionGroup.setMontantPaye(montant.get());
         transactionGroup.setMontantPaye(montant.get());
         if (montant.get() > produit.getPrix_vente() * encaissementRequest.getQuantite()){
-            transactionGroup.setMontantRestant(montant.get() - produit.getPrix_vente() * encaissementRequest.getQuantite());
+            transactionGroup.setMontantRestant(Math.round(montant.get() - produit.getPrix_vente() * encaissementRequest.getQuantite() * 100.0) / 100.0);
         }else{
-
-            transactionGroup.setMontantRestant(-(montant.get() - produit.getPrix_vente() * encaissementRequest.getQuantite()));
+            transactionGroup.setMontantRestant(-Math.round(montant.get() - produit.getPrix_vente() * encaissementRequest.getQuantite() * 100.0) / 100.0);
         }
         transactionGroup.setIdPompeUser(null);
 
@@ -219,6 +218,12 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
 
     public boolean debitTransaction(DebitRequest debitRequest){
         Station station = StationMapper.toEntity(stationService.get(debitRequest.getStationId()));
+        Double sum = transactionGroupRepository.amountByStation(station);
+        if (null == sum){
+            sum = 0.0;
+        } else if (sum < debitRequest.getMontant()) {
+            throw new ApiRequestException("montant_debit_superieur");
+        }
         TransactionGroup transactionGroup = new TransactionGroup();
         transactionGroup.setTypeTransaction(TypeTransaction.DEBIT);
         transactionGroup.setStation(station);

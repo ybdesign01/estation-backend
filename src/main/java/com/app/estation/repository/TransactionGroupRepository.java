@@ -38,4 +38,8 @@ public interface TransactionGroupRepository extends JpaRepository<TransactionGro
 
     @Query("select t from TransactionGroup t where t.dateTransaction between ?1 and ?2 and t.station = ?3")
     List<TransactionGroup> findAllByTypeActionAndStation(LocalDateTime dateDebut, LocalDateTime dateFin, Station station);
+
+    @Query("SELECT SUM(CASE WHEN t.typeTransaction = 'ENCAISSEMENT' THEN t.montantPaye ELSE -t.montantTotal END) " +
+            "FROM TransactionGroup t where t.station = ?1")
+    Double amountByStation(Station station);
 }
