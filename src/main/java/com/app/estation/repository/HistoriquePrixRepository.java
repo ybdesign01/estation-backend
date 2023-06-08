@@ -28,7 +28,7 @@ public interface HistoriquePrixRepository extends JpaRepository<HistoriquePrix, 
     List<Double> findPreviousPrixVente(@Param("idProduit") Long idProduit);
 
 
-    @Query("SELECT h FROM HistoriquePrix h WHERE h.idProduit = :idProduit AND h.dateDebut between :dateDebut AND :dateFin")
+    @Query("SELECT h FROM HistoriquePrix h WHERE h.idProduit = :idProduit AND h.dateDebut between :dateDebut AND :dateFin order by h.dateDebut ASC")
     List<HistoriquePrix> findAllByIdProduitAndDateDebut(Produit idProduit, LocalDateTime dateDebut, LocalDateTime dateFin);
 
 
