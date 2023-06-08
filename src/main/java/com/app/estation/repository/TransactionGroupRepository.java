@@ -1,13 +1,12 @@
 package com.app.estation.repository;
 
-import com.app.estation.entity.PompeUser;
-import com.app.estation.entity.Transaction;
-import com.app.estation.entity.TransactionGroup;
+import com.app.estation.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -33,4 +32,10 @@ public interface TransactionGroupRepository extends JpaRepository<TransactionGro
 
     @Query("select count (t) from TransactionGroup t where t.station.id = ?1")
     List<TransactionGroup> findTransactionGroupsByStation(Long id);
+
+    @Query("select t from TransactionGroup t where t.typeTransaction = ?1")
+    List<TransactionGroup> findTransactionGroupsByStationAndTypeTransaction(TypeTransaction typeTransaction);
+
+    @Query("select t from TransactionGroup t where t.dateTransaction between ?1 and ?2 and t.station = ?3")
+    List<TransactionGroup> findAllByTypeActionAndStation(LocalDateTime dateDebut, LocalDateTime dateFin, Station station);
 }

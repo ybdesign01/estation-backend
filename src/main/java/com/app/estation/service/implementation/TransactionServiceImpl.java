@@ -101,6 +101,12 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
 
         ProduitAction produitAction = new ProduitAction();
         Citerne citerne = pompeUserService.getCiterneByPompeUser(encaissementRequest.getIdPompeUser());
+        if (citerne == null){
+            throw new EntityNotFoundException("citerne_not_found");
+        }
+        if (citerne.getCapaciteActuelle() - (compteur/1000) < 0){
+            throw new ApiRequestException("citerne_capacity_exceeded");
+        }
         citerne.setCapaciteActuelle(citerne.getCapaciteActuelle() - (compteur/1000));
         citerneService.update(CiterneMapper.fromEntity(citerne),citerne.getId_citerne());
         Produit p = pompeUserService.getProduitByPompeUser(encaissementRequest.getIdPompeUser());
@@ -217,5 +223,13 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
         StationDto station = stationService.get(id);
         List<TransactionGroup> transactionGroups = transactionGroupRepository.findTransactionGroupsByStation(id);
         return TransactionGroupMapper.fromEntityList(transactionGroups);
+    }
+
+    public List<TransactionGroupDto> getEncaissements(Long id) {
+        return TransactionGroupMapper.fromEntityList(transactionGroupRepository.findTransactionGroupsByStationAndTypeTransaction( TypeTransaction.ENCAISSEMENT));
+    }
+
+    public List<TransactionGroupDto> getDebits(Long id) {
+        return TransactionGroupMapper.fromEntityList(transactionGroupRepository.findTransactionGroupsByStationAndTypeTransaction(TypeTransaction.DEBIT));
     }
 }

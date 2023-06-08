@@ -1,5 +1,8 @@
 package com.app.estation.util;
+import com.app.estation.dto.ActionDateDto;
+
 import java.text.DecimalFormat;
+import java.util.List;
 
 public class PriceCalculator {
     public static String calculatePercentageDifference(double oldPrice, double newPrice) {
@@ -11,5 +14,13 @@ public class PriceCalculator {
         final DecimalFormat df = new DecimalFormat("#.##");
         final String formattedPercentageDifference = df.format(percentageDifference);
         return formattedPercentageDifference + "%";
+    }
+
+    public static Double calculateTotal(List<ActionDateDto> entrees) {
+        Double total = 0.0;
+        for (ActionDateDto entree : entrees) {
+            total += entree.getMontant();
+        }
+        return total;
     }
 }

@@ -1,5 +1,6 @@
 package com.app.estation.controller;
 
+import com.app.estation.dto.DashboardRequest;
 import com.app.estation.dto.ServicesDto;
 import com.app.estation.dto.StationDto;
 import com.app.estation.service.implementation.ServicesImpl;
@@ -70,6 +71,11 @@ public class StationController {
     @GetMapping(value = "/getInfo/{id}", produces = "application/json")
     public ResponseEntity<?> getStationInfo(@PathVariable Long id){
         return ResponseEntity.ok().body(stationService.getStationInformation(id));
+    }
+
+    @PostMapping(value = "/getDashboardInfo/{id}", produces = "application/json",consumes = "application/json")
+    public ResponseEntity<?> getStationDashboardInfo(@PathVariable Long id, @RequestBody DashboardRequest request){
+        return ResponseEntity.ok().body(stationService.getDashboardInfo(id, request));
     }
 
 
