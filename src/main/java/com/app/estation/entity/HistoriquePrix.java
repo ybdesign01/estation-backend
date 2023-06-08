@@ -77,4 +77,16 @@ public class HistoriquePrix {
     public void setIdProduit(final Produit idProduit) {
         this.idProduit = idProduit;
     }
+
+    @Override
+    public String toString() {
+        return "HistoriquePrix{" +
+                "idHistoriquePrix=" + idHistoriquePrix +
+                ", prixAchat=" + prixAchat +
+                ", prixVente=" + prixVente +
+                ", dateDebut=" + dateDebut +
+                ", dateFin=" + dateFin +
+                ", idProduit=" + idProduit.getId_produit() +
+                '}';
+    }
 }

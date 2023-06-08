@@ -256,7 +256,13 @@ public class StationServiceImpl implements EServices<StationDto, StationDto> {
                     }
                 });
             }
-            carburantDto.setPrixCarburant(prices);
+            List<Map.Entry<LocalDateTime, Double>> entryList = new ArrayList<>(prices.entrySet());
+            entryList.sort(Map.Entry.comparingByKey());
+            Map<LocalDateTime, Double> sortedMap = new LinkedHashMap<>();
+            for (Map.Entry<LocalDateTime, Double> entry : entryList) {
+                sortedMap.put(entry.getKey(), entry.getValue());
+            }
+            carburantDto.setPrixCarburant(sortedMap);
             carburants.add(carburantDto);
         }
         return carburants;
