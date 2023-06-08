@@ -64,6 +64,10 @@ public class TransactionServiceImpl implements EServices<TransactionDto,Transact
         return null;
     }
 
+    public TransactionGroupDto getTransaction(Long id) {
+        return TransactionGroupMapper.fromEntity(transactionGroupRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("transaction_not_found")));
+    }
+
     @Override
     public TransactionDto update(TransactionDto request, Long id) {
         return null;

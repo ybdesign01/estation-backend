@@ -56,6 +56,11 @@ public class TransactionController {
         return ResponseEntity.ok().body(transactionService.getTransactionsByStation(id));
     }
 
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<?> getTransaction(@PathVariable Long id){
+        return ResponseEntity.ok().body(transactionService.getTransaction(id));
+    }
+
 
 
 }
