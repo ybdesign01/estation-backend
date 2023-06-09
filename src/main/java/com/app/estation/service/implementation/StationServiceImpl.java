@@ -292,5 +292,21 @@ public class StationServiceImpl implements EServices<StationDto, StationDto> {
         return carburants;
     }
 
+    public boolean addCarburants(CarburantsSetupDto dto, Long id){
+        Station station = stationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("station_not_found"));
+        Services service = serviceRepository.findByNom("CARBURANTS",station.getId()).orElseThrow(() -> new EntityNotFoundException("service_carburants_not_found"));
+         TypeProduit typeProduit = typeProduitRepository.save(new TypeProduit(null,"CARBURANT","Metre cube"));
+         dto.getCarburants().forEach(carburantDto -> {
+             Produit produit = new Produit();
+             produit.setNom_produit(carburantDto.getNom_produit());
+             produit.setPrix_achat(carburantDto.getPrix_achat());
+             produit.setPrix_vente(carburantDto.getPrix_vente());
+             produit.setId_service(service);
+             produit.setType(typeProduit);
+             produitRepository.save(produit);
+         });
+         return true;
+    }
+
 
 }

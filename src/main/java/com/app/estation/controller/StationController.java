@@ -1,8 +1,6 @@
 package com.app.estation.controller;
 
-import com.app.estation.dto.DashboardRequest;
-import com.app.estation.dto.ServicesDto;
-import com.app.estation.dto.StationDto;
+import com.app.estation.dto.*;
 import com.app.estation.service.implementation.ServicesImpl;
 import com.app.estation.service.implementation.StationServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -81,6 +79,15 @@ public class StationController {
     @PostMapping(value = "/getCarburantsChart/{id}", produces = "application/json",consumes = "application/json")
     public ResponseEntity<?> getStationCarburantsChart(@PathVariable Long id, @RequestBody DashboardRequest request){
         return ResponseEntity.ok().body(stationService.getCarburantChart(id, request));
+    }
+
+    @PostMapping(value = "/addCarburants/{id}", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<?> addCarburants(@Validated @RequestBody final CarburantsSetupDto dto, @PathVariable final Long id){
+        if (stationService.addCarburants(dto, id)){
+            return ResponseEntity.ok().body(Map.of( "msg", "carburants_added"));
+        }else {
+            return ResponseEntity.badRequest().body(Map.of( "msg", "carburants_not_added"));
+        }
     }
 
 

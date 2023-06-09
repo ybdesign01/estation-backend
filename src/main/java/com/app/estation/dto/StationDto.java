@@ -4,6 +4,7 @@ package com.app.estation.dto;
 import com.app.estation.dto.User.StationUserDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.Set;
@@ -17,7 +18,7 @@ public class StationDto {
     @NotBlank(message = "adresse_manatory")
     private String adresse;
 
-    @NotBlank(message = "services_mandatory")
+    @NotNull(message = "services_mandatory")
     private Set<ServicesDto> services;
     private List<StationUserDto> users;
 
