@@ -14,7 +14,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -121,11 +120,8 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
 
     public List<PompeUserDto> getPompsAssignedToUserForToday(final Long userId) {
         userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("user_not_found"));
-        final LocalDate currentDate = LocalDate.now();
-        final LocalDateTime startOfDay = currentDate.atStartOfDay();
-        final LocalDateTime endOfDay = startOfDay.plusHours(23).plusMinutes(59).plusSeconds(59);
-        final List<PompeUser> pompeUsers = pompeUserRepository.getPompesAssignedToUserForDay(userId);
-        System.out.println(pompeUsers);
+        final LocalDateTime currentDate = LocalDateTime.now();
+        final List<PompeUser> pompeUsers = pompeUserRepository.getPompesAssignedToUserForDay(userId, currentDate);
         if (pompeUsers.isEmpty()) {
             throw new EntityNotFoundException("no_pompes_assigned_to_user");
         }
