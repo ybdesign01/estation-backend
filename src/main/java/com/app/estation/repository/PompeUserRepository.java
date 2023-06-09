@@ -33,7 +33,7 @@ public interface PompeUserRepository extends JpaRepository<PompeUser, Long> {
 
 
     @Query("SELECT pu FROM PompeUser pu WHERE pu.user.id_user = :userId " +
-            "AND :currentTimestamp between pu.dateDebut AND pu.dateFin ")
-    List<PompeUser> getPompesAssignedToUserForDay(Long userId, LocalDateTime currentTimestamp);
+            "AND current timestamp between pu.dateDebut AND pu.dateFin ")
+    List<PompeUser> getPompesAssignedToUserForDay(Long userId);
 
 }
