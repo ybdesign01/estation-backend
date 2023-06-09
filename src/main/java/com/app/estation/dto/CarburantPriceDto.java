@@ -67,10 +67,18 @@ public class CarburantPriceDto {
     }
 
     public boolean isIncrease() {
-        return !percentChange.contains("-");
+        if (percentChange == null){
+            return isIncrease;
+        }else {
+            return !percentChange.contains("-");
+        }
     }
 
     public void setIncrease(final boolean increase) {
-        this.isIncrease = !percentChange.contains("-");;
+        if (percentChange != null){
+            this.isIncrease = !percentChange.contains("-");;
+        }else {
+            this.isIncrease = increase;
+        }
     }
 }

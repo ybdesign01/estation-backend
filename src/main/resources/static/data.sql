@@ -12,6 +12,3 @@ values ('oussama@gmail.com',
         'Berhili',
         '$2a$10$wgPP8gZluOrlVSh11K8eKO8bSBER1GLjkw3.8CzFawqdb6ZtzKbQ6', 1) on CONFLICT (email) DO NOTHING;
 
-insert into TYPE_PRODUIT (id_type, nom_type, unite) values (0, 'CARBURANTS', 'Métre cube') on CONFLICT (id_type) DO NOTHING;
-insert into station (id, nom_station, adresse) values (0, 'Station Hamriya', 'Hamriya, rue 15239') on CONFLICT (id) DO NOTHING;
-insert into services (id,nom_service, description, station_id) values (0, 'CARBURANTS', 'Service de carburants', 0) on CONFLICT (id) DO NOTHING;

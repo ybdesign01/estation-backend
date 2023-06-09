@@ -36,6 +36,9 @@ public class CiterneServiceImpl implements EServices<CiterneDto, CiterneDto> {
         Produit produit = produitRepository.findById(dto.getProduit().getId_produit()).orElseThrow(() -> new EntityNotFoundException("produit_not_found"));
 
         Station station = stationRepository.findById(dto.getStation().getId()).orElseThrow(() -> new EntityNotFoundException("station_not_found"));
+        if (produit.getId_service().getStation() != station){
+            throw new EntityNotFoundException("station_different_from_produit_station");
+        }
         Citerne citerne = CiterneMapper.toEntity(dto);
         citerne.setId_produit(produit);
         citerne.setStation(station);

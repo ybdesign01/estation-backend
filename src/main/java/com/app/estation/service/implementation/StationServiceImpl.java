@@ -48,6 +48,9 @@ public class StationServiceImpl implements EServices<StationDto, StationDto> {
     @Autowired
     private ProduitActionRepository produitActionRepository;
 
+    @Autowired
+    private ServicesImpl servicesImpl;
+
 
 
     @Override
@@ -75,7 +78,7 @@ public class StationServiceImpl implements EServices<StationDto, StationDto> {
             for (Services serv : servs) {
                 serv.setId(null);
                 serv.setStation(station1);
-                Services s = serviceRepository.save(serv);
+                Services s = ServicesMapper.toEntity(servicesImpl.addToStation(ServicesMapper.fromEntity(serv),station1.getId()));
                 s.setStation(station1);
                 servicesSet.add(s);
             }
@@ -171,7 +174,7 @@ public class StationServiceImpl implements EServices<StationDto, StationDto> {
 
                 System.out.println(prix);
                 System.out.println(produit.getPrix_vente());
-                if (prix == null) {
+                if (null == prix || prix== 0.0) {
                     carburantDto.setPercentChange(String.valueOf(0));
                 } else {
                     carburantDto.setPercentChange(PriceCalculator.calculatePercentageDifference(prix, produit.getPrix_vente()));
