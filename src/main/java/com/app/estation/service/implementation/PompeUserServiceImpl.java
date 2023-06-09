@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,7 +124,7 @@ public class PompeUserServiceImpl implements EServices<PompeUserDto,PompeUserDto
         final LocalDate currentDate = LocalDate.now();
         final LocalDateTime startOfDay = currentDate.atStartOfDay();
         final LocalDateTime endOfDay = startOfDay.plusHours(23).plusMinutes(59).plusSeconds(59);
-        final List<PompeUser> pompeUsers = pompeUserRepository.getPompesAssignedToUserForDay(userId, LocalDateTime.now().atZone(ZoneId.of("Africa/Casablanca")).toLocalDateTime());
+        final List<PompeUser> pompeUsers = pompeUserRepository.getPompesAssignedToUserForDay(userId, LocalDateTime.now());
         System.out.println(pompeUsers);
         if (pompeUsers.isEmpty()) {
             throw new EntityNotFoundException("no_pompes_assigned_to_user");
