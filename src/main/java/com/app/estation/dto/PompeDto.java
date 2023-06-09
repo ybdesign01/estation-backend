@@ -3,7 +3,6 @@ package com.app.estation.dto;
 import com.app.estation.dto.User.PompeUserDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -14,7 +13,6 @@ public class PompeDto {
     @NotBlank(message = "nom_pompe_mandatory")
     private String nom_pompe;
 
-    @NotNull(message = "compteurInitial_mandatory")
     private Long compteurInitial;
 
 

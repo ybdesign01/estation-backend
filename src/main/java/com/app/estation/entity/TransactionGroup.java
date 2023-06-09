@@ -137,4 +137,21 @@ public class TransactionGroup {
     public void setNote(final String note) {
         this.note = note;
     }
+
+    @Override
+    public String toString() {
+        return "TransactionGroup{" +
+                "idTransactionGroup=" + idTransactionGroup +
+                ", typeTransaction=" + typeTransaction +
+                ", montantTotal=" + montantTotal +
+                ", montantPaye=" + montantPaye +
+                ", montantRestant=" + montantRestant +
+                ", dateTransaction=" + dateTransaction +
+                ", idPompeUser=" + idPompeUser +
+                ", idProduitAction=" + idProduitAction +
+                ", station=" + station.getId() +
+                ", note='" + note + '\'' +
+                ", transactions=" + transactions +
+                '}';
+    }
 }

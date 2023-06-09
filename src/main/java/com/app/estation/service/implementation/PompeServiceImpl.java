@@ -33,6 +33,11 @@ public class PompeServiceImpl implements EServices<PompeDto, PompeDto> {
     @Override
     public PompeDto add(PompeDto dto) {
         Pompe pompe = PompeMapper.toEntity(dto);
+        if (dto.getCompteurInitial() != null) {
+            pompe.setCompteurInitial(dto.getCompteurInitial());
+        }else{
+            pompe.setCompteurInitial(0L);
+        }
         pompeRepository.save(pompe);
         return PompeMapper.fromEntity(pompeRepository.findById(pompe.getId_pompe()).orElseThrow(() -> new ApiRequestException("pompe_not_added")));
     }
@@ -43,7 +48,7 @@ public class PompeServiceImpl implements EServices<PompeDto, PompeDto> {
         pompe.setNom_pompe(dto.getNom_pompe());
         pompe.setId_pompe(id);
         pompeRepository.save(pompe);
-        return PompeMapper.fromEntity(pompeRepository.findById(dto.getId_pompe()).orElseThrow(() -> new ApiRequestException("pompe_not_updated")));
+        return PompeMapper.fromEntity(pompeRepository.findById(id).orElseThrow(() -> new ApiRequestException("pompe_not_updated")));
     }
 
     @Override

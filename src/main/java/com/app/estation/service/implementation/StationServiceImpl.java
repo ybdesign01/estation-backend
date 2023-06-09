@@ -16,6 +16,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Transactional
 @Service
@@ -215,7 +218,12 @@ public class StationServiceImpl implements EServices<StationDto, StationDto> {
         }
         dashboardInfoDto.setActions(actionPriceDtos);
 
-        List<TransactionGroup> transactionGroups = transactionGroupRepository.findAllByTypeActionAndStation(dashboardRequestDto.getDateDebut(), dashboardRequestDto.getDateFin(),station);
+        List<TransactionGroup> transactionGroups = transactionGroupRepository.findAllByDateAndStation(dashboardRequestDto.getDateDebut(), dashboardRequestDto.getDateFin(),station);
+        transactionGroups.forEach(transactionGroup -> {
+            if (transactionGroup.getIdProduitAction() != null){
+                System.out.println(transactionGroup.getIdProduitAction().getAction());
+            }
+        });
         List<ActionDateDto> entrees = new ArrayList<>();
         List<ActionDateDto> sorties = new ArrayList<>();
 
@@ -230,6 +238,20 @@ public class StationServiceImpl implements EServices<StationDto, StationDto> {
                     entrees.add(actionDateDto);
                 }
             }
+        });
+        Pattern pattern = Pattern.compile("\\d+");
+        AtomicReference<Matcher> matcher = new AtomicReference<>();
+        List<ProduitAction> produitActions = produitActionRepository.findEntreesByStation(dashboardRequestDto.getDateDebut(),dashboardRequestDto.getDateFin(),station);
+        AtomicReference<Long> quantite = new AtomicReference<>(0L);
+        produitActions.forEach(produitAction -> {
+            ActionDateDto actionDateDto = new ActionDateDto();
+            matcher.set(pattern.matcher(produitAction.getQuantite()));
+            if (matcher.get().find()) {
+                quantite.set(Long.parseLong(matcher.get().group()));
+            }
+            actionDateDto.setMontant(quantite.get() * produitAction.getProduit().getPrix_achat());
+            actionDateDto.setDate(produitAction.getDate_action());
+            entrees.add(actionDateDto);
         });
 
         dashboardInfoDto.setEntrees(entrees);
