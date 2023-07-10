@@ -86,7 +86,7 @@ public class UserServiceImpl implements EServices<UserDto,UserPassDto> {
         user.setMatricule(userDto.getMatricule());
         user.setProfile(profile);
         userRepository.save(user);
-        return UserMapper.fromEntity(userRepository.findById(userDto.getId_user()).orElseThrow(() -> new ApiRequestException("user_not_updated")));
+        return UserMapper.fromEntity(userRepository.findById(id).orElseThrow(() -> new ApiRequestException("user_not_updated")));
     }
 
 
