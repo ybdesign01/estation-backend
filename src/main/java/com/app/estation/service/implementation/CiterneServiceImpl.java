@@ -70,11 +70,10 @@ public class CiterneServiceImpl implements EServices<CiterneDto, CiterneDto> {
         Station st = stationRepository.findById(request.getStation().getId()).orElseThrow(() -> new EntityNotFoundException("station_not_found"));
         citerne.setStation(st);
         citerne.setCapaciteMaximale(request.getCapaciteMaximale());
-        if (request.getCapaciteActuelle() > request.getCapaciteMaximale()){
+        if(request.getCapaciteActuelle() != null){
+             if (request.getCapaciteActuelle() > request.getCapaciteMaximale()){
             throw new EntityNotFoundException("capacite_actuelle_greater_than_capacite_maximale");
         }
-        if (null == request.getCapaciteActuelle()){
-            citerne.setCapaciteActuelle(request.getCapaciteActuelle());
         }
         citerne.setId_produit(produit);
         citerne.setNom_citerne(request.getNom_citerne());
