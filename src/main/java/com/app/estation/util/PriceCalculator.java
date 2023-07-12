@@ -15,7 +15,7 @@ public class PriceCalculator {
     System.out.println("difference is: " + percentageDifference);
     final DecimalFormat df = new DecimalFormat("#.##");
     final String formattedPercentageDifference;
-    if (percentageDifference < 0) {
+    if (oldPrice > newPrice) {
         formattedPercentageDifference = "-" + df.format(Math.abs(percentageDifference));
     } else {
         formattedPercentageDifference = df.format(percentageDifference);
