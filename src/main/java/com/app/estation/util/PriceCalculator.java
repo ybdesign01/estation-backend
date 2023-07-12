@@ -19,6 +19,8 @@ public class PriceCalculator {
         formattedPercentageDifference = "+" + df.format(Math.abs(percentageDifference));
     } else if(difference > 0) {
         formattedPercentageDifference = "-" + df.format(Math.abs(percentageDifference));
+    }else{
+        formattedPercentageDifference = df.format(Math.abs(percentageDifference));
     }
    System.out.println("difference is: " + formattedPercentageDifference);
     return formattedPercentageDifference + "%";
