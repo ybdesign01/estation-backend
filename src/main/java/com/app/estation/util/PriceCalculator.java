@@ -18,6 +18,7 @@ public class PriceCalculator {
     } else {
         formattedPercentageDifference = df.format(percentageDifference);
     }
+   System.out.println("difference is: " + formattedPercentageDifference);
     return formattedPercentageDifference + "%";
 }
     
