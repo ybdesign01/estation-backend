@@ -10,7 +10,9 @@ public class PriceCalculator {
         return "0%";
     }
     final double difference = newPrice - oldPrice;
+    System.out.println("prices is: " + newPrice + " old: " + oldPrice);
     final double percentageDifference = (difference / Math.abs(oldPrice)) * 100;
+    System.out.println("difference is: " + percentageDifference);
     final DecimalFormat df = new DecimalFormat("#.##");
     final String formattedPercentageDifference;
     if (percentageDifference < 0) {
