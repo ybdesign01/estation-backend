@@ -6,15 +6,18 @@ import java.util.List;
 
 public class PriceCalculator {
     public static String calculatePercentageDifference(double oldPrice, double newPrice) {
-        if (0 == oldPrice) {
-            return "0%";
-        }
-        final double difference = newPrice - oldPrice;
-        final double percentageDifference = (difference / oldPrice) * 100;
-        final DecimalFormat df = new DecimalFormat("#.##");
-        final String formattedPercentageDifference = df.format(percentageDifference);
-        return formattedPercentageDifference + "%";
+    if (0 == oldPrice) {
+        return "0%";
     }
+    final double difference = newPrice - oldPrice;
+    final double percentageDifference = (difference / oldPrice) * 100;
+    final DecimalFormat df = new DecimalFormat("#.##");
+    df.setPositivePrefix("+");
+    df.setNegativePrefix("-");
+    final String formattedPercentageDifference = df.format(percentageDifference);
+    return formattedPercentageDifference + "%";
+}
+    
 
     public static Double calculateTotal(List<ActionDateDto> entrees) {
         Double total = 0.0;
