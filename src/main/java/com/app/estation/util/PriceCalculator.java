@@ -10,11 +10,13 @@ public class PriceCalculator {
         return "0%";
     }
     final double difference = newPrice - oldPrice;
+    System.out.println("difference is: " + difference");
     final double percentageDifference = (difference / oldPrice) * 100;
     final DecimalFormat df = new DecimalFormat("#.##");
     df.setPositivePrefix("+");
     df.setNegativePrefix("-");
     final String formattedPercentageDifference = df.format(percentageDifference);
+    System.out.println("difference F is: " + formatted");
     return formattedPercentageDifference + "%";
 }
     
