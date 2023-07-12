@@ -16,7 +16,7 @@ public class PriceCalculator {
     df.setPositivePrefix("+");
     df.setNegativePrefix("-");
     final String formattedPercentageDifference = df.format(percentageDifference);
-    System.out.println("difference F is: " + formatted);
+    System.out.println("difference F is: " + formattedPercentageDifference);
     return formattedPercentageDifference + "%";
 }
     
