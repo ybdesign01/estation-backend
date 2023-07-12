@@ -5,18 +5,19 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public class PriceCalculator {
-    public static String calculatePercentageDifference(double oldPrice, double newPrice) {
+ public static String calculatePercentageDifference(double oldPrice, double newPrice) {
     if (0 == oldPrice) {
         return "0%";
     }
     final double difference = newPrice - oldPrice;
-    System.out.println("difference is: " + difference);
-    final double percentageDifference = (difference / oldPrice) * 100;
+    final double percentageDifference = (difference / Math.abs(oldPrice)) * 100;
     final DecimalFormat df = new DecimalFormat("#.##");
-    df.setPositivePrefix("+");
-    df.setNegativePrefix("-");
-    final String formattedPercentageDifference = df.format(percentageDifference);
-    System.out.println("difference F is: " + formattedPercentageDifference);
+    final String formattedPercentageDifference;
+    if (percentageDifference < 0) {
+        formattedPercentageDifference = "-" + df.format(Math.abs(percentageDifference));
+    } else {
+        formattedPercentageDifference = df.format(percentageDifference);
+    }
     return formattedPercentageDifference + "%";
 }
     
