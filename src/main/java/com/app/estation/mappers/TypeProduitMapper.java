@@ -10,11 +10,11 @@ public class TypeProduitMapper {
         if (entity == null) {
             return null;
         }
-        return new TypeProduitDto(
-            entity.getId_type(),
-            entity.getUnite(),
-            entity.getNom_type()
-        );
+        TypeProduitDto dto = new TypeProduitDto();
+        dto.setId_type(entity.getId_type());
+        dto.setUnite(entity.getUnite());
+        dto.setNom_type(entity.getNom_type());
+        return dto;
     }
 
     public static TypeProduit toEntity(TypeProduitDto dto) {
