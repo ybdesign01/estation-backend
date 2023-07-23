@@ -21,10 +21,10 @@ public class Produit {
     @ManyToOne
     private TypeProduit type;
 
-    @OneToMany(mappedBy = "idProduit")
+    @OneToMany(mappedBy = "idProduit", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HistoriquePrix> historiquePrix;
 
-    @OneToMany(mappedBy = "produit")
+    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProduitAction> actions;
 
 
