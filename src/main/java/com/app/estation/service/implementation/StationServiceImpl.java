@@ -92,11 +92,19 @@ public class StationServiceImpl implements EServices<StationDto, StationDto> {
     @Override
     public StationDto update(StationDto dto, Long id) {
         Station station = stationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("station_not_found"));
-        station.setId(dto.getId());
+        station.setId(id);
         station.setNom_station(dto.getNom_station());
         station.setAdresse(dto.getAdresse());
-        station.setAdresse(dto.getAdresse());
-        station.setServices(ServicesMapper.toEntitySet(dto.getServices()));
+        Set<Services> servicesSet = station.getServices();
+        if (dto.getServices() != null){
+            for (ServicesDto serv : dto.getServices()) {
+                serv.setId(null);
+                serv.setStation(StationMapper.fromEntity(station));
+                Services s = ServicesMapper.toEntity(servicesImpl.addToStation(serv,id));
+                servicesSet.add(s);
+            }
+            station.setServices(servicesSet);
+        }
         stationRepository.save(station);
         return StationMapper.fromEntity(stationRepository.findById(station.getId()).orElseThrow(() -> new EntityNotFoundException("station_not_updated")));
     }
