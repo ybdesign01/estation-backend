@@ -17,13 +17,13 @@ public class Station {
     private Long id;
     private String nom_station;
     private String adresse;
-    @OneToMany(mappedBy = "station")
+    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Services> services;
 
-    @OneToMany(mappedBy = "station")
+    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StationUser> users;
 
-    @OneToMany(mappedBy = "station")
+    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Citerne> citernes;
 
 
