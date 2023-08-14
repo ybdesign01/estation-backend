@@ -17,6 +17,8 @@ public class PompeUser {
     User user;
     private LocalDateTime dateDebut;
     private LocalDateTime dateFin;
+    @OneToMany(mappedBy="pompeUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Releve> releves;
 
 
 
