@@ -14,10 +14,10 @@ public class Pompe {
     private Long id_pompe;
     private String nom_pompe;
     private Long compteurInitial;
-    @OneToMany(mappedBy = "pompe")
+    @OneToMany(mappedBy = "pompe", cascade = CascadeType.ALL)
     private List<PompeUser> users;
 
-    @OneToMany(mappedBy = "pompe")
+    @OneToMany(mappedBy = "pompe", cascade = CascadeType.ALL)
     private List<CiternePompe> citernes;
 
     public Pompe(final Long id_pompe, final String nom_pompe, final Long compteurInitiale, final List<PompeUser> users, final List<CiternePompe> citernes) {
