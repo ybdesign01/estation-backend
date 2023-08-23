@@ -6,6 +6,7 @@ import com.app.estation.dto.ProduitActionDto;
 import com.app.estation.dto.ProduitDto;
 import com.app.estation.entity.HistoriquePrix;
 import com.app.estation.entity.Produit;
+import com.app.estation.entity.TypeProduit;
 import com.app.estation.entity.ProduitAction;
 import com.app.estation.mappers.ProduitActionMapper;
 import com.app.estation.mappers.ProduitMapper;
