@@ -71,6 +71,8 @@ public class ProduitServiceImpl implements EServices<ProduitDto, ProduitDto> {
         Produit produit = ProduitMapper.toEntity(dto);
         produit.setId_produit(id);
         boolean isPriceUpdated = historiquePrixServiceImpl.updateAndAdd(produit);
+        List<ProduitAction> actions = produitActionRepository.getByProduitId(id);
+        produit.setActions(actions);
         produitRepository.save(produit);
         return ProduitMapper.fromEntity(produitRepository.findById(produit.getId_produit()).orElseThrow(()-> new ApiRequestException("produit_not_updated")));
     }
