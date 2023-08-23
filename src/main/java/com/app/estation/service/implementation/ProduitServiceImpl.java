@@ -72,7 +72,7 @@ public class ProduitServiceImpl implements EServices<ProduitDto, ProduitDto> {
         produit.setNom_produit(dto.getNom_produit());
         produit.setType(type);
         produit.setId_service(service);
-        List<HistoriquePrix> histo = historiquePrixRepository.findAllByIdProduit(produit);
+        List<HistoriquePrix> histo = historiquePrixRepository.findAllByIdProduit(produit).get();
         List<ProduitAction> actions = produitActionRepository.getByProduitId(id);
         produit.setActions(actions);
         produitRepository.save(produit);
