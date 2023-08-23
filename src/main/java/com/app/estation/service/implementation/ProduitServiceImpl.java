@@ -62,15 +62,14 @@ public class ProduitServiceImpl implements EServices<ProduitDto, ProduitDto> {
 
     @Override
     public ProduitDto update(ProduitDto dto, Long id) {
-        if (!produitRepository.existsById(id)){
-            throw new EntityNotFoundException("produit_not_found");
-        }
-        if (!typeProduitRepository.existsById(dto.getType().getId_type())){
-            throw new EntityNotFoundException("type_not_found");
-        }
-        Produit produit = ProduitMapper.toEntity(dto);
-        produit.setId_produit(id);
+        Produit produit = produitRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("produit_not_found"));
+        TypeProduit type = typeProduitRepository.findById(dto.getType().getId_type()).orElseThrow(()-> new EntityNotFoundException("type_not_found"));
+        Service service = serviceRepository.findById(dto.getService().getId()).orElseThrow(()-> new EntityNotFoundException("service_not_found"));
         boolean isPriceUpdated = historiquePrixServiceImpl.updateAndAdd(produit);
+        produit.setNom_produit(dto.getNom_produit());
+        produit.setType(type);
+        produit.setId_service(service);
+        List<HistoriquePrix> histo = historiquePrixRepository.findAllByIdProduit(id).
         List<ProduitAction> actions = produitActionRepository.getByProduitId(id);
         produit.setActions(actions);
         produitRepository.save(produit);
