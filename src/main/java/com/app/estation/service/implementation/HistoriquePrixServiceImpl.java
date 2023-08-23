@@ -40,7 +40,9 @@ public class HistoriquePrixServiceImpl implements EServices<HistoriquePrixDto,Hi
 
     public boolean updateAndAdd(Produit produit){
         HistoriquePrix hs = getByIdProduit(produit);
-        hs.setDateFin(java.time.LocalDateTime.now());
+        if(hs!=null){
+            hs.setDateFin(java.time.LocalDateTime.now());
+        }
         historiquePrixRepository.save(hs);
         HistoriquePrix historiquePrix = new HistoriquePrix();
         historiquePrix.setPrixAchat(produit.getPrix_achat());
