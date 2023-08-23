@@ -71,6 +71,8 @@ public class ProduitServiceImpl implements EServices<ProduitDto, ProduitDto> {
         boolean isPriceUpdated = historiquePrixServiceImpl.updateAndAdd(produit);
         produit.setNom_produit(dto.getNom_produit());
         produit.setType(type);
+        produit.setPrix_achat(dto.getPrix_achat());
+        produit.setPrix_vente(dto.getPrix_vente());
         produit.setId_service(service);
         List<HistoriquePrix> histo = historiquePrixRepository.findAllByIdProduit(produit).get();
         List<ProduitAction> actions = produitActionRepository.getByProduitId(id);
