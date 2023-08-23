@@ -3,10 +3,12 @@ package com.app.estation.service.implementation;
 import com.app.estation.advice.exceptions.ApiRequestException;
 import com.app.estation.advice.exceptions.EntityNotFoundException;
 import com.app.estation.dto.ProduitActionDto;
+import com.app.estation.entity.Produit;
 import com.app.estation.dto.ProduitDto;
 import com.app.estation.entity.HistoriquePrix;
 import com.app.estation.entity.Produit;
 import com.app.estation.entity.TypeProduit;
+import com.app.estation.entity.Services;
 import com.app.estation.entity.ProduitAction;
 import com.app.estation.mappers.ProduitActionMapper;
 import com.app.estation.mappers.ProduitMapper;
@@ -65,7 +67,7 @@ public class ProduitServiceImpl implements EServices<ProduitDto, ProduitDto> {
     public ProduitDto update(ProduitDto dto, Long id) {
         Produit produit = produitRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("produit_not_found"));
         TypeProduit type = typeProduitRepository.findById(dto.getType().getId_type()).orElseThrow(()-> new EntityNotFoundException("type_not_found"));
-        Service service = serviceRepository.findById(dto.getService().getId()).orElseThrow(()-> new EntityNotFoundException("service_not_found"));
+        Services service = serviceRepository.findById(dto.getService().getId()).orElseThrow(()-> new EntityNotFoundException("service_not_found"));
         boolean isPriceUpdated = historiquePrixServiceImpl.updateAndAdd(produit);
         produit.setNom_produit(dto.getNom_produit());
         produit.setType(type);
