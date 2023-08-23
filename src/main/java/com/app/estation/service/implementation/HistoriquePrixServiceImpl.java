@@ -42,15 +42,15 @@ public class HistoriquePrixServiceImpl implements EServices<HistoriquePrixDto,Hi
         HistoriquePrix hs = getByIdProduit(produit);
         if(hs!=null){
             hs.setDateFin(java.time.LocalDateTime.now());
+            historiquePrixRepository.save(hs);
         }
-        historiquePrixRepository.save(hs);
         HistoriquePrix historiquePrix = new HistoriquePrix();
         historiquePrix.setPrixAchat(produit.getPrix_achat());
         historiquePrix.setPrixVente(produit.getPrix_vente());
         historiquePrix.setDateDebut(java.time.LocalDateTime.now());
         historiquePrix.setIdProduit(hs.getIdProduit());
         historiquePrixRepository.save(historiquePrix);
-        return historiquePrixRepository.existsById(hs.getIdHistoriquePrix());
+        return historiquePrixRepository.existsById(historiquePrix.getIdHistoriquePrix());
     }
 
     @Override
