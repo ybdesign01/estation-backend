@@ -153,7 +153,7 @@ Body:
     "prenom": "yasser",
     "email": "admin@gmail.com",
     "matricule": "dd88",
-    "password": "Yasser123+",
+    "password": "Yasser5565+",
     "profile": "USER"
 }
 ```
